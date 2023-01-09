@@ -4,7 +4,8 @@
 
 package frc.robot.MainRobotStuff;
 
-/** This is the class for adding operator interface. This is for orginizatin purposes. Add joysticks, button board, and other button/joystick based interfaces. */
+/** This is the class for adding operator interface. This is for orginizatin purposes.
+ *  Add joysticks, button board, and other button/joystick based interfaces. -Owen */
 public class OI {
 
 

@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * project.
  * 
  * This is the main "running stuff" class. For orginization purposes the only things in here should
- * be the initialization of commands. No running code should be in here. Only new Command();
+ * be the initialization of commands. No running code should be in here. Only new Command(); -Owen
  */
 public class Robot extends TimedRobot {
   private static final String kDefaultAuto = "Default";

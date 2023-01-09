@@ -4,7 +4,8 @@
 
 package frc.robot.MainRobotStuff;
 
-/** This the class for mapping the physical parts of the robot to code. Motors/servos/gyros/all other components added here. */
+/** This the class for mapping the physical parts of the robot to code.
+ *  Motors/servos/gyros/all other components added here. -Owen */
 public class RobotMap {
 
 
