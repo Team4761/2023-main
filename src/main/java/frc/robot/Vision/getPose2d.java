@@ -6,12 +6,17 @@ package frc.robot.Vision;
 
 import java.util.List;
 
+import org.photonvision.RobotPoseEstimator;
+
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
-import edu.wpi.first.apriltag.AprilTagFields;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class getPose2d extends CommandBase {
+
+  
+
+
+
   /** Creates a new getPose2d. */
   public getPose2d() {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -21,9 +26,10 @@ public class getPose2d extends CommandBase {
   @Override
   public void initialize() {
 
-    AprilTagFieldLayout fieldLayout = aprilTags.fieldLayout;
+    AprilTagFieldLayout fieldLayout = visionVars.fieldLayout;
+    RobotPoseEstimator poseEstimmator = visionVars.robotPoseEstimator;
 
-
+    
 
 
 
