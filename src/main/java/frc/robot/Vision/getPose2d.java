@@ -9,11 +9,12 @@ import java.util.List;
 import org.photonvision.RobotPoseEstimator;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class getPose2d extends CommandBase {
 
-  
+  Pose2d prevPose;
 
 
 
@@ -28,16 +29,22 @@ public class getPose2d extends CommandBase {
 
     AprilTagFieldLayout fieldLayout = visionVars.fieldLayout;
     RobotPoseEstimator poseEstimmator = visionVars.robotPoseEstimator;
+    prevPose = new Pose2d();
 
-    
-
-
-
-  }
+    }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+
+    visionVars.getEstimatedPose(prevPose);
+    prevPose = visionVars.getEstimatedPose(prevPose).getFirst();
+
+
+
+   
+  }
+  
 
   // Called once the command ends or is interrupted.
   @Override
