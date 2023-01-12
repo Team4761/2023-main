@@ -3,6 +3,7 @@ package frc.robot.Vision;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import org.photonvision.PhotonCamera;
 import org.photonvision.RobotPoseEstimator;
@@ -11,10 +12,12 @@ import org.photonvision.RobotPoseEstimator.PoseStrategy;
 import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.Pair;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.wpilibj.Timer;
 
 public class visionVars {
 
@@ -51,5 +54,27 @@ public class visionVars {
 
     //pose estimator (object from photon lib to estimate coords)
     public static RobotPoseEstimator robotPoseEstimator = new RobotPoseEstimator(fieldLayout, PoseStrategy.CLOSEST_TO_REFERENCE_POSE, photonCameraList);
+
+
+    /**
+     * Gives out current estimate of pose based on previous pose.
+     * @param prevEstimatedPost
+     * @return
+     */
+    public static Pair<Pose2d, Double> getEstimatedPose(Pose2d prevEstimatedPose){
+        robotPoseEstimator.setReferencePose(prevEstimatedPose);
+
+        double currentTime = Timer.getFPGATimestamp();
+        Optional<Pair<Pose3d, Double>> result = robotPoseEstimator.update();
+
+        if(result.isPresent()){
+            return new Pair<Pose2d,Double>(result.get().getFirst().toPose2d(), currentTime - result.get().getSecond());
+        }else{
+            return new Pair<Pose2d, Double>(null, null); //or 0.0
+        }
+    }
+
+
+
     
 }
