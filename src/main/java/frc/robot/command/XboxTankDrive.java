@@ -1,6 +1,6 @@
 package frc.robot.command;
 
-import frc.robot.MainRobotStuff.Robot;
+import frc.robot.main.Robot;
 
 public class XboxTankDrive extends XboxDriveBase {
 

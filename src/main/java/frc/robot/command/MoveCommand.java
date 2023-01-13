@@ -1,7 +1,7 @@
 package frc.robot.command;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.MainRobotStuff.Robot;
+import frc.robot.main.Robot;
 
 public class MoveCommand extends CommandBase {
     private final double speed;

@@ -1,8 +1,6 @@
 package frc.robot.command;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.MainRobotStuff.Robot;
-import frc.robot.controller.XboxControl;
+import frc.robot.main.Robot;
 
 public class XboxArcadeDrive extends XboxDriveBase {
     @Override

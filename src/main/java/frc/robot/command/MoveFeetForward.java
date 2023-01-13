@@ -1,7 +1,7 @@
 package frc.robot.command;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.MainRobotStuff.Robot;
+import frc.robot.main.Robot;
 
 public class MoveFeetForward extends SequentialCommandGroup {
     private static final double ratio = 0.6;
