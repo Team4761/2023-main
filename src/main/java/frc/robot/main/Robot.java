@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.command.*;
 import frc.robot.impl.RobotImpl;
-import frc.robot.impl.WestCoast;
+import frc.robot.impl.westcoast.WestCoast;
 
 /**
  * The VM is configured to automatically run this class, and to call the methods corresponding to

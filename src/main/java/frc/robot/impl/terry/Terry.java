@@ -1,9 +1,9 @@
-package frc.robot.impl;
+package frc.robot.impl.terry;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import frc.robot.robomap.CanSparkMaxRoboMap;
+import frc.robot.impl.RobotImpl;
 
-public class Terry extends RobotImpl{
+public class Terry extends RobotImpl {
     @Override
     public DifferentialDrive getDrive() {
         return CanSparkMaxRoboMap.getDrive();

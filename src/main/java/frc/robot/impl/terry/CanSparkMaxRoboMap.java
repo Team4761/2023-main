@@ -1,4 +1,4 @@
-package frc.robot.robomap;
+package frc.robot.impl.terry;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
