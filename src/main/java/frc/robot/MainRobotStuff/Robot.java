@@ -1,4 +1,5 @@
 // Copyright (c) FIRST and other WPILib contributors.
+
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
@@ -7,42 +8,53 @@ package frc.robot.MainRobotStuff;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.command.*;
+import frc.robot.impl.RobotImpl;
+import frc.robot.impl.WestCoast;
 
 /**
- * The VM is configured to automatically run this class, and to call the functions corresponding to
+ * The VM is configured to automatically run this class, and to call the methods corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
  * the package after creating this project, you must also update the build.gradle file in the
  * project.
- * 
- * This is the main "running stuff" class. For orginization purposes the only things in here should
- * be the initialization of commands. No running code should be in here. Only new Command(); -Owen
  */
-public class Robot extends TimedRobot {
-  private static final String kDefaultAuto = "Default";
-  private static final String kCustomAuto = "My Auto";
-  private String m_autoSelected;
-  private final SendableChooser<String> m_chooser = new SendableChooser<>();
+public class Robot extends TimedRobot
+{
+  private static final String DEFAULT_AUTO = "Default";
+  private static final String CUSTOM_AUTO = "My Auto";
+  private final SendableChooser<String> chooser = new SendableChooser<>();
+
+  public final CommandScheduler commandScheduler = CommandScheduler.getInstance();
+  private final XboxArcadeDrive xboxArcadeDrive = new XboxArcadeDrive();
+
+  public static RobotImpl impl = new WestCoast();
 
   /**
-   * This function is run when the robot is first started up and should be used for any
+   * This method is run when the robot is first started up and should be used for any
    * initialization code.
    */
   @Override
-  public void robotInit() {
-    m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
-    m_chooser.addOption("My Auto", kCustomAuto);
-    SmartDashboard.putData("Auto choices", m_chooser);
+  public void robotInit()
+  {
+    chooser.setDefaultOption("Default Auto", DEFAULT_AUTO);
+    chooser.addOption("My Auto", CUSTOM_AUTO);
+    SmartDashboard.putData("Auto choices", chooser);
   }
 
+
   /**
-   * This function is called every 20 ms, no matter the mode. Use this for items like diagnostics
-   * that you want ran during disabled, autonomous, teleoperated and test.
+   * This method is called every robot packet, no matter the mode. Use this for items like
+   * diagnostics that you want ran during disabled, autonomous, teleoperated and test.
    *
-   * <p>This runs after the mode specific periodic functions, but before LiveWindow and
+   * <p>This runs after the mode specific periodic methods, but before LiveWindow and
    * SmartDashboard integrated updating.
    */
   @Override
-  public void robotPeriodic() {}
+  public void robotPeriodic() {
+  }
+
 
   /**
    * This autonomous (along with the chooser code above) shows how to select between different
@@ -55,55 +67,58 @@ public class Robot extends TimedRobot {
    * chooser code above as well.
    */
   @Override
-  public void autonomousInit() {
-    m_autoSelected = m_chooser.getSelected();
-    // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
-    System.out.println("Auto selected: " + m_autoSelected);
+  public void autonomousInit()
+  {
+    double topSpeed = .5;
+    commandScheduler.schedule(
+            new SequentialCommandGroup(
+                    new MoveFeetForward(topSpeed, 20),
+                    new RotateDegreesCommand(0.5, 180),
+                    new MoveFeetForward(topSpeed, 20),
+                    new RotateDegreesCommand(0.5, 180)
+            )
+    );
   }
 
-  /** This function is called periodically during autonomous. */
+
+  /** This method is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {
-    switch (m_autoSelected) {
-      case kCustomAuto:
-        // Put custom auto code here
-        break;
-      case kDefaultAuto:
-      default:
-        // Put default auto code here
-        break;
-    }
+  public void autonomousPeriodic()
+  {
+    commandScheduler.run();
   }
 
-  /** This function is called once when teleop is enabled. */
-  @Override
-  public void teleopInit() {}
 
-  /** This function is called periodically during operator control. */
+  /** This method is called once when teleop is enabled. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopInit() {
+    commandScheduler.schedule(xboxArcadeDrive.repeatedly());
+  }
 
-  /** This function is called once when the robot is disabled. */
+
+  /** This method is called periodically during operator control. */
+  @Override
+  public void teleopPeriodic() {
+    commandScheduler.run();
+  }
+
+
+  /** This method is called once when the robot is disabled. */
   @Override
   public void disabledInit() {}
 
-  /** This function is called periodically when disabled. */
+
+  /** This method is called periodically when disabled. */
   @Override
   public void disabledPeriodic() {}
 
-  /** This function is called once when test mode is enabled. */
+
+  /** This method is called once when test mode is enabled. */
   @Override
   public void testInit() {}
 
-  /** This function is called periodically during test mode. */
+
+  /** This method is called periodically during test mode. */
   @Override
   public void testPeriodic() {}
-
-  /** This function is called once when the robot is first started up. */
-  @Override
-  public void simulationInit() {}
-
-  /** This function is called periodically whilst in simulation. */
-  @Override
-  public void simulationPeriodic() {}
 }
