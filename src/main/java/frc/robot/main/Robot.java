@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.command.*;
 import frc.robot.impl.RobotImpl;
+import frc.robot.impl.terry.Terry;
 import frc.robot.impl.westcoast.WestCoast;
 
 /**
@@ -22,14 +23,16 @@ import frc.robot.impl.westcoast.WestCoast;
  */
 public class Robot extends TimedRobot
 {
-  private static final String DEFAULT_AUTO = "Default";
-  private static final String CUSTOM_AUTO = "My Auto";
+  private static final String TERRY = "Terry";
+  private static final String WEST_COAST = "West Coast";
+
+  private static final String PLACEHOLDER= "Placeholder Name";
   private final SendableChooser<String> chooser = new SendableChooser<>();
 
   public final CommandScheduler commandScheduler = CommandScheduler.getInstance();
   private final XboxArcadeDrive xboxArcadeDrive = new XboxArcadeDrive();
 
-  public static RobotImpl impl = new WestCoast();
+  public static RobotImpl impl = new Terry();
 
   /**
    * This method is run when the robot is first started up and should be used for any
@@ -38,11 +41,27 @@ public class Robot extends TimedRobot
   @Override
   public void robotInit()
   {
-    chooser.setDefaultOption("Default Auto", DEFAULT_AUTO);
-    chooser.addOption("My Auto", CUSTOM_AUTO);
-    SmartDashboard.putData("Auto choices", chooser);
+    chooser.setDefaultOption("Terry", TERRY);
+    chooser.addOption("West Coast", WEST_COAST);
+    chooser.addOption("Place Holder Name",PLACEHOLDER);
+    SmartDashboard.putData("Robot Choices", chooser);
   }
 
+  private void initFromSelector()
+  {
+    switch (chooser.getSelected())
+    {
+      case TERRY:
+        impl = new Terry();
+        break;
+      case WEST_COAST:
+        impl = new WestCoast();
+        break;
+      case PLACEHOLDER:
+        //impl = new Placeholder();
+        break;
+    }
+  }
 
   /**
    * This method is called every robot packet, no matter the mode. Use this for items like
@@ -69,6 +88,7 @@ public class Robot extends TimedRobot
   @Override
   public void autonomousInit()
   {
+    initFromSelector();
     double topSpeed = .5;
     commandScheduler.schedule(
             new SequentialCommandGroup(
@@ -92,6 +112,7 @@ public class Robot extends TimedRobot
   /** This method is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
+    initFromSelector();
     commandScheduler.schedule(xboxArcadeDrive.repeatedly());
   }
 
