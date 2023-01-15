@@ -4,9 +4,16 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import frc.robot.impl.RobotImpl;
 
 public class Terry extends RobotImpl {
+
+    @Override
+    public void init() {
+        super.init();
+        getDrive().setExpiration(.3);
+    }
+
     @Override
     public DifferentialDrive getDrive() {
-        return CanSparkMaxRoboMap.getDrive();
+        return TalonRoboMap.getDrive();
     }
 
     @Override

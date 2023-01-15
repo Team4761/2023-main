@@ -1,4 +1,4 @@
-package frc.robot.impl.westcoast;
+package frc.robot.impl.terry;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;

@@ -2,7 +2,6 @@ package frc.robot.impl.westcoast;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import frc.robot.impl.RobotImpl;
-import frc.robot.impl.terry.CanSparkMaxRoboMap;
 
 public class WestCoast extends RobotImpl {
     @Override
