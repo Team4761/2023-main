@@ -9,6 +9,7 @@ public class Terry extends RobotImpl {
     public void init() {
         super.init();
         getDrive().setExpiration(.3);
+        TalonRoboMap.m_rightMotors.setInverted(true);
     }
 
     @Override
@@ -18,12 +19,12 @@ public class Terry extends RobotImpl {
 
     @Override
     public double calcTimeToMoveFeet(double feet, double speed) {
-        double ratio = 0.6;
+        double ratio = 0.525;
         return feet * speed * ratio;
     }
     @Override
     public double calcTimeToRotate(double degrees, double speed) {
-        double ratio = 0.9;
+        double ratio = 0.544;
         return degrees / 90 * speed * ratio;
     }
 }

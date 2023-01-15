@@ -64,12 +64,13 @@ public class Robot extends TimedRobot
   {
     double topSpeed = .5;
     commandScheduler.schedule(
-      new SequentialCommandGroup(
-        new MoveFeetForward(topSpeed, 20),
-        new RotateDegreesCommand(0.5, 180),
-        new MoveFeetForward(topSpeed, 20),
-        new RotateDegreesCommand(0.5, 180)
-      )
+            new SequentialCommandGroup(
+                    new MoveFeetForward(topSpeed, 20),
+                    new RotateDegreesCommand(0.5, 90),
+                    new MoveFeetForward(topSpeed, 2),
+                    new RotateDegreesCommand(0.5, 90),
+                    new MoveFeetForward(topSpeed, 20)
+            )
     );
   }
 
