@@ -27,8 +27,8 @@ public class getPose2d extends CommandBase {
   @Override
   public void initialize() {
 
-    AprilTagFieldLayout fieldLayout = visionVars.fieldLayout;
-    RobotPoseEstimator poseEstimmator = visionVars.robotPoseEstimator;
+  //  AprilTagFieldLayout fieldLayout = visionVars.fieldLayout;
+   // RobotPoseEstimator poseEstimmator = visionVars.robotPoseEstimator;
     prevPose = new Pose2d();
 
     }

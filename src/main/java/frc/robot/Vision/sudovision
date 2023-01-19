@@ -1,0 +1,34 @@
+
+
+moveToHeading(){
+    difference = currentHeading - goalHeading;
+    moveRotate(difference);
+}
+
+moveToCoord(){
+    difference = currentpos - goalpos //get distance in straight line
+    moveStraight(difference); //with PID values
+    useEncoder.setRef.pos;
+
+}
+
+
+or
+
+
+pathweaver.setPath(pose2dCurrent, pose2dGoal);
+
+pathweaver.getAprilTagPose();
+
+
+
+
+
+
+
+
+
+
+
+
+
