@@ -1,10 +1,11 @@
 package frc.robot.Vision;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import edu.wpi.first.math.geometry.*;
+import edu.wpi.first.wpilibj.Timer;
 import org.photonvision.PhotonCamera;
 import org.photonvision.RobotPoseEstimator;
 import org.photonvision.RobotPoseEstimator.PoseStrategy;
@@ -12,14 +13,8 @@ import org.photonvision.RobotPoseEstimator.PoseStrategy;
 import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.Pair;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation3d;
-import edu.wpi.first.wpilibj.Timer;
 
-public class visionVars {
+public class visionVarsAndMethods {
 
     /**
      * This is sudo-camera code for right now, when cameras are mounted and april tags mounted, these will change accordingly.
@@ -46,9 +41,9 @@ public class visionVars {
     static Transform3d ctagsLeftToRobot = new Transform3d(new Translation3d(0,1,1), new Rotation3d(0,0,90));
     static Transform3d ctagsRightToRobot = new Transform3d(new Translation3d(0,0,-1), new Rotation3d(0,0,270));
 
-    static Pair<PhotonCamera, Transform3d> pairedDriveCamera = new Pair<PhotonCamera, Transform3d>(camera_drive, cDriveToRobot);
-    static Pair<PhotonCamera, Transform3d> pairedLeftCamera = new Pair<PhotonCamera, Transform3d>(camera_tagsLeft, ctagsLeftToRobot);
-    static Pair<PhotonCamera, Transform3d> pairedRightCamera = new Pair<PhotonCamera, Transform3d>(camera_tagsRight, ctagsRightToRobot);
+    static Pair<PhotonCamera, Transform3d> pairedDriveCamera = new Pair<>(camera_drive, cDriveToRobot);
+    static Pair<PhotonCamera, Transform3d> pairedLeftCamera = new Pair<>(camera_tagsLeft, ctagsLeftToRobot);
+    static Pair<PhotonCamera, Transform3d> pairedRightCamera = new Pair<>(camera_tagsRight, ctagsRightToRobot);
     //final list of photon cameras
     static List<Pair<PhotonCamera, Transform3d>> photonCameraList = Arrays.asList(pairedDriveCamera, pairedLeftCamera, pairedRightCamera);
 
@@ -57,9 +52,7 @@ public class visionVars {
 
 
     /**
-     * Gives out current estimate of pose based on previous pose.
-     * @param prevEstimatedPost
-     * @return
+     * returns pose2d of where robot is
      */
     public static Pair<Pose2d, Double> getEstimatedPose(Pose2d prevEstimatedPose){
         robotPoseEstimator.setReferencePose(prevEstimatedPose);
@@ -68,9 +61,9 @@ public class visionVars {
         Optional<Pair<Pose3d, Double>> result = robotPoseEstimator.update();
 
         if(result.isPresent()){
-            return new Pair<Pose2d,Double>(result.get().getFirst().toPose2d(), currentTime - result.get().getSecond());
+            return new Pair<>(result.get().getFirst().toPose2d(), currentTime - result.get().getSecond());
         }else{
-            return new Pair<Pose2d, Double>(null, null); //or 0.0
+            return new Pair<>(null, currentTime - result.get().getSecond()); //or 0.0
         }
     }
 
