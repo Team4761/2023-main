@@ -7,6 +7,9 @@ package frc.robot.impl.placeholder;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
+import com.ctre.phoenix.sensors.CANCoderConfiguration;
+import com.ctre.phoenix.sensors.SensorTimeBase;
+import edu.wpi.first.wpilibj.CAN;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 
@@ -26,6 +29,10 @@ public class RobotMap {
     public static CANCoder back_left_CANCoder = new CANCoder(2);
     public static CANCoder back_right_CANCoder = new CANCoder(3);
 
+    //Setting encoder variables
+    CANCoderConfiguration CANCoderConfig = new CANCoderConfiguration();
+
+
     // Drivetrain
     public static final MotorControllerGroup m_leftMotors = new MotorControllerGroup(front_left,back_left);
     public static final MotorControllerGroup m_rightMotors = new MotorControllerGroup(front_right,back_right);
@@ -34,7 +41,23 @@ public class RobotMap {
 
 
 
+    public RobotMap(){
 
+        //config of the encoders
+
+        CANCoderConfig.sensorCoefficient = 0.000244140625; // this is will be (1/4096) * gearRatio ( < 1) * wheelRadius to return meters.
+        CANCoderConfig.unitString = "revs"; //defines the units
+        CANCoderConfig.sensorTimeBase = SensorTimeBase.PerSecond; //defines the time period
+        //the above stuff basically makes it so when you ask for a velocity from the encoder, (getVelocity), it returns revs/sec.
+        //This may want to be converted into meters or yards per second to simplify the goDistanceEncoder command.
+
+        front_left_CANCoder.configAllSettings(CANCoderConfig); //put the config into the encoders
+        front_right_CANCoder.configAllSettings(CANCoderConfig);
+        back_left_CANCoder.configAllSettings(CANCoderConfig);
+        back_right_CANCoder.configAllSettings(CANCoderConfig);
+
+
+    }
 
 
 

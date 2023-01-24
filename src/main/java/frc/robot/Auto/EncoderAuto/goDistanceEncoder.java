@@ -2,10 +2,13 @@ package frc.robot.Auto.EncoderAuto;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
+import static frc.robot.impl.placeholder.RobotMap.front_left_CANCoder;
+
 
 public class goDistanceEncoder extends CommandBase {
 
     double distance;
+    double distanceToGo;
     public goDistanceEncoder(double distance) {
         // each subsystem used by the command must be passed into the
         // addRequirements() method (which takes a vararg of Subsystem)\
@@ -15,7 +18,7 @@ public class goDistanceEncoder extends CommandBase {
 
     @Override
     public void initialize() {
-        //encoder magic lol
+        distanceToGo = distance;
     }
 
     @Override
