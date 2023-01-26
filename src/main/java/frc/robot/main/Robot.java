@@ -147,6 +147,9 @@ public class Robot extends TimedRobot
           impl = new Terry();
           break;
       }
+      if (impl != null) {
+        impl.init();
+      }
     }
   }
 }
