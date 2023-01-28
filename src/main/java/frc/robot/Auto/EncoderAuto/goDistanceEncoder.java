@@ -2,7 +2,6 @@ package frc.robot.Auto.EncoderAuto;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-import static frc.robot.impl.placeholder.RobotMap.front_left_CANCoder;
 
 
 public class goDistanceEncoder extends CommandBase {

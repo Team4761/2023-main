@@ -1,22 +1,14 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.impl.placeholder;
-
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.CANCoderConfiguration;
 import com.ctre.phoenix.sensors.SensorTimeBase;
-import edu.wpi.first.wpilibj.CAN;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import frc.robot.impl.RobotImpl;
 
-/** This the class for mapping the physical parts of the robot to code.
- *  Motors/servos/gyros/all other components added here. -Owen */
-public class RobotMap {
-
+public class Placeholder extends RobotImpl {
     // Drivetrain motors. The Talons already have encoders inside them
     public static WPI_TalonFX front_left = new WPI_TalonFX(0);
     public static WPI_TalonFX front_right = new WPI_TalonFX(1);
@@ -41,7 +33,7 @@ public class RobotMap {
 
 
 
-    public RobotMap(){
+    public Placeholder(){
 
         //config of the encoders
 
@@ -55,12 +47,22 @@ public class RobotMap {
         front_right_CANCoder.configAllSettings(CANCoderConfig);
         back_left_CANCoder.configAllSettings(CANCoderConfig);
         back_right_CANCoder.configAllSettings(CANCoderConfig);
-
-
     }
 
+    @Override
+    public DifferentialDrive getDrive() {
+        return m_drive;
+    }
 
+    @Override
+    public double calcTimeToMoveFeet(double feet, double speed) {
+        double ratio = 0.525;
+        return feet * speed * ratio;
+    }
 
-
-
+    @Override
+    public double calcTimeToRotate(double degrees, double speed) {
+        double ratio = 0.544;
+        return degrees / 90 * speed * ratio;
+    }
 }
