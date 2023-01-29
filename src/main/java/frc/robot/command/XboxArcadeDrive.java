@@ -5,11 +5,11 @@ import frc.robot.main.Robot;
 public class XboxArcadeDrive extends XboxDriveBase {
     @Override
     public void execute() {
-        Robot.impl.getDrive().arcadeDrive(xbox.getRightX(), xbox.getLeftY());
+        Robot.driveTrain.arcadeDrive(xbox.getRightX(), xbox.getLeftY());
     }
 
     @Override
     public void end(boolean interrupted) {
-        Robot.impl.getDrive().arcadeDrive(0,0);
+        Robot.driveTrain.arcadeDrive(0,0);
     }
 }

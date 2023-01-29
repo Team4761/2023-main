@@ -1,7 +1,9 @@
 package frc.robot.Drivetrain;
 
 
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.main.Robot;
 
 public class DrivetrainSubsystem extends SubsystemBase {
 
@@ -36,6 +38,14 @@ public class DrivetrainSubsystem extends SubsystemBase {
         //       in the constructor or in the robot coordination class, such as RobotContainer.
         //       Also, you can call addChild(name, sendableChild) to associate sendables with the subsystem
         //       such as SpeedControllers, Encoders, DigitalInputs, etc.
+    }
+
+    //Include .arcadeDrive() with function below safe for tank
+    public void arcadeDrive(double speed, double rotation){
+        Robot.impl.getDrive().arcadeDrive(speed, rotation);
+    }
+    public void tankDrive(double rightSpeed, double leftSpeed){
+        Robot.impl.getDrive().tankDrive(rightSpeed, leftSpeed);
     }
 }
 

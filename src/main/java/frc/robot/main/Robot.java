@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Drivetrain.DrivetrainSubsystem;
 import frc.robot.command.*;
 import frc.robot.impl.RobotImpl;
 import frc.robot.impl.terry.Terry;
@@ -32,7 +33,9 @@ public class Robot extends TimedRobot
   public final CommandScheduler commandScheduler = CommandScheduler.getInstance();
   private final XboxArcadeDrive xboxArcadeDrive = new XboxArcadeDrive();
 
-  public static RobotImpl impl = null;
+  public static RobotImpl impl = new Terry();
+
+  public static DrivetrainSubsystem driveTrain = DrivetrainSubsystem.getInstance();
 
   /**
    * This method is run when the robot is first started up and should be used for any
@@ -72,6 +75,7 @@ public class Robot extends TimedRobot
                     new MoveFeetForward(topSpeed, 20)
             )
     );
+
   }
 
   /** This method is called periodically during autonomous. */
