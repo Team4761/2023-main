@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Drivetrain.DrivetrainSubsystem;
 import frc.robot.command.*;
 import frc.robot.impl.RobotImpl;
+import frc.robot.impl.placeholder.Placeholder;
 import frc.robot.impl.terry.Terry;
 import frc.robot.impl.westcoast.WestCoast;
 
@@ -143,16 +144,13 @@ public class Robot extends TimedRobot
           break;
 
         case PLACEHOLDER:
-          //impl = new Placeholder();
+          impl = new Placeholder();
           break;
 
         default:
         case TERRY:
           impl = new Terry();
           break;
-      }
-      if (impl != null) {
-        impl.init();
       }
     }
   }
