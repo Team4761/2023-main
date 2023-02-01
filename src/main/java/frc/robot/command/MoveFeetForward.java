@@ -12,7 +12,7 @@ public class MoveFeetForward extends SequentialCommandGroup {
         );
     }
 
-    public static double computeTime(double speed, double feet) {
+    public static double computeTime(double speed, double feet){
         return Robot.impl.calcTimeToMoveFeet(feet, speed);
     }
 }
