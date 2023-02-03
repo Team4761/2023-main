@@ -13,6 +13,7 @@ import org.photonvision.RobotPoseEstimator.PoseStrategy;
 import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.math.Pair;
+import org.photonvision.targeting.PhotonTrackedTarget;
 
 public class visionVarsAndMethods {
 
@@ -48,24 +49,71 @@ public class visionVarsAndMethods {
     static List<Pair<PhotonCamera, Transform3d>> photonCameraList = Arrays.asList(pairedDriveCamera, pairedLeftCamera, pairedRightCamera);
 
     //pose estimator (object from photon lib to estimate coords)
-    public static RobotPoseEstimator robotPoseEstimator = new RobotPoseEstimator(fieldLayout, PoseStrategy.CLOSEST_TO_REFERENCE_POSE, photonCameraList);
+    public static RobotPoseEstimator robotPoseEstimator = new RobotPoseEstimator(fieldLayout, PoseStrategy.AVERAGE_BEST_TARGETS, photonCameraList);
 
 
     /**
-     * returns pose2d of where robot is
+     * returns pose3d of where robot is
      */
-    public static Pair<Pose2d, Double> getEstimatedPose(Pose2d prevEstimatedPose){
-        robotPoseEstimator.setReferencePose(prevEstimatedPose);
+    public static Pair<Pose3d, Double> getEstimatedPose(){
+        //robotPoseEstimator.setReferencePose(prevEstimatedPose);
 
         double currentTime = Timer.getFPGATimestamp();
         Optional<Pair<Pose3d, Double>> result = robotPoseEstimator.update();
 
         if(result.isPresent()){
-            return new Pair<>(result.get().getFirst().toPose2d(), currentTime - result.get().getSecond());
+            return new Pair<>(result.get().getFirst(), currentTime - result.get().getSecond());
         }else{
-            return new Pair<>(null, currentTime - result.get().getSecond()); //or 0.0
+            return new Pair<>(new Pose3d(0,0,0, new Rotation3d(0,0,0)), 0.0); //or 0.0
         }
     }
+
+
+    public static Pair<Double, Double> getBestTagTransform(){
+        var result = camera_drive.getLatestResult();
+        boolean hasTargets = result.hasTargets();
+        if(hasTargets){
+            PhotonTrackedTarget target = result.getBestTarget();
+            Transform3d bestCameraToTarget = target.getBestCameraToTarget();
+            double x = bestCameraToTarget.getX();
+            double y = bestCameraToTarget.getY();
+            return new Pair<>(x, y);
+        }else{
+            return new Pair<>(0.0,0.0);
+        }
+
+    }
+
+    public static int getBestTagID(){
+        var result = camera_drive.getLatestResult();
+        boolean hasTargets = result.hasTargets();
+        if(hasTargets){
+            PhotonTrackedTarget target = result.getBestTarget();
+            int targetID = target.getFiducialId();
+            return targetID;
+        }else{
+            return 0;
+        }
+    }
+
+    public static double getBestTagPoseAmbi(){
+        var result = camera_drive.getLatestResult();
+        boolean hasTargets = result.hasTargets();
+        if(hasTargets){
+            PhotonTrackedTarget target = result.getBestTarget();
+            double poseAmbi = target.getPoseAmbiguity();
+            return poseAmbi;
+        }else{
+            return 0.0;
+        }
+    }
+
+    public static boolean getIsTarget(){
+        var result = camera_drive.getLatestResult();
+        return result.hasTargets();
+    }
+
+
 
 
 
