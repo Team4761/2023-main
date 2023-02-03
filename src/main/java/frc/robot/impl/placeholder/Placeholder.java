@@ -4,9 +4,11 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.CANCoderConfiguration;
 import com.ctre.phoenix.sensors.SensorTimeBase;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import frc.robot.impl.RobotImpl;
+import frc.robot.main.Constants;
 
 public class Placeholder extends RobotImpl {
     // Drivetrain motors. The Talons already have encoders inside them
@@ -30,6 +32,10 @@ public class Placeholder extends RobotImpl {
     public static final MotorControllerGroup m_rightMotors = new MotorControllerGroup(front_right,back_right);
 
     private static final DifferentialDrive m_drive = new DifferentialDrive(m_leftMotors,m_rightMotors);
+
+    //PID controllers (for auto stuff, maybe drive)
+    public static final PIDController linear_PIDcontroller = new PIDController(Constants.LINEAR_P, Constants.LINEAR_I, Constants.LINEAR_D);
+    public static final PIDController angular_PIDcontroller = new PIDController(Constants.ANGULAR_P, Constants.ANGULAR_I, Constants.ANGULAR_D);
 
 
 
