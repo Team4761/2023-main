@@ -16,6 +16,7 @@ public class Terry extends RobotImpl {
     public static final MotorControllerGroup m_leftMotors = new MotorControllerGroup(front_left, back_left);
     public static final MotorControllerGroup m_rightMotors = new MotorControllerGroup(front_right, back_right);
 
+
     private static final DifferentialDrive m_drive = new DifferentialDrive(m_leftMotors, m_rightMotors);
 
     public Terry() {
@@ -27,6 +28,7 @@ public class Terry extends RobotImpl {
     public DifferentialDrive getDrive() {
         return m_drive;
     }
+
 
     @Override
     public double calcTimeToMoveFeet(double feet, double speed) {

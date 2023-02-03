@@ -34,7 +34,7 @@ public class Robot extends TimedRobot
   public final CommandScheduler commandScheduler = CommandScheduler.getInstance();
   private final XboxArcadeDrive xboxArcadeDrive = new XboxArcadeDrive();
 
-  public static RobotImpl impl = new Terry();
+  public static RobotImpl impl = new Placeholder();
 
   public static DrivetrainSubsystem driveTrain = DrivetrainSubsystem.getInstance();
 

@@ -1,15 +1,16 @@
 package frc.robot.controller;
 
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.main.Robot;
 
 public class XboxControl {
     private CommandXboxController xbox;
     private boolean inverted = true;
-
     public XboxControl(int port)
     {
         xbox = new CommandXboxController(port);
     }
+
 
     double applyDeadzone (double value, double deadzone) {
         if (Math.abs(value) > deadzone) {
@@ -44,4 +45,8 @@ public class XboxControl {
         double right = xbox.getRightY() * (inverted ? -1 : 1);
         return applyDeadzone(right,0.05);
     }
+
+
+
+
 }
