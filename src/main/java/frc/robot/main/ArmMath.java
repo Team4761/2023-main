@@ -1,4 +1,4 @@
-package frc.robot;
+package frc.robot.main;
 import edu.wpi.first.math.geometry.Translation2d;
 public class ArmMath {
     static final public double armLength1 = 25.0;
