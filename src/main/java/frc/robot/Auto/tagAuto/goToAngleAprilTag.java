@@ -1,15 +1,13 @@
 package frc.robot.Auto.tagAuto;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Vision.visionVarsAndMethods;
-import frc.robot.impl.placeholder.Placeholder;
-import frc.robot.main.Constants;
+import frc.robot.main.Robot;
 
 import static frc.robot.impl.placeholder.Placeholder.angular_PIDcontroller;
 
 
-public class goToAngle extends CommandBase {
+public class goToAngleAprilTag extends CommandBase {
 
     /**
      * This method should make the robot move to a given pose using real time tag feedback.
@@ -17,9 +15,12 @@ public class goToAngle extends CommandBase {
      */
 
     double goalYaw;
+    double prevKnownAngle;
+    double currentYaw;
+    double rotateSpeed;
 
 
-    public goToAngle(double goalYaw) {
+    public goToAngleAprilTag(double goalYaw) {
         // each subsystem used by the command must be passed into the
         // addRequirements() method (which takes a vararg of Subsystem)
         addRequirements();
@@ -33,18 +34,21 @@ public class goToAngle extends CommandBase {
 
     @Override
     public void execute() {
-        double rotateSpeed;
         boolean isTarget = visionVarsAndMethods.getIsTarget();
         if(isTarget){
-           double currentYaw = visionVarsAndMethods.getEstimatedPose().getFirst().getRotation().getX();
-           rotateSpeed = angular_PIDcontroller.calculate(currentYaw, goalYaw);
+           currentYaw = visionVarsAndMethods.getEstimatedPose().getFirst().getRotation().getX();
+           prevKnownAngle = currentYaw;
+           rotateSpeed = angular_PIDcontroller.calculate(currentYaw, goalYaw); //TODO find if photonvision does degrees or radians!
+        }else{
+            rotateSpeed = angular_PIDcontroller.calculate(prevKnownAngle, goalYaw); //TODO find if this actually works, it may make the robot just spin around forever
         }
+        Robot.driveTrain.arcadeDrive(0, rotateSpeed);
     }
 
     @Override
     public boolean isFinished() {
-        // TODO: Make this return true when this Command no longer needs to run execute()
-        return false;
+        //TODO Tune this value
+        return Math.abs(currentYaw - goalYaw) < Math.PI / 16;
     }
 
     @Override
