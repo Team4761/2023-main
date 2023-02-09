@@ -1,5 +1,6 @@
-package frc.robot.Auto.tagAuto;
+package frc.robot.Auto.tagAuto.moveToPointCommands;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Vision.visionVarsAndMethods;
 import frc.robot.main.Robot;
@@ -18,18 +19,19 @@ public class goToAngleAprilTag extends CommandBase {
     double prevKnownAngle;
     double currentYaw;
     double rotateSpeed;
+    Pose2d goalPose;
 
 
-    public goToAngleAprilTag(double goalYaw) {
+    public goToAngleAprilTag(Pose2d goalPose) {
         // each subsystem used by the command must be passed into the
         // addRequirements() method (which takes a vararg of Subsystem)
         addRequirements();
-        this.goalYaw = goalYaw;
+        this.goalPose = goalPose;
     }
 
     @Override
     public void initialize() {
-
+        goalYaw = goalPose.getRotation().getRadians();
     }
 
     @Override
@@ -48,7 +50,7 @@ public class goToAngleAprilTag extends CommandBase {
     @Override
     public boolean isFinished() {
         //TODO Tune this value
-        return Math.abs(currentYaw - goalYaw) < Math.PI / 16;
+        return Math.abs(currentYaw - goalYaw) < Math.PI / 16; //TODO TUNE THIS NUMBER
     }
 
     @Override

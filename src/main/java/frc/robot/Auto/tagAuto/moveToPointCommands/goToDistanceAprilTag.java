@@ -1,4 +1,4 @@
-package frc.robot.Auto.tagAuto;
+package frc.robot.Auto.tagAuto.moveToPointCommands;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
