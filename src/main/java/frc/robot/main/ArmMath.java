@@ -80,4 +80,14 @@ public class ArmMath {
         }
         return false;
     }
+    public Translation2d getPoint(double theta1, double theta2)
+    {
+        return new Translation2d(
+                armLength1 * Math.cos(theta1) + armLength2 * Math.cos(theta2),
+                armLength1 * Math.sin(theta1) + armLength2 * Math.cos(theta2));
+    }
+    public boolean comparePoint(Translation2d wantedPoint, Translation2d currentPoint, double variation)
+    {
+        return Math.abs(wantedPoint.getX() - currentPoint.getX()) < variation && Math.abs(wantedPoint.getY() - currentPoint.getY()) <  variation;
+    }
 }
