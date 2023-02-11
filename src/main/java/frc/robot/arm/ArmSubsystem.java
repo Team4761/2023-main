@@ -21,7 +21,7 @@ public class ArmSubsystem extends SubsystemBase {
         lowEncoder = new AbsoluteEncoder(0);
         highEncoder = new AbsoluteEncoder(9);
         bottom_left = new CANSparkMax(15, CANSparkMaxLowLevel.MotorType.kBrushless);
-        bottom_right = new CANSparkMax(1, CANSparkMaxLowLevel.MotorType.kBrushless3);
+        bottom_right = new CANSparkMax(1, CANSparkMaxLowLevel.MotorType.kBrushless);
         bottom_right.setInverted(true);
         top = new CANSparkMax(12, CANSparkMaxLowLevel.MotorType.kBrushless);
     }
