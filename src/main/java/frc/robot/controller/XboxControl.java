@@ -1,16 +1,16 @@
 package frc.robot.controller;
 
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.impl.placeholder.Placeholder;
 import frc.robot.main.Robot;
 
-public class XboxControl {
-    private CommandXboxController xbox;
+public class XboxControl extends CommandXboxController {
     private boolean inverted = true;
     public XboxControl(int port)
     {
-        xbox = new CommandXboxController(port);
+        super(port);
     }
-
 
     double applyDeadzone (double value, double deadzone) {
         if (Math.abs(value) > deadzone) {
@@ -24,29 +24,28 @@ public class XboxControl {
         }
 
     }
-    public double getLeftX()
-    {
-        double left = xbox.getLeftX() * (inverted ? -1 : 1);
-        return applyDeadzone(left,0.05);
+
+    @Override
+    public double getLeftX() {
+        double left = super.getLeftX() * (inverted ? -1 : 1);
+        return applyDeadzone(left, 0.05);
     }
-    
-    public double getRightX()
-    {
-        double right = xbox.getRightX() ;
-        return applyDeadzone(right,0.05);
-    }
-    public double getLeftY()
-    {
-        double left = xbox.getLeftY() * (inverted ? -1 : 1);
-        return applyDeadzone(left,0.05);
-    }
-    public double getRightY()
-    {
-        double right = xbox.getRightY() * (inverted ? -1 : 1);
+
+    @Override
+    public double getRightX() {
+        double right = super.getRightX() ;
         return applyDeadzone(right,0.05);
     }
 
+    @Override
+    public double getLeftY() {
+        double left = super.getLeftY() * (inverted ? -1 : 1);
+        return applyDeadzone(left,0.05);
+    }
 
-
-
+    @Override
+    public double getRightY() {
+        double right = super.getRightY() * (inverted ? -1 : 1);
+        return applyDeadzone(right,0.05);
+    }
 }

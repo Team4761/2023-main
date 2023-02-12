@@ -1,10 +1,11 @@
 package frc.robot.Drivetrain;
 
-
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.impl.placeholder.Placeholder;
 import frc.robot.main.Robot;
 
 public class DrivetrainSubsystem extends SubsystemBase {
+    private static int holder = 0;
 
     // With eager singleton initialization, any static variables/fields used in the 
     // constructor must appear before the "INSTANCE" variable so that they are initialized 
@@ -16,6 +17,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
      * than trying to construct an instance of this class.)
      */
     private final static DrivetrainSubsystem INSTANCE = new DrivetrainSubsystem();
+
+
 
     /**
      * Returns the Singleton instance of this DrivetrainSubsystem. This static method
@@ -40,10 +43,15 @@ public class DrivetrainSubsystem extends SubsystemBase {
     }
 
     public void arcadeDrive(double speed, double rotation){
+        if((holder++ % 100) == 0){
+            Placeholder.logGyro();
+            Placeholder.logMySpeed();
+        }
         Robot.impl.getDrive().arcadeDrive(speed, rotation);
     }
     public void tankDrive(double rightSpeed, double leftSpeed){
         Robot.impl.getDrive().tankDrive(rightSpeed, leftSpeed);
     }
+
 }
 

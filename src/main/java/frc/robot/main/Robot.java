@@ -17,6 +17,7 @@ import frc.robot.impl.placeholder.Placeholder;
 import frc.robot.impl.terry.Terry;
 import frc.robot.impl.westcoast.WestCoast;
 
+
 /**
  * The VM is configured to automatically run this class, and to call the methods corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -69,11 +70,11 @@ public class Robot extends TimedRobot
     double topSpeed = .5;
     commandScheduler.schedule(
             new SequentialCommandGroup(
-                    new MoveFeetForward(topSpeed, 20),
-                    new RotateDegreesCommand(0.5, 90),
-                    new MoveFeetForward(topSpeed, 2),
-                    new RotateDegreesCommand(0.5, 90),
-                    new MoveFeetForward(topSpeed, 20)
+                    new MoveFeetForward(topSpeed, 6)
+//                    new RotateDegreesCommand(0.5, 90),
+//                    new MoveFeetForward(topSpeed, 2),
+//                    new RotateDegreesCommand(0.5, 90),
+//                    new MoveFeetForward(topSpeed, 20)
             )
     );
 
@@ -90,6 +91,7 @@ public class Robot extends TimedRobot
   /** This method is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
+
     commandScheduler.schedule(xboxArcadeDrive.repeatedly());
   }
 
