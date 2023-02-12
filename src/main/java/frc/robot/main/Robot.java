@@ -63,18 +63,20 @@ public class Robot extends TimedRobot
     initFromSelector();
   }
 
+  static int count = 0;
+
   @Override
   public void autonomousInit()
   {
     double topSpeed = .5;
     commandScheduler.schedule(
-            new SequentialCommandGroup(
-                    new MoveFeetForward(topSpeed, 20),
-                    new RotateDegreesCommand(0.5, 90),
-                    new MoveFeetForward(topSpeed, 2),
-                    new RotateDegreesCommand(0.5, 90),
-                    new MoveFeetForward(topSpeed, 20)
-            )
+      new SequentialCommandGroup(
+        new MoveToSpeed(100000, topSpeed)
+        //            new RotateDegreesCommand(0.5, 90),
+        //            new MoveFeetForward(topSpeed, 2),
+        //            new RotateDegreesCommand(0.5, 90),
+        //            new MoveFeetForward(topSpeed, 20)
+        )
     );
 
   }
@@ -84,6 +86,14 @@ public class Robot extends TimedRobot
   public void autonomousPeriodic()
   {
     commandScheduler.run();
+    if ((count++ % 10) == 0) {
+      try {
+         Placeholder.log();
+      } catch (RuntimeException ex) {
+         ex.printStackTrace();
+      }
+    }
+
   }
 
 

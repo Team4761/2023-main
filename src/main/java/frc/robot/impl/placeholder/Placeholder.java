@@ -1,14 +1,19 @@
 package frc.robot.impl.placeholder;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
-import com.ctre.phoenix.sensors.CANCoderConfiguration;
-import com.ctre.phoenix.sensors.SensorTimeBase;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import frc.robot.impl.RobotImpl;
 import frc.robot.main.Constants;
+import edu.wpi.first.wpilibj.Encoder;
+import frc.robot.main.Varyings;
 
 public class Placeholder extends RobotImpl {
     // Drivetrain motors. The Talons already have encoders inside them
@@ -18,7 +23,7 @@ public class Placeholder extends RobotImpl {
     public static WPI_TalonFX back_right = new WPI_TalonFX(1);
 
     //Encoders that are pre-built into the talons
-//    public static CANCoder front_left_CANCoder = new CANCoder(0);
+    //public static CANCoder front_right_CANCoder = new CANCoder(0);
 //    public static CANCoder front_right_CANCoder = new CANCoder(1);
 //    public static CANCoder back_left_CANCoder = new CANCoder(2);
 //    public static CANCoder back_right_CANCoder = new CANCoder(3);
@@ -26,6 +31,8 @@ public class Placeholder extends RobotImpl {
 //    //Setting encoder variables
 //    CANCoderConfiguration CANCoderConfig = new CANCoderConfiguration();
 //
+    //private static final Encoder m_leftEncoder = new Encoder(0, 1);
+
 
     // Drivetrain
     public static final MotorControllerGroup m_leftMotors = new MotorControllerGroup(front_left,back_left);
@@ -57,6 +64,16 @@ public class Placeholder extends RobotImpl {
         getDrive().setExpiration(.3);
 //        m_rightMotors.setInverted(true);
         m_leftMotors.setInverted(true);
+        setPidContants(front_left);
+        setPidContants(front_right);
+        setPidContants(back_left);
+        setPidContants(back_right);
+    }
+
+    private void setPidContants(WPI_TalonFX motor) {
+        motor.config_kP(0, Varyings.drivetrainpid.getP());
+        motor.config_kI(0, Varyings.drivetrainpid.getI());
+        motor.config_kD(0, Varyings.drivetrainpid.getD());
     }
 
     @Override
@@ -76,5 +93,6 @@ public class Placeholder extends RobotImpl {
         return degrees / 90 * speed * ratio;
     }
 
-
+    public static void log() {
+    }
 }
