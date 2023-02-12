@@ -49,8 +49,8 @@ public class MoveToSpeedCommand extends CommandBase {
         if ((count++ % 10) == 0) {
             System.out.println("count=" + count + " speed=" + leftFrontSpeed + ", " + rightFrontSpeed);
         }
-        Placeholder.m_leftMotors.setVoltage(leftFrontSpeed + leftFeedforward);
-        Placeholder.m_rightMotors.setVoltage(rightFrontSpeed + rightFeedforward);
+        Placeholder.m_leftMotors.set(leftFrontSpeed + leftFeedforward);
+        Placeholder.m_rightMotors.set(rightFrontSpeed + rightFeedforward);
     }
 
     @Override
