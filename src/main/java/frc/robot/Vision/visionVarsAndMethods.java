@@ -113,6 +113,13 @@ public class visionVarsAndMethods {
         return result.hasTargets();
     }
 
+    public static double getLinearDistance(Pose2d goal){
+        double xDifference = goal.getX() - getEstimatedPose().getFirst().getX();
+        double yDifference = goal.getY() - getEstimatedPose().getFirst().getY(); //TODO find if its y or z
+        double pythagStuff = Math.sqrt((xDifference * xDifference) + (yDifference * yDifference));
+        return pythagStuff;
+    }
+
 
 
 
