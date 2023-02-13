@@ -19,8 +19,8 @@ public class MoveStraightMeasuredCommand extends CommandBase {
     private final double meters;
 
     /**
-     * @param xSpeed in meters / second
-     * @param meters
+     * @param xSpeed between -1.0 and 1.0
+     * @param meters the number of meters to go forward
      */
     public MoveStraightMeasuredCommand(double xSpeed, double meters) {
         start = Robot.impl.getSensorReadings();
