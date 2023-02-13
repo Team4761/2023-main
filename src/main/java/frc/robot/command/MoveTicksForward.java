@@ -1,44 +1,5 @@
 package frc.robot.command;
 
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import frc.robot.impl.placeholder.Placeholder;
-
-class Distances {
-    public double frontLeft;
-    public double frontRight;
-    public double backLeft;
-    public double backRight;
-
-    public static Distances fromPlaceholder() {
-        return new Distances(
-                getSensorPosition(Placeholder.front_left),
-                getSensorPosition(Placeholder.front_right),
-                getSensorPosition(Placeholder.back_left),
-                getSensorPosition(Placeholder.back_right)
-        );
-    }
-
-    private static double getSensorPosition(WPI_TalonFX motor) {
-        return motor.getSensorCollection().getIntegratedSensorPosition();
-    }
-
-    public Distances(double frontLeft, double frontRight, double backLeft, double backRight) {
-        this.frontLeft = frontLeft;
-        this.frontRight = frontRight;
-        this.backLeft = backLeft;
-        this.backRight = backRight;
-    }
-
-    public double average() {
-        return (frontLeft + frontRight + backLeft + backRight) / 4;
-    }
-
-    @Override
-    public String toString() {
-        return "fl=" + frontLeft + " fr=" + frontRight + " bl=" + backLeft + " br=" + backRight;
-    }
-}
-
 public class MoveTicksForward extends MoveCommand {
     private Distances start;
     private double ticks;

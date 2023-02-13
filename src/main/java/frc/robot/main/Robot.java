@@ -11,7 +11,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Drivetrain.DrivetrainSubsystem;
-import frc.robot.command.*;
+import frc.robot.command.MoveStraightMeasuredCommand;
+import frc.robot.command.XboxArcadeDrive;
 import frc.robot.impl.RobotImpl;
 import frc.robot.impl.placeholder.Placeholder;
 import frc.robot.impl.terry.Terry;
@@ -71,9 +72,9 @@ public class Robot extends TimedRobot
     double topSpeed = .5;
     commandScheduler.schedule(
       new SequentialCommandGroup(
-        new MoveToSpeed(100000, topSpeed)
+        new MoveStraightMeasuredCommand(2, 3.0)
         //            new RotateDegreesCommand(0.5, 90),
-        //            new MoveFeetForward(topSpeed, 2),
+        //            new MoveFeetForward(topSpeed, 2),    3
         //            new RotateDegreesCommand(0.5, 90),
         //            new MoveFeetForward(topSpeed, 20)
         )
@@ -86,16 +87,7 @@ public class Robot extends TimedRobot
   public void autonomousPeriodic()
   {
     commandScheduler.run();
-    if ((count++ % 10) == 0) {
-      try {
-         Placeholder.log();
-      } catch (RuntimeException ex) {
-         ex.printStackTrace();
-      }
-    }
-
   }
-
 
   /** This method is called once when teleop is enabled. */
   @Override

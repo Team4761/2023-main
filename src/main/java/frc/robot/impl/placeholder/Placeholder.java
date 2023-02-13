@@ -1,18 +1,12 @@
 package frc.robot.impl.placeholder;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import com.ctre.phoenix.sensors.CANCoder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import frc.robot.command.Distances;
 import frc.robot.impl.RobotImpl;
 import frc.robot.main.Constants;
-import edu.wpi.first.wpilibj.Encoder;
 import frc.robot.main.Varyings;
 
 public class Placeholder extends RobotImpl {
@@ -93,6 +87,17 @@ public class Placeholder extends RobotImpl {
         return degrees / 90 * speed * ratio;
     }
 
-    public static void log() {
+    @Override
+    public Distances getSensorReadings() {
+        return new Distances(
+            getSensorPosition(front_left),
+            getSensorPosition(front_right),
+            getSensorPosition(back_left),
+            getSensorPosition(back_right)
+        );
+    }
+
+    private double getSensorPosition(WPI_TalonFX motor) {
+        return motor.getSensorCollection().getIntegratedSensorPosition();
     }
 }
