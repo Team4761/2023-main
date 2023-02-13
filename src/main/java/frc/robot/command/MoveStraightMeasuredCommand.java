@@ -24,25 +24,40 @@ public class MoveStraightMeasuredCommand extends CommandBase {
      */
     public MoveStraightMeasuredCommand(double xSpeed, double meters) {
         start = Robot.impl.getSensorReadings();
-        speed = xSpeed;
+        speed = MathUtil.applyDeadband(xSpeed, RobotDriveBase.kDefaultDeadband);
         this.meters = meters;
     }
 
     @Override
     public void execute() {
-        var m_deadband = RobotDriveBase.kDefaultDeadband;
-        var xSpeed = MathUtil.applyDeadband(speed, m_deadband);
+        var speeds = DifferentialDrive.tankDriveIK(speed, speed, true);
 
-        var speeds = DifferentialDrive.curvatureDriveIK(xSpeed, 0.0, true);
+        var delta = getDelta();
+        var avgDeltaLeftRight = (delta.frontLeft - delta.frontRight) / 2;
 
-//        Robot.impl.getDrive().getLeft().set(speeds.left * kMaxOutput);
-//        Robot.impl.getDrive().getRight().set(speeds.right * kMaxOutput);
+        // the closer the average delta is to zero, the more we want speeds.left to stay the same.
+        // if the average delta is positive, we want left to slow down just a bit, and go to zero if it's a full
+        // revolution behind.
+        speeds.left *= 1 - (avgDeltaLeftRight / 4096);
+
+        // the closer the average delta is to zero, the more we want speeds.left to stay the same
+        // if the average delta is positive, we want right to speed up just a bit, and go to 2*speed if it's a full
+        // revolution behind.
+        speeds.right *= 1 + (avgDeltaLeftRight / 4096);
+
+        // TODO: this can be extracted to RobotImpl
         Placeholder.m_leftMotors.set(speeds.left * kMaxOutput);
         Placeholder.m_rightMotors.set(speeds.right * kMaxOutput);
     }
 
     @Override
     public boolean isFinished() {
+        Distances delta = getDelta();
+        var distance = ticksToMeters(delta.average());
+        return distance > this.meters;
+    }
+
+    private Distances getDelta() {
         var rightNow = Robot.impl.getSensorReadings();
         var delta = new Distances(
             Math.abs(rightNow.frontLeft - start.frontLeft),
@@ -50,8 +65,7 @@ public class MoveStraightMeasuredCommand extends CommandBase {
             Math.abs(rightNow.backLeft - start.backLeft),
             Math.abs(rightNow.backRight - start.frontRight)
         );
-        var distance = ticksToMeters(delta.average());
-        return distance > this.meters;
+        return delta;
     }
 
     private double ticksToMeters(double sensorCounts) {
