@@ -11,8 +11,8 @@ import frc.robot.main.Constants;
 public class ArmSubsystem extends SubsystemBase {
     private final static ArmSubsystem INSTANCE = new ArmSubsystem();
 
-    AbsoluteEncoder lowEncoder;
-    AbsoluteEncoder highEncoder;
+    AbsoluteEncoder bottomEncoder;
+    AbsoluteEncoder topEncoder;
     CANSparkMax bottom_left;
     CANSparkMax bottom_right;
     CANSparkMax top_motor;
@@ -28,16 +28,17 @@ public class ArmSubsystem extends SubsystemBase {
 
     public ArmSubsystem()
     {
-        lowEncoder = new AbsoluteEncoder(Constants.ARM_ENCODER_BOTTOM_PORT);
-        highEncoder = new AbsoluteEncoder(Constants.ARM_ENCODER_TOP_PORT);
+        bottomEncoder = new AbsoluteEncoder(Constants.ARM_ENCODER_BOTTOM_PORT);
+        topEncoder = new AbsoluteEncoder(Constants.ARM_ENCODER_TOP_PORT);
         bottom_left = new CANSparkMax(Constants.ARM_MOTOR_BOTTOM_LEFT_PORT, CANSparkMaxLowLevel.MotorType.kBrushless);
         bottom_right = new CANSparkMax(Constants.ARM_MOTOR_BOTTOM_RIGHT_PORT, CANSparkMaxLowLevel.MotorType.kBrushless);
         top_motor = new CANSparkMax(Constants.ARM_MOTOR_TOP_PORT, CANSparkMaxLowLevel.MotorType.kBrushless);
 
         bottom_right.setInverted(true);
 
-        //bottom = new ArmPIDSubsystem(lowEncoder, bottom_left, "low");
-        top = new ArmPIDSubsystem(highEncoder, top_motor, "high");
+        //bottom = new ArmPIDSubsystem(bottomEncoder, bottom_left, "bottom");
+        top = new ArmPIDSubsystem(topEncoder, top_motor, "top");
+        top.enable();
 
         inverseKinematics = new ArmMath();
         pos = inverseKinematics.getPoint(getBottomRotation(), getTopRotation());
@@ -51,11 +52,10 @@ public class ArmSubsystem extends SubsystemBase {
 
     /* Setters */
     // PID control
-    public void move() {
+    public void movePID() {
+        //top.enable();
         top.setGoal(getDesiredTopRotation());
         //bottom.setGoal(getDesiredBottomRotation());
-
-        top.enable();
         // bottom.enable();
     }
     // Updating positions
@@ -99,8 +99,9 @@ public class ArmSubsystem extends SubsystemBase {
         stopTop();
     }
     public void zeroEncoders() {
-        lowEncoder.reset();
-        highEncoder.reset();
+        System.out.println("[ZERO ENCODERS] Please note that zero-ing encoders only works for the current run, and the next run it will default back to official values!");
+        bottomEncoder.reset();
+        topEncoder.reset();
     }
 
     /* Getters */
@@ -111,10 +112,10 @@ public class ArmSubsystem extends SubsystemBase {
         return top_motor.get();
     }
     public double getBottomRotation() {
-        return lowEncoder.getRotation() - Constants.ENCODER_ZERO_VALUE_BOTTOM;
+        return bottomEncoder.getRotation() - Constants.ENCODER_ZERO_VALUE_BOTTOM;       // This is to effectively zero out the robot using a preset value
     }
     public double getTopRotation() {
-        return highEncoder.getRotation() - Constants.ENCODER_ZERO_VALUE_TOP;
+        return topEncoder.getRotation() - Constants.ENCODER_ZERO_VALUE_TOP;             // Same as above comment
     }
     public double getDesiredBottomRotation() {
         return inverseKinematics.arm1Theta(pos.getX(),pos.getY());

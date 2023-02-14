@@ -28,7 +28,7 @@ public class AbsoluteEncoder extends SubsystemBase {
     public double getRotation() {
         return m_dutyCycleEncoder.getAbsolutePosition() * 2*Math.PI;
     }
-    public double getRotationAngle() {
+    public double getRotationDegrees() {
         return (m_dutyCycleEncoder.get() * 360) % 360;
     }
     // 1 is a full revolution. 0 is nothing.
@@ -41,4 +41,17 @@ public class AbsoluteEncoder extends SubsystemBase {
     public void reset() {
         m_dutyCycleEncoder.reset();
     }
+
+
+    // DEBUGGING AND SPECIFIC INFO FOR NERDS //
+    public String toString() {
+        String name = "[Encoder Port {" + m_dutyCycleEncoder.getSourceChannel() + "}]";
+        return
+            name + " isConnected: " + m_dutyCycleEncoder.isConnected() + "\n" +
+            name + " rotation: " + m_dutyCycleEncoder.get() * 2*Math.PI + "\n" + 
+            name + " rawValue: " + m_dutyCycleEncoder.get();
+    }
+
+    public DutyCycleEncoder getDutyCycleEncoder() { return m_dutyCycleEncoder; }
+    public void setDutyCycleEncoder(DutyCycleEncoder newEncoder) { this.m_dutyCycleEncoder = newEncoder; }
 }

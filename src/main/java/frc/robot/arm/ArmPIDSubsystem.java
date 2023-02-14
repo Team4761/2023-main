@@ -15,7 +15,7 @@ public class ArmPIDSubsystem extends ProfiledPIDSubsystem {
     CANSparkMax motor;
     String motorType;
     // <https://www.reca.lc/arm> has a very useful calculator!!!
-    ArmFeedforward feedforward = new ArmFeedforward(0.01, 0.45, 1.95, 0.02);
+    // ArmFeedforward feedforward = new ArmFeedforward(0.01, 0.45, 1.95, 0.02);
 
 
     public ArmPIDSubsystem(AbsoluteEncoder e, CANSparkMax m, String type) {
@@ -28,8 +28,8 @@ public class ArmPIDSubsystem extends ProfiledPIDSubsystem {
 
         encoder = e;
         motor = m;
-        setGoal(e.getRotation());
         motorType = type;
+        setGoal(e.getRotation());
     }
 
 
@@ -37,15 +37,18 @@ public class ArmPIDSubsystem extends ProfiledPIDSubsystem {
     public void useOutput(double output, TrapezoidProfile.State setpoint) {
         double ff = 0.0;//feedforward.calculate(setpoint.position, setpoint.velocity);
         System.out.println("CURRENT OUTPUT: " + output);
-        if (motorType.equalsIgnoreCase("high"))
+        if (motorType.equalsIgnoreCase("top"))
             Robot.arms.setTop(output + ff);
-        if (motorType.equalsIgnoreCase("low"))
+        if (motorType.equalsIgnoreCase("bottom"))
             Robot.arms.setBottom(output + ff);
     }
 
     @Override
     public double getMeasurement() {
         System.out.println("Our current rotation is | " + Robot.arms.getTopRotation() + " | and our desired rotation is | " + Robot.arms.getDesiredTopRotation());
-        return Robot.arms.getTopRotation();
+        if (motorType.equalsIgnoreCase("top"))
+            return Robot.arms.getTopRotation();
+        else
+            return Robot.arms.getBottomRotation();
     }
 }
