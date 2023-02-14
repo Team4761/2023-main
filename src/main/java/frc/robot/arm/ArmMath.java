@@ -1,8 +1,11 @@
 package frc.robot.arm;
 import edu.wpi.first.math.geometry.Translation2d;
+import frc.robot.main.Constants;
+
 public class ArmMath {
-    static final public double armLength1 = 25.0;
-    static final public double armLength2 = 30.0;
+    double armLength1 = Constants.ARM_LENGTH_BOTTOM;
+    double armLength2 = Constants.ARM_LENGTH_TOP;
+
     //x and y relative to arm1's joint
     public double arm1Theta(double x, double y)
     {
@@ -36,7 +39,7 @@ public class ArmMath {
     //<not sure if translation2d is implemented correctly>
     public Translation2d inPoint(Translation2d testPoint)
     {
-        if(inBounds(testPoint.getX(), testPoint.getY()))
+        if(inBounds(new Translation2d(testPoint.getX(), testPoint.getY())))
             return testPoint;
         else
         {
@@ -62,9 +65,8 @@ public class ArmMath {
         }
         return null;
     }
-    public boolean inBounds(double x, double y)//,Translation2d testPoint)
+    public boolean inBounds(Translation2d testPoint)//,Translation2d testPoint)
     {
-        Translation2d testPoint = new Translation2d(x, y);
         //only for default joint configuration
         Translation2d jLock1 = new Translation2d(-Math.sqrt(armLength1*armLength1-jointHeight*jointHeight),-jointHeight);
         Translation2d origin = new Translation2d();
