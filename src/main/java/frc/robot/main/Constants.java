@@ -22,7 +22,7 @@ public class Constants {
     // Arm Constants
     static final public double ARM_LENGTH_BOTTOM = 25.0;        // Bottom Arm?
     static final public double ARM_LENGTH_TOP = 30.0;           // Top Arm?
-    static final public double ARM_P = 3.0;                     // PID control for arms
+    static final public double ARM_P = 0.5;                     // PID control for arms
     static final public double ARM_I = 0.0;                     // PID control for arms
     static final public double ARM_D = 0.0;                     // PID control for arms
     static final public double ARM_MAX_ACCELERATION_SPEED = 0.1;

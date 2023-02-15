@@ -37,6 +37,7 @@ public class ArmPIDSubsystem extends ProfiledPIDSubsystem {
     public void useOutput(double output, TrapezoidProfile.State setpoint) {
         double ff = 0.0;//feedforward.calculate(setpoint.position, setpoint.velocity);
         System.out.println("CURRENT OUTPUT: " + output);
+        System.out.println("ERROR: " + (Robot.arms.getDesiredTopRotation()-Robot.arms.getTopRotation()));
         if (motorType.equalsIgnoreCase("top"))
             Robot.arms.setTop(output + ff);
         if (motorType.equalsIgnoreCase("bottom"))

@@ -26,7 +26,10 @@ public class AbsoluteEncoder extends SubsystemBase {
     }
     // Returns radians
     public double getRotation() {
-        return m_dutyCycleEncoder.getAbsolutePosition() * 2*Math.PI;
+        double raw = m_dutyCycleEncoder.getAbsolutePosition() * 2*Math.PI;
+        if(raw > Math.PI)
+            raw -= 2*Math.PI;
+        return raw;
     }
     public double getRotationDegrees() {
         return (m_dutyCycleEncoder.get() * 360) % 360;

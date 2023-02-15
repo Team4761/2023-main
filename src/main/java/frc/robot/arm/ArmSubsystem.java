@@ -38,7 +38,7 @@ public class ArmSubsystem extends SubsystemBase {
 
         //bottom = new ArmPIDSubsystem(bottomEncoder, bottom_left, "bottom");
         top = new ArmPIDSubsystem(topEncoder, top_motor, "top");
-        top.enable();
+
 
         inverseKinematics = new ArmMath();
         pos = inverseKinematics.getPoint(getBottomRotation(), getTopRotation());
@@ -53,8 +53,9 @@ public class ArmSubsystem extends SubsystemBase {
     /* Setters */
     // PID control
     public void movePID() {
-        //top.enable();
+
         top.setGoal(getDesiredTopRotation());
+        top.enable();
         //bottom.setGoal(getDesiredBottomRotation());
         // bottom.enable();
     }
@@ -135,7 +136,7 @@ public class ArmSubsystem extends SubsystemBase {
 
     /* Debugging Info */
     public void debug() {
-        System.out.println(getTopRotation() + " | " + getBottomRotation());
+        System.out.println("TOP ROTATION: " + getTopRotation() + " | " + "BOTTOM ROTATION: " + getBottomRotation());
         SmartDashboard.putBoolean("ARMS[00]: Is debugging", true);
         SmartDashboard.putNumber("ARMS[01]: Top rotation", getTopRotation());
         SmartDashboard.putNumber("ARMS[02]: Bottom rotation", getBottomRotation());

@@ -11,19 +11,22 @@ public class ArmControl extends CommandBase {
     @Override
     public void execute() {
         //Robot.arms.updatePos(xbox.getRightX(), xbox.getRightY());
-        Robot.arms.movePID();
+        //Robot.arms.movePID();
         //obot.arms.setBottomL(xbox.getRightY()/2);
         //Robot.arms.setBottomR(xbox.getLeftY()/2);
         Robot.arms.setBottom(xbox.getRightY());
         //Robot.arms.setTop(xbox.getLeftY()/2);
         
         // Emergency Stop!
-        xbox.getController().a().onTrue(Commands.runOnce(() -> { emergencyStop(); }));
+        xbox.getController().a().onTrue(Commands.runOnce(() -> { movePID(); }));
         //xbox.getController().x().onTrue(Commands.runOnce(() -> { zeroEncoders(); }));
         // Debugging purposes only
         Robot.arms.debug();
     }
 
+    public void movePID() {
+        Robot.arms.movePID();
+    }
     public void emergencyStop() {
         Robot.arms.emergencyStop();
     }
