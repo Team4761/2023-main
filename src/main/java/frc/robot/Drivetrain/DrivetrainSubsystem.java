@@ -18,6 +18,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
      */
     private final static DrivetrainSubsystem INSTANCE = new DrivetrainSubsystem();
 
+    public final static Placeholder test = new Placeholder();
 
 
     /**

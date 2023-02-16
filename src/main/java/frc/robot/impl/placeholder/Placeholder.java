@@ -9,8 +9,11 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.robot.impl.RobotImpl;
 import frc.robot.main.Constants;
+import frc.robot.main.Robot;
 
 public class Placeholder extends RobotImpl {
     // Drivetrain motors. The Talons already have encoders inside them
@@ -22,9 +25,9 @@ public class Placeholder extends RobotImpl {
     //Gyro and PID controllers for PID
     public static ADXRS450_Gyro m_gyro = new ADXRS450_Gyro();
 
-    private final PIDController left_PIDController = new PIDController(1,0,0);
+    private final PIDController left_PIDController = new PIDController(.1,0,.001);
 
-    private final PIDController right_PIDController = new PIDController(1,0,0);
+    private final PIDController right_PIDController = new PIDController(-2.5,0,.001);
 
 
     // Drivetrain
@@ -42,7 +45,7 @@ public class Placeholder extends RobotImpl {
             new DifferentialDriveKinematics(Constants.trackWidth);
 
 //To be determined
-    private final SimpleMotorFeedforward m_feedFoward = new SimpleMotorFeedforward(0,0);
+    private final SimpleMotorFeedforward m_feedFoward = new SimpleMotorFeedforward(0.106,0.76);
 
 
     public static boolean doLogging = false;
@@ -64,8 +67,6 @@ public class Placeholder extends RobotImpl {
         getDrive().setExpiration(.3);
 
         m_leftMotors.setInverted(true);
-
-
 
     }
 
@@ -124,9 +125,15 @@ public class Placeholder extends RobotImpl {
         final double rightFeedforward = m_feedFoward.calculate(speeds.rightMetersPerSecond);
 
         final double leftOutput =
-                left_PIDController.calculate(nativeUnitsToDistanceMeters(Placeholder.averageMotorGroupVelocity(front_left, back_left)));
+                left_PIDController.calculate(nativeUnitsToDistanceMeters(Placeholder.averageMotorGroupVelocity(front_left, back_left)), 1);
         final double rightOutput =
-                right_PIDController.calculate(nativeUnitsToDistanceMeters(Placeholder.averageMotorGroupVelocity(front_right, back_right)));
+                right_PIDController.calculate(nativeUnitsToDistanceMeters(Placeholder.averageMotorGroupVelocity(front_right, back_right)), 1);
+
+        System.out.println("Right Voltage: " + (rightOutput + rightFeedforward));
+        System.out.println("Left Voltage: " + (leftFeedforward + leftOutput));
+
+        System.out.println("Right " + averageMotorGroupVelocity(front_right, back_right));
+        System.out.println("Left " + averageMotorGroupVelocity(front_left, back_left));
 
         m_rightMotors.setVoltage(rightOutput + rightFeedforward);
         m_leftMotors.setVoltage(leftOutput + leftFeedforward);

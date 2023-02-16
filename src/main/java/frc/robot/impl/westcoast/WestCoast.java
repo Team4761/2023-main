@@ -29,4 +29,9 @@ public class WestCoast extends RobotImpl {
         double ratio = 0.9;
         return degrees / 90 * speed * ratio;
     }
+
+    @Override
+    public void drive(double xSpeed, double rot) {
+
+    }
 }

@@ -67,10 +67,11 @@ public class Robot extends TimedRobot
   @Override
   public void autonomousInit()
   {
-    double topSpeed = .5;
+
+
     commandScheduler.schedule(
             new SequentialCommandGroup(
-                    new MoveFeetForward(topSpeed, 6)
+                    new MoveFeetForward(.5, 6)
 //                    new RotateDegreesCommand(0.5, 90),
 //                    new MoveFeetForward(topSpeed, 2),
 //                    new RotateDegreesCommand(0.5, 90),
@@ -84,7 +85,10 @@ public class Robot extends TimedRobot
   @Override
   public void autonomousPeriodic()
   {
-    commandScheduler.run();
+//    commandScheduler.run();
+    double topSpeed = 5;
+    driveTrain.test.drive(topSpeed, 0);
+//    Placeholder.logMySpeed();
   }
 
 
@@ -120,7 +124,10 @@ public class Robot extends TimedRobot
 
   /** This method is called periodically during test mode. */
   @Override
-  public void testPeriodic() {}
+  public void testPeriodic() {
+    double topSpeed = 5;
+    driveTrain.test.drive(topSpeed, 0);
+  }
 
   /**
    * This shows how to select between different modes using the dashboard. The sendable chooser code

@@ -40,4 +40,9 @@ public class Terry extends RobotImpl {
         double ratio = 0.544;
         return degrees / 90 * speed * ratio;
     }
+
+    @Override
+    public void drive(double xSpeed, double rot) {
+
+    }
 }

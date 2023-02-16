@@ -11,9 +11,9 @@ public class Constants {
 
     public static final double weight = 10; //TODO in lbs, need to find
 
-    public static final double distancePerEncoderTick = wheelCircumference / 4096;
+    public static final double distancePerEncoderTick = wheelCircumference / Constants.talonEncoderResolution;
 
-    public static final double talonEncoderResolution = 4096;
+    public static final double talonEncoderResolution = 2048;
 
     public static final double trackWidth = 19.5 ;//Inches : 19.5 //Meters : 0.4953
 
