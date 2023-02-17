@@ -75,16 +75,17 @@ public class Robot extends TimedRobot
   @Override
   public void autonomousInit()
   {
-    double topSpeed = .5;
-    /*commandScheduler.schedule(
+
+
+    commandScheduler.schedule(
             new SequentialCommandGroup(
-                    new MoveFeetForward(topSpeed, 20),
-                    new RotateDegreesCommand(0.5, 90),
-                    new MoveFeetForward(topSpeed, 2),
-                    new RotateDegreesCommand(0.5, 90),
-                    new MoveFeetForward(topSpeed, 20)
+                    new MoveFeetForward(.5, 6)
+//                    new RotateDegreesCommand(0.5, 90),
+//                    new MoveFeetForward(topSpeed, 2),
+//                    new RotateDegreesCommand(0.5, 90),
+//                    new MoveFeetForward(topSpeed, 20)
             )
-    );*/
+    );
 
   }
 

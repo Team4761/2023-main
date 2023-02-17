@@ -2,6 +2,7 @@ package frc.robot.Drivetrain;
 
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.impl.placeholder.Placeholder;
 import frc.robot.main.Robot;
 
 public class DrivetrainSubsystem extends SubsystemBase {
@@ -16,6 +17,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
      * than trying to construct an instance of this class.)
      */
     private final static DrivetrainSubsystem INSTANCE = new DrivetrainSubsystem();
+
+    public final static Placeholder test = new Placeholder();
+
 
     /**
      * Returns the Singleton instance of this DrivetrainSubsystem. This static method

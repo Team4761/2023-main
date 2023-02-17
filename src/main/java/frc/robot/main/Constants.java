@@ -18,6 +18,11 @@ public class Constants {
     public static final double wheelCircumference = wheelRadius * 2 * Math.PI;
     public static final double weight = 10; //TODO in lbs, need to find
 
+    public static final double distancePerEncoderTick = wheelCircumference / Constants.talonEncoderResolution;
+
+    public static final double talonEncoderResolution = 2048;
+
+    public static final double trackWidth = 19.5 ;//Inches : 19.5 //Meters : 0.4953
 
     // Arm Constants
     static final public double ARM_LENGTH_BOTTOM = 25.0;        // Bottom Arm?
@@ -29,7 +34,6 @@ public class Constants {
     static final public double ARM_MAX_ROTATION_SPEED = 1.0;
     static final public double ENCODER_ZERO_VALUE_TOP = 0.6189683810569215;
     static final public double ENCODER_ZERO_VALUE_BOTTOM = 5.06664074953627;
-
 
     //PID constants for robot.
     public static final double LINEAR_P = 0.01;

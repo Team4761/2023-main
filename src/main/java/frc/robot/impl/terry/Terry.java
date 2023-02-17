@@ -43,5 +43,10 @@ public class Terry extends RobotImpl {
 //        return degrees / 90 * speed * ratio;
         return 1.0;
     }
- }
+
+    @Override
+    public void drive(double xSpeed, double rot) {
+
+    }
+}
 

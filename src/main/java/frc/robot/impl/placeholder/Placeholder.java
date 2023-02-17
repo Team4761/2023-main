@@ -1,14 +1,20 @@
 package frc.robot.impl.placeholder;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import com.ctre.phoenix.sensors.CANCoder;
-import com.ctre.phoenix.sensors.CANCoderConfiguration;
-import com.ctre.phoenix.sensors.SensorTimeBase;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.robot.impl.RobotImpl;
 import frc.robot.main.Constants;
+import frc.robot.main.Robot;
 
 public class Placeholder extends RobotImpl {
     // Drivetrain motors. The Talons already have encoders inside them
@@ -16,6 +22,13 @@ public class Placeholder extends RobotImpl {
     public static WPI_TalonFX front_right = new WPI_TalonFX(0);
     public static WPI_TalonFX back_left = new WPI_TalonFX(7);
     public static WPI_TalonFX back_right = new WPI_TalonFX(1);
+
+    //Gyro and PID controllers for PID
+    public static ADXRS450_Gyro m_gyro = new ADXRS450_Gyro();
+
+    private final PIDController left_PIDController = new PIDController(.1,0,.001);
+
+    private final PIDController right_PIDController = new PIDController(-2.5,0,.001);
 
     //Encoders that are pre-built into the talons
 //    public static CANCoder front_left_CANCoder = new CANCoder(0);
@@ -38,6 +51,14 @@ public class Placeholder extends RobotImpl {
     public static final PIDController angular_PIDcontroller = new PIDController(Constants.ANGULAR_P, Constants.ANGULAR_I, Constants.ANGULAR_D);
 
 
+    private final DifferentialDriveKinematics m_kinematics =
+            new DifferentialDriveKinematics(Constants.trackWidth);
+
+//To be determined
+    private final SimpleMotorFeedforward m_feedFoward = new SimpleMotorFeedforward(0.106,0.76);
+
+
+    public static boolean doLogging = false;
 
     public Placeholder(){
 
@@ -57,6 +78,7 @@ public class Placeholder extends RobotImpl {
         getDrive().setExpiration(.3);
 //        m_rightMotors.setInverted(true);
         m_leftMotors.setInverted(true);
+
     }
 
     @Override
@@ -75,6 +97,54 @@ public class Placeholder extends RobotImpl {
         double ratio = 0.544;
         return degrees / 90 * speed * ratio;
     }
+    public static void logMySpeed() {
+        log(front_left, "front_left");
+        log(front_right, "front_right");
+        log(back_left, "back_left");
+        log(back_right, "back_right");
+        System.out.println();
+    }
+
+    public static void log(WPI_TalonFX motor, String label) {
+        if (doLogging) {
+            System.out.println(
+                    label + ": v=" + motor.getSensorCollection().getIntegratedSensorVelocity() +
+                            "  pos=" + motor.getSensorCollection().getIntegratedSensorPosition()
+            );
+        }
+
+    }
+
+    public static void logGyro(){
+        System.out.println(m_gyro.getAngle());
+    }
+    public static void zeroEncoders(){
+        front_right.getSensorCollection().setIntegratedSensorPosition(0, 100);
+        front_left.getSensorCollection().setIntegratedSensorPosition(0, 100);
+        back_right.getSensorCollection().setIntegratedSensorPosition(0, 100);
+        back_left.getSensorCollection().setIntegratedSensorPosition(0, 100);
+    }
+
+
+    public static double averageMotorGroupVelocity(WPI_TalonFX front_motor, WPI_TalonFX back_motor){
+        //Needs to account for gear ratio
+        return ((front_motor.getSensorCollection().getIntegratedSensorVelocity() + back_motor.getSensorCollection().getIntegratedSensorVelocity()) / 2 );
+    }
+
+    public void setSpeeds(DifferentialDriveWheelSpeeds speeds){
+        final double leftFeedforward = m_feedFoward.calculate(speeds.leftMetersPerSecond);
+        final double rightFeedforward = m_feedFoward.calculate(speeds.rightMetersPerSecond);
+
+        final double leftOutput =
+                left_PIDController.calculate(nativeUnitsToDistanceMeters(Placeholder.averageMotorGroupVelocity(front_left, back_left)), 1);
+        final double rightOutput =
+                right_PIDController.calculate(nativeUnitsToDistanceMeters(Placeholder.averageMotorGroupVelocity(front_right, back_right)), 1);
+
+        System.out.println("Right Voltage: " + (rightOutput + rightFeedforward));
+        System.out.println("Left Voltage: " + (leftFeedforward + leftOutput));
+
+        System.out.println("Right " + averageMotorGroupVelocity(front_right, back_right));
+        System.out.println("Left " + averageMotorGroupVelocity(front_left, back_left));
 
 
 }
