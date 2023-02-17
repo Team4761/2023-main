@@ -26,9 +26,9 @@ public class Placeholder extends RobotImpl {
     //Gyro and PID controllers for PID
     public static ADXRS450_Gyro m_gyro = new ADXRS450_Gyro();
 
-    private final PIDController left_PIDController = new PIDController(.1,0,.001);
+    private final PIDController left_PIDController = new PIDController(.1, 0, .001);
 
-    private final PIDController right_PIDController = new PIDController(-2.5,0,.001);
+    private final PIDController right_PIDController = new PIDController(-2.5, 0, .001);
 
     //Encoders that are pre-built into the talons
 //    public static CANCoder front_left_CANCoder = new CANCoder(0);
@@ -41,10 +41,10 @@ public class Placeholder extends RobotImpl {
 //
 
     // Drivetrain
-    public static final MotorControllerGroup m_leftMotors = new MotorControllerGroup(front_left,back_left);
-    public static final MotorControllerGroup m_rightMotors = new MotorControllerGroup(front_right,back_right);
-//    public static final MotorControllerGroup m_rightMotors = new MotorControllerGroup(front_right);
-    private static final DifferentialDrive m_drive = new DifferentialDrive(m_leftMotors,m_rightMotors);
+    public static final MotorControllerGroup m_leftMotors = new MotorControllerGroup(front_left, back_left);
+    public static final MotorControllerGroup m_rightMotors = new MotorControllerGroup(front_right, back_right);
+    //    public static final MotorControllerGroup m_rightMotors = new MotorControllerGroup(front_right);
+    private static final DifferentialDrive m_drive = new DifferentialDrive(m_leftMotors, m_rightMotors);
 
     //PID controllers (for auto stuff, maybe drive)
     public static final PIDController linear_PIDcontroller = new PIDController(Constants.LINEAR_P, Constants.LINEAR_I, Constants.LINEAR_D);
@@ -54,13 +54,13 @@ public class Placeholder extends RobotImpl {
     private final DifferentialDriveKinematics m_kinematics =
             new DifferentialDriveKinematics(Constants.trackWidth);
 
-//To be determined
-    private final SimpleMotorFeedforward m_feedFoward = new SimpleMotorFeedforward(0.106,0.76);
+    //To be determined
+    private final SimpleMotorFeedforward m_feedFoward = new SimpleMotorFeedforward(0.106, 0.76);
 
 
     public static boolean doLogging = false;
 
-    public Placeholder(){
+    public Placeholder() {
 
         //config of the encoders
 
@@ -97,6 +97,7 @@ public class Placeholder extends RobotImpl {
         double ratio = 0.544;
         return degrees / 90 * speed * ratio;
     }
+
     public static void logMySpeed() {
         log(front_left, "front_left");
         log(front_right, "front_right");
@@ -115,10 +116,11 @@ public class Placeholder extends RobotImpl {
 
     }
 
-    public static void logGyro(){
+    public static void logGyro() {
         System.out.println(m_gyro.getAngle());
     }
-    public static void zeroEncoders(){
+
+    public static void zeroEncoders() {
         front_right.getSensorCollection().setIntegratedSensorPosition(0, 100);
         front_left.getSensorCollection().setIntegratedSensorPosition(0, 100);
         back_right.getSensorCollection().setIntegratedSensorPosition(0, 100);
@@ -126,12 +128,12 @@ public class Placeholder extends RobotImpl {
     }
 
 
-    public static double averageMotorGroupVelocity(WPI_TalonFX front_motor, WPI_TalonFX back_motor){
+    public static double averageMotorGroupVelocity(WPI_TalonFX front_motor, WPI_TalonFX back_motor) {
         //Needs to account for gear ratio
-        return ((front_motor.getSensorCollection().getIntegratedSensorVelocity() + back_motor.getSensorCollection().getIntegratedSensorVelocity()) / 2 );
+        return ((front_motor.getSensorCollection().getIntegratedSensorVelocity() + back_motor.getSensorCollection().getIntegratedSensorVelocity()) / 2);
     }
 
-    public void setSpeeds(DifferentialDriveWheelSpeeds speeds){
+    public void setSpeeds(DifferentialDriveWheelSpeeds speeds) {
         final double leftFeedforward = m_feedFoward.calculate(speeds.leftMetersPerSecond);
         final double rightFeedforward = m_feedFoward.calculate(speeds.rightMetersPerSecond);
 
@@ -145,6 +147,17 @@ public class Placeholder extends RobotImpl {
 
         System.out.println("Right " + averageMotorGroupVelocity(front_right, back_right));
         System.out.println("Left " + averageMotorGroupVelocity(front_left, back_left));
+    }
 
+    public void drive(double xSpeed, double rot) {
+        var wheelSpeeds = m_kinematics.toWheelSpeeds(new ChassisSpeeds(xSpeed, 0.0, rot));
+        setSpeeds(wheelSpeeds);
+    }
 
+    private double nativeUnitsToDistanceMeters(double sensorCounts) {
+        double motorRotations = (double) sensorCounts / Constants.talonEncoderResolution;
+        double wheelRotations = motorRotations / Constants.drivetrainGearRatio;
+        double positionMeters = wheelRotations * (2 * Math.PI * Units.inchesToMeters(Constants.wheelRadius));
+        return positionMeters;
+    }
 }
