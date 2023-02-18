@@ -2,6 +2,7 @@ package frc.robot.impl.placeholder;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import frc.robot.command.Distances;
@@ -38,7 +39,7 @@ public class Placeholder extends RobotImpl {
     public static final PIDController linear_PIDcontroller = new PIDController(Constants.LINEAR_P, Constants.LINEAR_I, Constants.LINEAR_D);
     public static final PIDController angular_PIDcontroller = new PIDController(Constants.ANGULAR_P, Constants.ANGULAR_I, Constants.ANGULAR_D);
 
-
+    public static ADXRS450_Gyro gyro = new ADXRS450_Gyro();
 
     public Placeholder(){
 
@@ -62,6 +63,7 @@ public class Placeholder extends RobotImpl {
         setPidContants(front_right);
         setPidContants(back_left);
         setPidContants(back_right);
+        gyro.calibrate();
     }
 
     private void setPidContants(WPI_TalonFX motor) {

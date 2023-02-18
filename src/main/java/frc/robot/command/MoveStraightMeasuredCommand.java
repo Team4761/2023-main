@@ -4,6 +4,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.drive.RobotDriveBase;
+import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.impl.placeholder.Placeholder;
 import frc.robot.main.Robot;
@@ -12,7 +13,7 @@ public class MoveStraightMeasuredCommand extends CommandBase {
     final int kCountsPerRev = 2048;  //Encoder counts per revolution of the motor shaft.
     final double kGearRatio = 3.1;
     final double kWheelRadiusInches = 2;
-    final double linearSpeedIncrease = .02;
+    final double linearSpeedIncrease = .01;
     final double kMaxOutput = RobotDriveBase.kDefaultMaxOutput;
 
     private final Distances start;
@@ -20,6 +21,8 @@ public class MoveStraightMeasuredCommand extends CommandBase {
 
     private double speed = 0.0;
     private final double meters;
+
+    private final double startAngle;
 
     /**
      * @param xSpeed between -1.0 and 1.0
@@ -29,6 +32,8 @@ public class MoveStraightMeasuredCommand extends CommandBase {
         start = Robot.impl.getSensorReadings();
         goalSpeed = MathUtil.applyDeadband(xSpeed, RobotDriveBase.kDefaultDeadband);
         this.meters = meters;
+        Placeholder.gyro.reset();
+        startAngle = Placeholder.gyro.getAngle();
     }
 
     @Override
@@ -37,40 +42,15 @@ public class MoveStraightMeasuredCommand extends CommandBase {
         if (speed < goalSpeed) {
             speed += linearSpeedIncrease;
         }
-        var speeds = DifferentialDrive.tankDriveIK(speed, speed, true);
 
-        var delta = getDelta();
-        var avgDeltaLeftRight = (delta.frontLeft - delta.frontRight) / 2;
+        double kP = 1.0;
 
-        if ((count++ % 10) == 0) {
-            System.out.println("delta=" + delta);
-            System.out.println("avgDelta=" + avgDeltaLeftRight + " start speeds=" + speeds.left + " speed right=" + speeds.right);
-        }
+        // Setpoint is implicitly 0, since we don't want the heading to change
+        Gyro gyro = Placeholder.gyro;
+        double error = -gyro.getRate();
 
-        final double nudge = .02;
-        if (avgDeltaLeftRight > 0) {
-            speeds.left *= (1.0 - nudge);
-            //speeds.right *= (1.0 + nudge);
-        } else {
-            speeds.left *= (1.0 + nudge);
-            //speeds.right *= (1.0 - nudge);
-        }
-
-//        // the closer the average delta is to zero, the more we want speeds.left to stay the same.
-//        // if the average delta is positive, we want left to slow down just a bit, and go to zero if it's a full
-//        // revolution behind.
-//        speeds.left *= 1 - (avgDeltaLeftRight / kCountsPerRev);
-//
-//        // the closer the average delta is to zero, the more we want speeds.left to stay the same
-//        // if the average delta is positive, we want right to speed up just a bit, and go to 2*speed if it's a full
-//        // revolution behind.
-//        speeds.right *= 1 + (avgDeltaLeftRight / kCountsPerRev);
-
-        System.out.println("Speed left=" + speeds.left + " speed right=" + speeds.right);
-
-        // TODO: this can be extracted to RobotImpl
-        Placeholder.m_leftMotors.set(speeds.left * kMaxOutput);
-        Placeholder.m_rightMotors.set(speeds.right * kMaxOutput);
+        // Drives forward continuously at half speed, using the gyro to stabilize the heading
+        Robot.impl.getDrive().tankDrive(speed + kP * error, speed - kP * error);
     }
 
     int count = 0;

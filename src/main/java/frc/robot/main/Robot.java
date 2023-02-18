@@ -72,7 +72,7 @@ public class Robot extends TimedRobot
     double topSpeed = .5;
     commandScheduler.schedule(
       new SequentialCommandGroup(
-        new MoveStraightMeasuredCommand(.5, 10.0)
+        new MoveStraightMeasuredCommand(.4, 10.0)
         //            new RotateDegreesCommand(0.5, 90),
         //            new MoveFeetForward(topSpeed, 2),    3
         //            new RotateDegreesCommand(0.5, 90),
