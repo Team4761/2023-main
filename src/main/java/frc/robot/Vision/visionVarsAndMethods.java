@@ -23,10 +23,10 @@ public class visionVarsAndMethods {
      */
 
     //apriltags
-    static AprilTag tag1 = new AprilTag(1, new Pose3d(0,0,0, new Rotation3d()));
-    static AprilTag tag2 = new AprilTag(2, new Pose3d(10,0,0, new Rotation3d(90,0,0)));
-    static AprilTag tag3 = new AprilTag(3, new Pose3d(10,10,0, new Rotation3d(270,0,0)));
-    static AprilTag tag4 = new AprilTag(4, new Pose3d(0,10,0, new Rotation3d(180,0,0)));
+    static AprilTag tag1 = new AprilTag(1, new Pose3d(0.1524,0,0, new Rotation3d(0,0,0)));
+    static AprilTag tag2 = new AprilTag(6, new Pose3d(10,0,0, new Rotation3d(90,0,0)));
+    static AprilTag tag3 = new AprilTag(7, new Pose3d(10,10,0, new Rotation3d(270,0,0)));
+    static AprilTag tag4 = new AprilTag(8, new Pose3d(0,10,0, new Rotation3d(180,0,0)));
 
     static List<AprilTag> tagList = Arrays.asList(tag1, tag2, tag3, tag4);
 

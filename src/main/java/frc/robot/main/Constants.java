@@ -22,7 +22,7 @@ public class Constants {
 
     public static final double talonEncoderResolution = 2048;
 
-    public static final double trackWidth = 19.5 ;//Inches : 19.5 //Meters : 0.4953
+    public static final double trackWidth = 19.5;//Inches : 19.5 //Meters : 0.4953
 
     // Arm Constants
     static final public double ARM_LENGTH_BOTTOM = 25.0;        // Bottom Arm?
@@ -34,6 +34,10 @@ public class Constants {
     static final public double ARM_MAX_ROTATION_SPEED = 1.0;
     static final public double ENCODER_ZERO_VALUE_TOP = 0.6189683810569215;
     static final public double ENCODER_ZERO_VALUE_BOTTOM = 5.06664074953627;
+    public static final double joint1Max = 0.8;
+    public static final double joint1Min = -2.5;
+    public static final double joint2Max = 0;
+    public static final double joint2Min = 0;
 
     //PID constants for robot.
     public static final double LINEAR_P = 0.01;
@@ -43,13 +47,6 @@ public class Constants {
     public static final double ANGULAR_P = 0.01;
     public static final double ANGULAR_I = 0;
     public static final double ANGULAR_D = 0.1;
-
-
-
-
-
-
-
 
 
 }

@@ -22,6 +22,7 @@ public class ArmSubsystem extends SubsystemBase {
     ArmMath inverseKinematics;
     Translation2d pos;
     private static double desiredTopRotation=0.2;
+    private static double desiredBottomRoation = 0;
 
 
     // CONNECT USING the white, red, and black cable.
@@ -129,6 +130,10 @@ public class ArmSubsystem extends SubsystemBase {
     public static void setDesiredTopRotation(double rot)
     {
         desiredTopRotation = rot;
+    }
+
+    public static void setDesiredBottomRotation(double rot){
+        desiredBottomRoation = rot;
     }
 
     // Emergencies

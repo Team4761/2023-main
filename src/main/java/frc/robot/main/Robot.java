@@ -58,6 +58,8 @@ public class Robot extends TimedRobot
     chooser.addOption("West Coast", WEST_COAST);
     chooser.addOption("Place Holder Name",PLACEHOLDER);
     SmartDashboard.putData("Robot Choices", chooser);
+
+
   }
 
   /**
@@ -105,6 +107,10 @@ public class Robot extends TimedRobot
 
     commandScheduler.schedule(armControl.repeatedly());
     commandScheduler.schedule(updateLED.repeatedly());
+    SmartDashboard.putNumber("fupper arm angle", 0);
+    SmartDashboard.putNumber("flower arm angle", 0);
+    SmartDashboard.putNumber("farm x togo", 0);
+    SmartDashboard.putNumber("farm y togo", 0);
   }
 
 
