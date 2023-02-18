@@ -34,10 +34,10 @@ public class Constants {
     static final public double ARM_MAX_ROTATION_SPEED = 1.0;
     static final public double ENCODER_ZERO_VALUE_TOP = 0.6189683810569215;
     static final public double ENCODER_ZERO_VALUE_BOTTOM = 5.06664074953627;
-    public static final double joint1Max = 0.8;
-    public static final double joint1Min = -2.5;
-    public static final double joint2Max = 0;
-    public static final double joint2Min = 0;
+    public static final double JOINT_2_MAX = 0.8;
+    public static final double JOINT_2_MIN = -2.5;
+    public static final double JOINT_1_MAX = 0;
+    public static final double JOINT_1_MIN = 0;
 
     //PID constants for robot.
     public static final double LINEAR_P = 0.01;

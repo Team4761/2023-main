@@ -38,14 +38,14 @@ public class ArmControl extends CommandBase {
 
     private void onPressA() {
 
-        SmartDashboard.putNumber("farm 1 theta calc", armMath.arm1Theta(
+        SmartDashboard.putNumber("farm 1 theta calc", armMath.getThetas(
                 SmartDashboard.getNumber("farm x togo", 0),
                 SmartDashboard.getNumber("farm y togo", 0)
-        ));
-        SmartDashboard.putNumber("farm 2 theta calc", armMath.arm2Theta(
+        )[1]);
+        SmartDashboard.putNumber("farm 2 theta calc", armMath.getThetas(
                 SmartDashboard.getNumber("farm x togo", 0),
                 SmartDashboard.getNumber("farm y tog", 0)
-        ));
+        )[0]);
 
 
     }
@@ -58,7 +58,7 @@ public class ArmControl extends CommandBase {
 
         SmartDashboard.putNumber("farm y togo", armMath.getPoint(
                 SmartDashboard.getNumber("farm 1 theta calc",0),
-                SmartDashboard.getNumber("farm 1 theta calc", 0)
+                SmartDashboard.getNumber("farm 2 theta calc", 0)
         ).getY());
 
 
@@ -85,20 +85,22 @@ public class ArmControl extends CommandBase {
     }
 
     public void movePID(double setTopRotation, double setBottomRotation) {
-        if(setTopRotation > Constants.joint1Min && setTopRotation < Constants.joint1Max){
+        //top is joint 2
+        if(setTopRotation > Constants.JOINT_2_MIN && setTopRotation < Constants.JOINT_2_MAX){
             ArmSubsystem.setDesiredTopRotation(setTopRotation);
-        }else if(setTopRotation > Constants.joint1Max){
-            ArmSubsystem.setDesiredTopRotation(Constants.joint1Max);
-        }else if(setTopRotation < Constants.joint1Min){
-            ArmSubsystem.setDesiredTopRotation(Constants.joint1Min);
+        }else if(setTopRotation > Constants.JOINT_2_MAX){
+            ArmSubsystem.setDesiredTopRotation(Constants.JOINT_2_MAX);
+        }else if(setTopRotation < Constants.JOINT_2_MIN){
+            ArmSubsystem.setDesiredTopRotation(Constants.JOINT_2_MIN);
         }
 
-        if(setBottomRotation > Constants.joint1Min && setBottomRotation < Constants.joint1Max){
+        //bototm in joint 1
+        if(setBottomRotation > Constants.JOINT_2_MIN && setBottomRotation < Constants.JOINT_2_MAX){
             ArmSubsystem.setDesiredBottomRotation(setTopRotation);
-        }else if(setBottomRotation > Constants.joint2Max){
-            ArmSubsystem.setDesiredBottomRotation(Constants.joint1Max);
-        }else if(setBottomRotation < Constants.joint2Min){
-            ArmSubsystem.setDesiredBottomRotation(Constants.joint1Min);
+        }else if(setBottomRotation > Constants.JOINT_1_MAX){
+            ArmSubsystem.setDesiredBottomRotation(Constants.JOINT_2_MAX);
+        }else if(setBottomRotation < Constants.JOINT_1_MIN){
+            ArmSubsystem.setDesiredBottomRotation(Constants.JOINT_2_MIN);
         }
         Robot.arms.movePID();
     }
