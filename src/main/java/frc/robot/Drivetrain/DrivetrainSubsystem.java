@@ -68,11 +68,11 @@ public class DrivetrainSubsystem extends SubsystemBase {
     }
 
     private void resetAngle() {
-        Placeholder.m_gyro.reset();
+        Placeholder.gyro.reset();
     }
 
     private Double getAngle() {
-        return Placeholder.m_gyro.getAngle();
+        return Placeholder.gyro.getAngle();
     }
 
     public void arcadeDrive(double speed, double rotation) {

@@ -11,6 +11,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Drivetrain.DrivetrainSubsystem;
+import frc.robot.arm.ArmSubsystem;
+import frc.robot.leds.LEDSubsystem;
+import frc.robot.command.*;
+import frc.robot.controller.XboxControl;
 import frc.robot.command.MoveStraightMeasuredCommand;
 import frc.robot.command.XboxArcadeDrive;
 import frc.robot.impl.RobotImpl;
@@ -26,18 +30,24 @@ import frc.robot.impl.westcoast.WestCoast;
  */
 public class Robot extends TimedRobot
 {
+  // Robot Selection
   private static final String TERRY = "Terry";
   private static final String WEST_COAST = "West Coast";
-
   private static final String PLACEHOLDER= "Placeholder Name";
+  long time = 0;
   private final SendableChooser<String> chooser = new SendableChooser<>();
-
-  public final CommandScheduler commandScheduler = CommandScheduler.getInstance();
-  private final XboxArcadeDrive xboxArcadeDrive = new XboxArcadeDrive();
-
   public static RobotImpl impl = new Placeholder();
-
-  public static DrivetrainSubsystem driveTrain = DrivetrainSubsystem.getInstance();
+  // Joystick (XBox) Input
+  public static XboxControl xbox = new XboxControl(0);
+  // Commands
+  public final CommandScheduler commandScheduler = CommandScheduler.getInstance();
+  //private final XboxArcadeDrive xboxArcadeDrive = new XboxArcadeDrive();
+  private final ArmControl armControl = new ArmControl();
+  private final UpdateLED updateLED = new UpdateLED();
+  // Subsystems
+  //public static DrivetrainSubsystem driveTrain = DrivetrainSubsystem.getInstance();
+  public static ArmSubsystem arms = ArmSubsystem.getInstance();
+  public static LEDSubsystem leds = LEDSubsystem.getInstance();
 
   /**
    * This method is run when the robot is first started up and should be used for any
@@ -50,6 +60,8 @@ public class Robot extends TimedRobot
     chooser.addOption("West Coast", WEST_COAST);
     chooser.addOption("Place Holder Name",PLACEHOLDER);
     SmartDashboard.putData("Robot Choices", chooser);
+
+
   }
 
   /**
@@ -69,7 +81,8 @@ public class Robot extends TimedRobot
   @Override
   public void autonomousInit()
   {
-    double topSpeed = .5;
+
+
     commandScheduler.schedule(
       new SequentialCommandGroup(
         new MoveStraightMeasuredCommand(.4, 10.0)
@@ -92,7 +105,15 @@ public class Robot extends TimedRobot
   /** This method is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
-    commandScheduler.schedule(xboxArcadeDrive.repeatedly());
+    //commandScheduler.schedule(xboxArcadeDrive.repeatedly());
+    leds.enableLEDs();
+
+    commandScheduler.schedule(armControl.repeatedly());
+    commandScheduler.schedule(updateLED.repeatedly());
+    SmartDashboard.putNumber("fupper arm angle", 0);
+    SmartDashboard.putNumber("flower arm angle", 0);
+    SmartDashboard.putNumber("farm x togo", 0);
+    SmartDashboard.putNumber("farm y togo", 0);
   }
 
 
@@ -100,6 +121,17 @@ public class Robot extends TimedRobot
   @Override
   public void teleopPeriodic() {
     commandScheduler.run();
+    SmartDashboard.putNumber("CONTROLLER[00] Right Axis X", xbox.getRightX());
+    SmartDashboard.putNumber("CONTROLLER[01] Right Axis Y", xbox.getRightY());
+    SmartDashboard.putNumber("CONTROLLER[02] Left Axis X", xbox.getLeftX());
+    SmartDashboard.putNumber("CONTROLLER[03] Left Axis Y", xbox.getLeftY());
+    int pattern = 0;
+    if (time <= System.currentTimeMillis()) {
+      leds.setLEDs(pattern);
+      pattern++;
+      pattern%=4;
+      time = System.currentTimeMillis() + 1000;
+    }
   }
 
 
@@ -110,7 +142,10 @@ public class Robot extends TimedRobot
 
   /** This method is called periodically when disabled. */
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+    arms.stop();
+    leds.disableLEDs();
+  }
 
 
   /** This method is called once when test mode is enabled. */

@@ -40,7 +40,7 @@ public class faceGoalPoseAprilTag extends CommandBase {
         }else{
             rotateSpeed = angular_PIDcontroller.calculate(prevKnownAngle, goalYaw); //TODO find if this actually works, it may make the robot just spin around forever
         }
-        Robot.driveTrain.arcadeDrive(0, rotateSpeed);
+        //Robot.driveTrain.arcadeDrive(0, rotateSpeed);
     }
 
     @Override

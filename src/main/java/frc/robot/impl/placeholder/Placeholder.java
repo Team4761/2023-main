@@ -24,7 +24,7 @@ public class Placeholder extends RobotImpl {
     public static WPI_TalonFX back_right = new WPI_TalonFX(1);
 
     //Gyro and PID controllers for PID
-    public static ADXRS450_Gyro m_gyro = new ADXRS450_Gyro();
+    public static ADXRS450_Gyro gyro = new ADXRS450_Gyro();
 
     private final PIDController left_PIDController = new PIDController(.1, 0, .001);
 
@@ -56,6 +56,7 @@ public class Placeholder extends RobotImpl {
 
     //To be determined
     private final SimpleMotorFeedforward m_feedFoward = new SimpleMotorFeedforward(0.106, 0.76);
+
 
     public static boolean doLogging = false;
 
@@ -132,7 +133,7 @@ public class Placeholder extends RobotImpl {
     }
 
     public static void logGyro() {
-        System.out.println(m_gyro.getAngle());
+        System.out.println(gyro.getAngle());
     }
 
     public static void zeroEncoders() {

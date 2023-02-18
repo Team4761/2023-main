@@ -2,6 +2,7 @@ package frc.robot.impl;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import frc.robot.command.Distances;
+import frc.robot.command.Distances;
 
 public abstract class RobotImpl {
 
@@ -12,4 +13,6 @@ public abstract class RobotImpl {
     public Distances getSensorReadings() {
         return new Distances(0, 0, 0, 0);
     }
+
+    public abstract void drive(double xSpeed, double rot);
 }
