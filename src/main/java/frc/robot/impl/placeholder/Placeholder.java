@@ -13,8 +13,11 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.robot.impl.RobotImpl;
 import frc.robot.main.Constants;
+import frc.robot.main.Robot;
 
 public class Placeholder extends RobotImpl {
     // Drivetrain motors. The Talons already have encoders inside them

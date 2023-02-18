@@ -75,11 +75,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
         return Placeholder.gyro.getAngle();
     }
 
-    public void arcadeDrive(double speed, double rotation) {
+    public void arcadeDrive(double speed, double rotation){
         Robot.impl.getDrive().arcadeDrive(speed, rotation);
     }
-
-    public void tankDrive(double rightSpeed, double leftSpeed) {
+    public void tankDrive(double rightSpeed, double leftSpeed){
         Robot.impl.getDrive().tankDrive(rightSpeed, leftSpeed);
     }
 }

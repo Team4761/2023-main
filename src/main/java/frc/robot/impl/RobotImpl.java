@@ -2,7 +2,6 @@ package frc.robot.impl;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import frc.robot.command.Distances;
-import frc.robot.command.Distances;
 
 public abstract class RobotImpl {
 
