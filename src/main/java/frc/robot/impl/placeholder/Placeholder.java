@@ -160,4 +160,9 @@ public class Placeholder extends RobotImpl {
         double positionMeters = wheelRotations * (2 * Math.PI * Units.inchesToMeters(Constants.wheelRadius));
         return positionMeters;
     }
+    public void tankDriveVolts(double leftVolts, double rightVolts){
+        m_leftMotors.setVoltage(leftVolts);
+        m_rightMotors.setVoltage(rightVolts);
+        m_drive.feed();
+    }
 }

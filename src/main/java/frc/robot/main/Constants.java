@@ -1,5 +1,7 @@
 package frc.robot.main;
 
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+
 public class Constants {
 
     // Ports.
@@ -35,6 +37,22 @@ public class Constants {
     static final public double ENCODER_ZERO_VALUE_TOP = 0.6189683810569215;
     static final public double ENCODER_ZERO_VALUE_BOTTOM = 5.06664074953627;
 
+    //pathweaver constants (ramsete stuff)
+    public static final double ksVolts = 0.22;   //TODO NOT FINAL, DO NOT USE WITHOUT REAL VALUES
+    public static final double kvVoltSecondsPerMeter = 1.98;
+    public static final double kaVoltSecondsSquaredPerMeter = 0.2;
+    public static final double kPDriveVel = 8.5;
+    //define kinematics thing
+    public static final DifferentialDriveKinematics kDriveKinematics =
+            new DifferentialDriveKinematics(trackWidth);
+    //set max values
+    public static final double kMaxSpeedMetersPerSecond = 3;
+    public static final double kMaxAccelerationMetersPerSecondSquared = 1;
+    //ramsete constants
+    public static final double kRamseteB = 2;
+    public static final double kRamseteZeta = 0.7;
+
+
     //PID constants for robot.
     public static final double LINEAR_P = 0.01;
     public static final double LINEAR_I = 0;
@@ -43,6 +61,8 @@ public class Constants {
     public static final double ANGULAR_P = 0.01;
     public static final double ANGULAR_I = 0;
     public static final double ANGULAR_D = 0.1;
+
+
 
 
 
