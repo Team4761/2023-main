@@ -122,13 +122,6 @@ public class Robot extends TimedRobot
     SmartDashboard.putNumber("CONTROLLER[01] Right Axis Y", xbox.getRightY());
     SmartDashboard.putNumber("CONTROLLER[02] Left Axis X", xbox.getLeftX());
     SmartDashboard.putNumber("CONTROLLER[03] Left Axis Y", xbox.getLeftY());
-    int pattern = 0;
-    if (time <= System.currentTimeMillis()) {
-      leds.setLEDs(pattern);
-      pattern++;
-      pattern%=4;
-      time = System.currentTimeMillis() + 1000;
-    }
   }
 
 

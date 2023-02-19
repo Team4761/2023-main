@@ -28,7 +28,7 @@ public class ArmSubsystem extends SubsystemBase {
     // CONNECT USING the white, red, and black cable.
     // The WHITE cable is the signal wire.
 
-    public ArmSubsystem()
+    private ArmSubsystem()
     {
         bottomEncoder = new AbsoluteEncoder(Constants.ARM_ENCODER_BOTTOM_PORT);
         topEncoder = new AbsoluteEncoder(Constants.ARM_ENCODER_TOP_PORT);
@@ -38,12 +38,21 @@ public class ArmSubsystem extends SubsystemBase {
 
         bottom_right.setInverted(true);
 
-        //bottom = new ArmPIDSubsystem(bottomEncoder, bottom_left, "bottom", Constants.ARM_P_BOTTOM, Constants.ARM_I_BOTTOM, Constants.ARM_D_BOTTOM);
+        // Do find '//REMOVABLE' and replace all with nothing to activate bottom control
+        //REMOVABLEbottom = new ArmPIDSubsystem(bottomEncoder, bottom_left, "bottom", Constants.ARM_P_BOTTOM, Constants.ARM_I_BOTTOM, Constants.ARM_D_BOTTOM);
         top = new ArmPIDSubsystem(topEncoder, top_motor, "top", Constants.ARM_P_TOP, Constants.ARM_I_TOP, Constants.ARM_D_TOP);
-
 
         inverseKinematics = new ArmMath();
         pos = inverseKinematics.getPoint(getBottomRotation(), getTopRotation());
+
+        //REMOVABLEbottoms.enable();
+    }
+
+    @Override
+    public void register() {
+        super.register();
+        top.enable();
+        //REMOVABLEbottom.enable();
     }
 
     @SuppressWarnings("WeakerAccess")
@@ -55,24 +64,17 @@ public class ArmSubsystem extends SubsystemBase {
     /* Setters */
     // PID control
     public void movePID() {
-
         top.setGoal(getDesiredTopRotation());
-        top.enable();
-        //bottom.setGoal(getDesiredBottomRotation());
-        // bottom.enable();
+        //REMOVABLEbottom.setGoal(getDesiredBottomRotation());
     }
     // Updating positions
     public void updatePos(double deltaX, double deltaY) {
-        if (inverseKinematics.inBounds(pos.plus(new Translation2d(deltaX, deltaY)))) {}
-        else {
-            pos.minus(new Translation2d(deltaX, deltaY));
-        }
+        if (inverseKinematics.inBounds(pos.plus(new Translation2d(deltaX, deltaY))))
+            pos.plus(new Translation2d(deltaX, deltaY));
     }
     public void updatePos(Translation2d delta) {
-        if (inverseKinematics.inBounds(pos.plus(delta))) {}
-        else {
+        if (inverseKinematics.inBounds(pos.plus(delta)))
             pos.minus(delta);
-        }
     }
     // Bottom Motor Control
     public void setBottom(double speed) {
@@ -106,6 +108,14 @@ public class ArmSubsystem extends SubsystemBase {
         bottomEncoder.reset();
         topEncoder.reset();
     }
+    public void enablePID() {
+        top.enable();
+        //REMOVABLEbottom.enable();
+    }
+    public void disablePID() {
+        top.disable();
+        //REMOVABLEbottom.disable();
+    }
 
     /* Getters */
     public double getBottomSpeed() {
@@ -138,6 +148,9 @@ public class ArmSubsystem extends SubsystemBase {
         desiredTopRotation = rot;
     }
 
+
+    // Unhandled exception instantiating robot frc.robot.arm.ArmPIDSubsystem java.lang.NullPointerException: Cannot invoke "frc.robot.arm.ArmSubsystem.getTopRotation()"
+     //because the return value of "frc.robot.arm.ArmSubsystem.getInstance()" is null ﻿﻿ frc.robot.arm.ArmPIDSubsystem.getMeasurement(ArmPIDSubsystem.java:52) 
     public static void setDesiredBottomRotation(double rot){
         desiredBottomRoation = rot;
     }

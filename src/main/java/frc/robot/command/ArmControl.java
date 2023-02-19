@@ -37,20 +37,11 @@ public class ArmControl extends CommandBase {
     }
 
     private void onPressA() {
-
-        SmartDashboard.putNumber("farm 1 theta calc", armMath.getThetas(
-                SmartDashboard.getNumber("farm x togo", 0),
-                SmartDashboard.getNumber("farm y togo", 0)
-        )[1]);
-        SmartDashboard.putNumber("farm 2 theta calc", armMath.getThetas(
-                SmartDashboard.getNumber("farm x togo", 0),
-                SmartDashboard.getNumber("farm y tog", 0)
-        )[0]);
-
-
+        Robot.arms.enablePID();
     }
     private void onPressX() {
-
+        Robot.arms.disablePID();
+/* 
         SmartDashboard.putNumber("farm x togo", armMath.getPoint(
                 SmartDashboard.getNumber("farm 1 theta calc",0),
                 SmartDashboard.getNumber("farm 2 theta calc", 0)
@@ -60,8 +51,7 @@ public class ArmControl extends CommandBase {
                 SmartDashboard.getNumber("farm 1 theta calc",0),
                 SmartDashboard.getNumber("farm 2 theta calc", 0)
         ).getY());
-
-
+*/
     }
     private void onPressY() {
         movePID(0.5,0);

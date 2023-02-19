@@ -37,19 +37,23 @@ public class ArmPIDSubsystem extends ProfiledPIDSubsystem {
     public void useOutput(double output, TrapezoidProfile.State setpoint) {
         double ff = 0.0;//feedforward.calculate(setpoint.position, setpoint.velocity);
         System.out.println("CURRENT OUTPUT: " + output);
-        System.out.println("ERROR: " + (Robot.arms.getDesiredTopRotation()-Robot.arms.getTopRotation()));
+        System.out.println("ERROR: " + (ArmSubsystem.getInstance().getDesiredTopRotation()-ArmSubsystem.getInstance().getTopRotation()));
         if (motorType.equalsIgnoreCase("top"))
-            Robot.arms.setTop(output + ff);
+            ArmSubsystem.getInstance().setTop(output + ff);
         if (motorType.equalsIgnoreCase("bottom"))
-            Robot.arms.setBottom(output + ff);
+            ArmSubsystem.getInstance().setBottom(output + ff);
     }
 
     @Override
     public double getMeasurement() {
-        System.out.println("Our current rotation is | " + Robot.arms.getTopRotation() + " | and our desired rotation is | " + Robot.arms.getDesiredTopRotation());
-        if (motorType.equalsIgnoreCase("top"))
-            return Robot.arms.getTopRotation();
-        else
-            return Robot.arms.getBottomRotation();
+        //System.out.println("Our current rotation is | " + ArmSubsystem.getInstance().getTopRotation() + " | and our desired rotation is | " + ArmSubsystem.getInstance().getDesiredTopRotation());
+        //ArmSubsystem instance = ArmSubsystem.getInstance();
+        //if (instance != null) {
+          if (motorType.equalsIgnoreCase("top"))
+            return ArmSubsystem.getInstance().getTopRotation();
+          else
+            return ArmSubsystem.getInstance().getBottomRotation();
+        //}
+        //return 0.0;
     }
 }
