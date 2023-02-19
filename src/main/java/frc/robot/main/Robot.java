@@ -36,7 +36,7 @@ public class Robot extends TimedRobot
   private final SendableChooser<String> chooser = new SendableChooser<>();
   public static RobotImpl impl = new Placeholder();
   // Joystick (XBox) Input
-  public static XboxControl xbox = new XboxControl(0);
+  public static XboxControl xbox = new XboxControl(2);
   // Commands
   public final CommandScheduler commandScheduler = CommandScheduler.getInstance();
   //private final XboxArcadeDrive xboxArcadeDrive = new XboxArcadeDrive();

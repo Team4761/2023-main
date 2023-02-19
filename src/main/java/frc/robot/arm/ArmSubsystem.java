@@ -38,8 +38,8 @@ public class ArmSubsystem extends SubsystemBase {
 
         bottom_right.setInverted(true);
 
-        //bottom = new ArmPIDSubsystem(bottomEncoder, bottom_left, "bottom");
-        top = new ArmPIDSubsystem(topEncoder, top_motor, "top");
+        //bottom = new ArmPIDSubsystem(bottomEncoder, bottom_left, "bottom", Constants.ARM_P_BOTTOM, Constants.ARM_I_BOTTOM, Constants.ARM_D_BOTTOM);
+        top = new ArmPIDSubsystem(topEncoder, top_motor, "top", Constants.ARM_P_TOP, Constants.ARM_I_TOP, Constants.ARM_D_TOP);
 
 
         inverseKinematics = new ArmMath();
@@ -115,10 +115,16 @@ public class ArmSubsystem extends SubsystemBase {
         return top_motor.get();
     }
     public double getBottomRotation() {
-        return bottomEncoder.getRotation() - Constants.ENCODER_ZERO_VALUE_BOTTOM;       // This is to effectively zero out the robot using a preset value
+        if (bottomEncoder.getRotation() >= Constants.ENCODER_ZERO_VALUE_TOP)
+            return bottomEncoder.getRotation() - Constants.ENCODER_ZERO_VALUE_TOP;
+        else
+            return bottomEncoder.getRotation() + (Math.PI * 2) - Constants.ENCODER_ZERO_VALUE_TOP;
     }
     public double getTopRotation() {
-        return topEncoder.getRotation() - Constants.ENCODER_ZERO_VALUE_TOP;             // Same as above comment
+        if (topEncoder.getRotation() >= Constants.ENCODER_ZERO_VALUE_TOP)
+            return topEncoder.getRotation() - Constants.ENCODER_ZERO_VALUE_TOP;
+        else
+            return topEncoder.getRotation() + (Math.PI * 2) - Constants.ENCODER_ZERO_VALUE_TOP;
     }
     public double getDesiredBottomRotation() {
         return inverseKinematics.arm1Theta(pos.getX(),pos.getY());

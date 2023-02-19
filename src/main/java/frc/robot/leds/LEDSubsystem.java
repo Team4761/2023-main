@@ -46,7 +46,7 @@
     }
 
     public void disableLEDs () {
-        m_led.stop();
+        setAllLEDs(0,0,0);
     }
 
     private void loadBuffers () {
