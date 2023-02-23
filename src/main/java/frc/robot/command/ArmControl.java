@@ -97,7 +97,7 @@ public class ArmControl extends CommandBase {
         }
 
          */
-        Robot.arms.movePID();
+       // Robot.arms.movePID();
     }
     public void emergencyStop() {
         Robot.arms.emergencyStop();

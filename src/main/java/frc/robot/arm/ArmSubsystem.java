@@ -53,7 +53,7 @@ public class ArmSubsystem extends SubsystemBase {
         inverseKinematics = new ArmMath();
         pos = inverseKinematics.getPoint(getBottomRotation(), getTopRotation());
 
-        bottom.enable();
+      //  bottom.enable();
 
     }
 
