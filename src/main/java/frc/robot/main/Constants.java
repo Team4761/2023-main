@@ -7,9 +7,11 @@ public class Constants {
     public static final int LED_NUMBER = 8;                     // Number of LEDs
     public static final int ARM_ENCODER_TOP_PORT = 9;           // RoboRIO, DIO port
     public static final int ARM_ENCODER_BOTTOM_PORT = 0;        // RoboRIO, DIO port
-    public static final int ARM_MOTOR_BOTTOM_LEFT_PORT = 3;     // CAN, initialized port
-    public static final int ARM_MOTOR_BOTTOM_RIGHT_PORT = 2;    // CAN, initialized port
-    public static final int ARM_MOTOR_TOP_PORT = 1;             // CAN, initialized port
+    //Ports are for new arm old ports on side or the same
+    public static final int ARM_MOTOR_BOTTOM_LEFT_PORT = 3;     // CAN, initialized port //same ports
+    public static final int ARM_MOTOR_BOTTOM_RIGHT_PORT = 42;   // CAN, initialized port //42 for new arm, 2 for old
+    public static final int ARM_MOTOR_TOP_PORT = 1;             // CAN, initialized port //same ports
+    public static final int ARM_MOTOR_INTAKE_PORT = 4;          // CAN, initialized port //only for new arm
 
 
     // Drivetrain constants.
