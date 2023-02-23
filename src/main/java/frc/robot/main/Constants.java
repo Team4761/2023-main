@@ -27,8 +27,8 @@ public class Constants {
     public static final double trackWidth = 19.5;//Inches : 19.5 //Meters : 0.4953
 
     // Arm Constants
-    static final public double ARM_LENGTH_BOTTOM = 25.0;        // Bottom Arm?
-    static final public double ARM_LENGTH_TOP = 30.0;           // Top Arm?
+    static final public double ARM_LENGTH_BOTTOM = 22.5;        // Bottom Arm?  //now 22.5 was 25
+    static final public double ARM_LENGTH_TOP = 28.5;           // Top Arm?     //now 28.5 was 30
     static public double ARM_P_TOP = 0.5;                     // PID control for arms
     static public double ARM_I_TOP = 0.0;                     // PID control for arms
     static public double ARM_D_TOP = 0.0;                     // PID control for arms
