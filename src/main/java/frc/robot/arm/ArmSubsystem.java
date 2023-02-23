@@ -23,8 +23,8 @@ public class ArmSubsystem extends SubsystemBase {
     CANSparkMax bottom_left;
     CANSparkMax bottom_right;
     CANSparkMax top_motor;
-    ArmPIDSubsystem bottom;
-    ArmPIDSubsystem top;
+    public ArmPIDSubsystem bottom;
+   public  ArmPIDSubsystem top;
 
     ArmMath inverseKinematics;
     Translation2d pos;
@@ -43,23 +43,25 @@ public class ArmSubsystem extends SubsystemBase {
         bottom_right = new CANSparkMax(Constants.ARM_MOTOR_BOTTOM_RIGHT_PORT, CANSparkMaxLowLevel.MotorType.kBrushless);
         top_motor = new CANSparkMax(Constants.ARM_MOTOR_TOP_PORT, CANSparkMaxLowLevel.MotorType.kBrushless);
 
-        bottom_right.setInverted(true);
+        bottom_left.setInverted(true);
+     //   bottom_right.setInverted(true);
 
         // Do find '//REMOVABLE' and replace all with nothing to activate bottom control
-        //REMOVABLEbottom = new ArmPIDSubsystem(bottomEncoder, bottom_left, "bottom", Constants.ARM_P_BOTTOM, Constants.ARM_I_BOTTOM, Constants.ARM_D_BOTTOM);
+        bottom = new ArmPIDSubsystem(bottomEncoder, bottom_left, "bottom", Constants.ARM_P_BOTTOM, Constants.ARM_I_BOTTOM, Constants.ARM_D_BOTTOM);
         top = new ArmPIDSubsystem(topEncoder, top_motor, "top", Constants.ARM_P_TOP, Constants.ARM_I_TOP, Constants.ARM_D_TOP);
 
         inverseKinematics = new ArmMath();
         pos = inverseKinematics.getPoint(getBottomRotation(), getTopRotation());
 
-        //REMOVABLEbottoms.enable();
+        bottom.enable();
+
     }
 
     @Override
     public void register() {
         super.register();
         top.enable();
-        //REMOVABLEbottom.enable();
+        bottom.enable();
     }
 
     @SuppressWarnings("WeakerAccess")
@@ -72,7 +74,9 @@ public class ArmSubsystem extends SubsystemBase {
     // PID control
     public void movePID() {
         top.setGoal(getDesiredTopRotation());
-        //REMOVABLEbottom.setGoal(getDesiredBottomRotation());
+        bottom.setGoal(getDesiredBottomRotation());
+        top.enable();
+        bottom.enable();
     }
     // Updating positions
     public void updatePos(double deltaX, double deltaY) {
@@ -153,10 +157,10 @@ public class ArmSubsystem extends SubsystemBase {
         return top_motor.get();
     }
     public double getBottomRotation() {
-        if (bottomEncoder.getRotation() >= Constants.ENCODER_ZERO_VALUE_TOP)
-            return bottomEncoder.getRotation() - Constants.ENCODER_ZERO_VALUE_TOP;
+        if (bottomEncoder.getRotation() >= Constants.ENCODER_ZERO_VALUE_BOTTOM)
+            return bottomEncoder.getRotation() - Constants.ENCODER_ZERO_VALUE_BOTTOM;
         else
-            return bottomEncoder.getRotation() + (Math.PI * 2) - Constants.ENCODER_ZERO_VALUE_TOP;
+            return bottomEncoder.getRotation() + (Math.PI * 2) - Constants.ENCODER_ZERO_VALUE_BOTTOM;
     }
     public double getTopRotation() {
         if (topEncoder.getRotation() >= Constants.ENCODER_ZERO_VALUE_TOP)

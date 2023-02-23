@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Drivetrain.DrivetrainSubsystem;
+import frc.robot.arm.ArmPIDSubsystem;
 import frc.robot.arm.ArmSubsystem;
 import frc.robot.leds.LEDSubsystem;
 import frc.robot.command.*;
@@ -111,6 +112,8 @@ public class Robot extends TimedRobot
     SmartDashboard.putNumber("flower arm angle", 0);
     SmartDashboard.putNumber("farm x togo", 0);
     SmartDashboard.putNumber("farm y togo", 0);
+    arms.bottom.setGoal(SmartDashboard.getNumber("ARMS[02]: Bottom rotation", 0.2));
+    arms.top.setGoal(SmartDashboard.getNumber("ARMS[01]: Top rotation", 0.2));
   }
 
 

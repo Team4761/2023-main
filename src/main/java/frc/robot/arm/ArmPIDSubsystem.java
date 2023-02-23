@@ -47,14 +47,15 @@ public class ArmPIDSubsystem extends ProfiledPIDSubsystem {
     @Override
     public double getMeasurement() {
         //System.out.println("Our current rotation is | " + ArmSubsystem.getInstance().getTopRotation() + " | and our desired rotation is | " + ArmSubsystem.getInstance().getDesiredTopRotation());
-        //ArmSubsystem instance = ArmSubsystem.getInstance();
-        //if (instance != null) {
+        ArmSubsystem instance = ArmSubsystem.getInstance();
+        if (instance != null) {
           if (motorType.equalsIgnoreCase("top"))
             return ArmSubsystem.getInstance().getTopRotation();
           else
             return ArmSubsystem.getInstance().getBottomRotation();
-        //}
-        //return 0.0;
+        }
+        return 0.0;
+
     }
 
     public void updatePIDValues(double p, double i, double d) {
@@ -62,4 +63,5 @@ public class ArmPIDSubsystem extends ProfiledPIDSubsystem {
             super.getController().setPID(p, i, d);
         }
     }
+
 }

@@ -34,6 +34,7 @@ public class ArmControl extends CommandBase {
     //current range of motion is 0.8 to -2.5 use smart dashboard to set rotation angle.
     private void onPressB() {
         movePID(SmartDashboard.getNumber("fupper arm angle",0), SmartDashboard.getNumber("flower arm angle", 0));
+        Robot.arms.movePID();
     }
 
     private void onPressA() {
@@ -60,10 +61,10 @@ public class ArmControl extends CommandBase {
     @Override
     public void execute() {
         //Robot.arms.updatePos(xbox.getRightX(), xbox.getRightY());
-        //Robot.arms.movePID();
+       // Robot.arms.movePID();
         //obot.arms.setBottomL(xbox.getRightY()/2);
         //Robot.arms.setBottomR(xbox.getLeftY()/2);
-        Robot.arms.setBottom(xbox.getRightY());
+        //Robot.arms.setBottom(xbox.getRightY());
         //Robot.arms.setTop(xbox.getLeftY()/2);
         
         // Emergency Stop!
@@ -76,22 +77,26 @@ public class ArmControl extends CommandBase {
 
     public void movePID(double setTopRotation, double setBottomRotation) {
         //top is joint 2
-        if(setTopRotation > Constants.JOINT_2_MIN && setTopRotation < Constants.JOINT_2_MAX){
+        //if(setTopRotation > Constants.JOINT_2_MIN && setTopRotation < Constants.JOINT_2_MAX){
             ArmSubsystem.setDesiredTopRotation(setTopRotation);
-        }else if(setTopRotation > Constants.JOINT_2_MAX){
+       /* }else if(setTopRotation > Constants.JOINT_2_MAX){
             ArmSubsystem.setDesiredTopRotation(Constants.JOINT_2_MAX);
         }else if(setTopRotation < Constants.JOINT_2_MIN){
             ArmSubsystem.setDesiredTopRotation(Constants.JOINT_2_MIN);
         }
 
+        */
+
         //bototm in joint 1
-        if(setBottomRotation > Constants.JOINT_2_MIN && setBottomRotation < Constants.JOINT_2_MAX){
-            ArmSubsystem.setDesiredBottomRotation(setTopRotation);
-        }else if(setBottomRotation > Constants.JOINT_1_MAX){
+       // if(setBottomRotation > Constants.JOINT_2_MIN && setBottomRotation < Constants.JOINT_2_MAX){
+            ArmSubsystem.setDesiredBottomRotation(setBottomRotation);
+        /*}else if(setBottomRotation > Constants.JOINT_1_MAX){
             ArmSubsystem.setDesiredBottomRotation(Constants.JOINT_2_MAX);
         }else if(setBottomRotation < Constants.JOINT_1_MIN){
             ArmSubsystem.setDesiredBottomRotation(Constants.JOINT_2_MIN);
         }
+
+         */
         Robot.arms.movePID();
     }
     public void emergencyStop() {
