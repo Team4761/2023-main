@@ -17,12 +17,12 @@ public class ArmMath {
             return Math.PI / 2 + thetaC;
         if (x > 0)
             return Math.atan(-x / y) + thetaC + Math.PI / 2;
-        return Math.PI / 4;
+        return Math.PI / 4 + Constants.KINEMATICS_OFFSET_TOP;
     }
 
     public double arm2Theta(double x, double y) {
         double d = Math.sqrt(x * x + y * y);
-        return Math.acos((d * d - armLength1 * armLength1 - armLength2 * armLength2) / (-2 * armLength1 * armLength2));
+        return Math.acos((d * d - armLength1 * armLength1 - armLength2 * armLength2) / (-2 * armLength1 * armLength2)) + Constants.KINEMATICS_OFFSET_BOTTOM;
     }
 
     //chatGPT did this lol. It works, returns both values
@@ -38,11 +38,11 @@ public class ArmMath {
         // Calculate both possible values of the first joint angle
         double k1_0 = armLength1 + armLength2 * c2;
         double k2_0 = armLength2 * s2;
-        angles[0][0] = Math.atan2(y, x) - Math.atan2(k2_0, k1_0);
+        angles[0][0] = Math.atan2(y, x) - Math.atan2(k2_0, k1_0) + Constants.KINEMATICS_OFFSET_TOP;
 
         double k1_1 = armLength1 + armLength2 * c2;
         double k2_1 = -armLength2 * s2;
-        angles[1][0] = Math.atan2(y, x) - Math.atan2(k2_1, k1_1);
+        angles[1][0] = Math.atan2(y, x) - Math.atan2(k2_1, k1_1) + Constants.KINEMATICS_OFFSET_BOTTOM;
 
         return angles[0];
     }
@@ -100,9 +100,13 @@ public class ArmMath {
 
     //gets point from two thetas of two arms
     public Translation2d getPoint(double theta1, double theta2) {
+        theta1 -= Constants.KINEMATICS_OFFSET_BOTTOM;
+        theta2 -= Constants.KINEMATICS_OFFSET_TOP;
+        if (theta1 < 0) { theta1 += Math.PI*2; }
+        if (theta2 < 0) { theta2 += Math.PI*2; }
         return new Translation2d(
-                armLength1 * Math.cos(theta1) + armLength2 * Math.cos(theta1 + theta2),
-                armLength1 * Math.sin(theta1) + armLength2 * Math.sin(theta1 + theta2));  //Checked 2/18, added theta1 - theta 2
+                armLength1 * Math.cos(theta1) + armLength2 * Math.cos(theta1 + theta2) + Constants.KINEMATICS_OFFSET_BOTTOM,
+                armLength1 * Math.sin(theta1) + armLength2 * Math.sin(theta1 + theta2) + Constants.KINEMATICS_OFFSET_TOP);  //Checked 2/18, added theta1 - theta 2
     }
 
     public boolean comparePoint(Translation2d wantedPoint, Translation2d currentPoint, double variation) {

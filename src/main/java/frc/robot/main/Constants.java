@@ -41,6 +41,8 @@ public class Constants {
     public static final double JOINT_2_MIN = -2.5;
     public static final double JOINT_1_MAX = 0;
     public static final double JOINT_1_MIN = 0;
+    public static final double KINEMATICS_OFFSET_TOP = 0.0;
+    public static final double KINEMATICS_OFFSET_BOTTOM = 0.0;
 
     //PID constants for robot.
     public static final double LINEAR_P = 0.01;
