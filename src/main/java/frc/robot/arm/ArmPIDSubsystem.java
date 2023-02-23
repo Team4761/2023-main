@@ -56,4 +56,10 @@ public class ArmPIDSubsystem extends ProfiledPIDSubsystem {
         //}
         //return 0.0;
     }
+
+    public void updatePIDValues(double p, double i, double d) {
+        if (motorType.equalsIgnoreCase("bottom")) {
+            super.getController().setPID(p, i, d);
+        }
+    }
 }

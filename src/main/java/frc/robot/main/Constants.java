@@ -1,15 +1,17 @@
 package frc.robot.main;
 
+import edu.wpi.first.math.geometry.Translation2d;
+
 public class Constants {
 
-    // Ports.
+    // Ports & LEDs
     public static final int LED_PORT = 0;                       // RoboRIO, PWM port
-    public static final int LED_NUMBER = 8;                     // Number of LEDs
+    public static final int LED_NUMBER = 60;                    // Number of LEDs
     public static final int ARM_ENCODER_TOP_PORT = 9;           // RoboRIO, DIO port
     public static final int ARM_ENCODER_BOTTOM_PORT = 0;        // RoboRIO, DIO port
     //Ports are for new arm old ports on side or the same
     public static final int ARM_MOTOR_BOTTOM_LEFT_PORT = 3;     // CAN, initialized port //same ports
-    public static final int ARM_MOTOR_BOTTOM_RIGHT_PORT = 42;   // CAN, initialized port //42 for new arm, 2 for old
+    public static final int ARM_MOTOR_BOTTOM_RIGHT_PORT = 2;    // CAN, initialized port //42 for new arm, 2 for old
     public static final int ARM_MOTOR_TOP_PORT = 1;             // CAN, initialized port //same ports
     public static final int ARM_MOTOR_INTAKE_PORT = 4;          // CAN, initialized port //only for new arm
 
@@ -45,6 +47,7 @@ public class Constants {
     public static final double JOINT_1_MIN = 0;
     public static final double KINEMATICS_OFFSET_TOP = 0.0;
     public static final double KINEMATICS_OFFSET_BOTTOM = 0.0;
+    public static final double CONTROLLER_DEADZONE = 0.05;
 
     //PID constants for robot.
     public static final double LINEAR_P = 0.01;
@@ -56,4 +59,6 @@ public class Constants {
     public static final double ANGULAR_D = 0.1;
 
 
+    // Set Positions
+    public static final Translation2d INTAKE_POSITION = new Translation2d(0.0, 0.0);    // x & y are angles in radians (top_rotation, bottom_rotation)
 }

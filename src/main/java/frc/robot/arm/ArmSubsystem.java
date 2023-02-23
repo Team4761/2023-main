@@ -28,10 +28,10 @@ public class ArmSubsystem extends SubsystemBase {
 
     ArmMath inverseKinematics;
     Translation2d pos;
-    private static double desiredTopRotation=0.2;
-    private static double desiredBottomRoation = 0;
+    private static double desiredTopRotation = 0.0;
+    private static double desiredBottomRotation = 0.0;
 
-
+    private boolean goingToSetPosition = false;
     // CONNECT USING the white, red, and black cable.
     // The WHITE cable is the signal wire.
 
@@ -76,12 +76,33 @@ public class ArmSubsystem extends SubsystemBase {
     }
     // Updating positions
     public void updatePos(double deltaX, double deltaY) {
-        if (inverseKinematics.inBounds(pos.plus(new Translation2d(deltaX, deltaY))))
-            pos.plus(new Translation2d(deltaX, deltaY));
+        if (deltaX > Constants.CONTROLLER_DEADZONE || deltaX < 0-Constants.CONTROLLER_DEADZONE || deltaY > Constants.CONTROLLER_DEADZONE || deltaY < 0-Constants.CONTROLLER_DEADZONE) {
+            if (goingToSetPosition) {
+                pos = inverseKinematics.getPoint(getBottomRotation(), getTopRotation());
+                goingToSetPosition = false;
+            }
+            if (inverseKinematics.inBounds(pos.plus(new Translation2d(deltaX, deltaY))))
+                pos.plus(new Translation2d(deltaX, deltaY));
+            setDesiredBottomRotation(inverseKinematics.arm1Theta(pos.getX(),pos.getY()));
+            setDesiredTopRotation(inverseKinematics.arm2Theta(pos.getX(),pos.getY()));
+        }
     }
     public void updatePos(Translation2d delta) {
-        if (inverseKinematics.inBounds(pos.plus(delta)))
-            pos.plus(delta);
+        if (delta.getX() > Constants.CONTROLLER_DEADZONE || delta.getX() < 0-Constants.CONTROLLER_DEADZONE || delta.getY() > Constants.CONTROLLER_DEADZONE || delta.getY() < 0-Constants.CONTROLLER_DEADZONE) {
+            if (goingToSetPosition) {
+                pos = inverseKinematics.getPoint(getBottomRotation(), getTopRotation());
+                goingToSetPosition = false;
+            }
+            if (inverseKinematics.inBounds(pos.plus(delta)))
+                pos.plus(delta);
+            setDesiredBottomRotation(inverseKinematics.arm1Theta(pos.getX(),pos.getY()));
+            setDesiredTopRotation(inverseKinematics.arm2Theta(pos.getX(),pos.getY()));
+        }
+    }
+    public void moveToSetPos(Translation2d pos) {
+        setDesiredBottomRotation(inverseKinematics.arm1Theta(pos.getX(),pos.getY()));
+        setDesiredTopRotation(inverseKinematics.arm2Theta(pos.getX(),pos.getY()));
+        goingToSetPosition = true;
     }
     // Bottom Motor Control
     public void setBottom(double speed) {
@@ -144,18 +165,19 @@ public class ArmSubsystem extends SubsystemBase {
             return topEncoder.getRotation() + (Math.PI * 2) - Constants.ENCODER_ZERO_VALUE_TOP;
     }
     public double getDesiredBottomRotation() {
-        return inverseKinematics.arm1Theta(pos.getX(),pos.getY());
+        //return inverseKinematics.arm1Theta(pos.getX(),pos.getY());
+        return desiredBottomRotation;
     }
     public double getDesiredTopRotation() {
-        return inverseKinematics.arm2Theta(pos.getX(),pos.getY());
-        //return desiredTopRotation;
+        //return inverseKinematics.arm2Theta(pos.getX(),pos.getY());
+        return desiredTopRotation;
     }
     public static void setDesiredTopRotation(double rot)
     {
         desiredTopRotation = rot;
     }
     public static void setDesiredBottomRotation(double rot){
-        desiredBottomRoation = rot;
+        desiredBottomRotation = rot;
     }
 
     // Emergencies
@@ -201,8 +223,13 @@ public class ArmSubsystem extends SubsystemBase {
         SmartDashboard.putNumberArray("ARMS[07]: Position to get to", new double[]{pos.getX(),pos.getY()});
 
         // Widgets (sliders!) [For tuning PID cause yay]
+        if (Constants.ARM_P_BOTTOM != p_bottom.getDouble(Constants.ARM_P_BOTTOM) || Constants.ARM_I_BOTTOM != i_bottom.getDouble(Constants.ARM_I_BOTTOM) || Constants.ARM_D_BOTTOM != d_bottom.getDouble(Constants.ARM_D_BOTTOM))
+            bottom.updatePIDValues(p_bottom.getDouble(Constants.ARM_P_BOTTOM), i_bottom.getDouble(Constants.ARM_I_BOTTOM), d_bottom.getDouble(Constants.ARM_D_BOTTOM));
+        if (Constants.ARM_P_TOP != p_top.getDouble(Constants.ARM_P_TOP) || Constants.ARM_I_TOP != i_top.getDouble(Constants.ARM_I_TOP) || Constants.ARM_D_TOP != d_top.getDouble(Constants.ARM_D_TOP))
+            top.updatePIDValues(p_top.getDouble(Constants.ARM_P_TOP), i_top.getDouble(Constants.ARM_I_TOP), d_top.getDouble(Constants.ARM_D_TOP));
         Constants.ARM_P_BOTTOM = p_bottom.getDouble(Constants.ARM_P_BOTTOM);
         Constants.ARM_I_BOTTOM = i_bottom.getDouble(Constants.ARM_I_BOTTOM);
+
         Constants.ARM_D_BOTTOM = d_bottom.getDouble(Constants.ARM_D_BOTTOM);
         Constants.ARM_P_TOP = p_top.getDouble(Constants.ARM_P_TOP);
         Constants.ARM_I_TOP = i_top.getDouble(Constants.ARM_I_TOP);
