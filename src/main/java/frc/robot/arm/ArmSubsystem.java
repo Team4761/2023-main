@@ -1,9 +1,16 @@
 package frc.robot.arm;
 
+import java.util.Map;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
 
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.main.Constants;
@@ -74,7 +81,7 @@ public class ArmSubsystem extends SubsystemBase {
     }
     public void updatePos(Translation2d delta) {
         if (inverseKinematics.inBounds(pos.plus(delta)))
-            pos.minus(delta);
+            pos.plus(delta);
     }
     // Bottom Motor Control
     public void setBottom(double speed) {
@@ -140,31 +147,49 @@ public class ArmSubsystem extends SubsystemBase {
         return inverseKinematics.arm1Theta(pos.getX(),pos.getY());
     }
     public double getDesiredTopRotation() {
-        //return inverseKinematics.arm2Theta(pos.getX(),pos.getY());
-        return desiredTopRotation;
+        return inverseKinematics.arm2Theta(pos.getX(),pos.getY());
+        //return desiredTopRotation;
     }
     public static void setDesiredTopRotation(double rot)
     {
         desiredTopRotation = rot;
     }
-
-
-    // Unhandled exception instantiating robot frc.robot.arm.ArmPIDSubsystem java.lang.NullPointerException: Cannot invoke "frc.robot.arm.ArmSubsystem.getTopRotation()"
-     //because the return value of "frc.robot.arm.ArmSubsystem.getInstance()" is null ﻿﻿ frc.robot.arm.ArmPIDSubsystem.getMeasurement(ArmPIDSubsystem.java:52) 
     public static void setDesiredBottomRotation(double rot){
         desiredBottomRoation = rot;
     }
 
     // Emergencies
     public void emergencyStop() {
-        //top.disable();
-        //bottom.disable();
+        top.disable();
+        bottom.disable();
         stop();
     }
 
 
+
+
     /* Debugging Info */
+    private boolean finishedDebugInit = false;
+    long nextTime = System.currentTimeMillis() + 1000;
+    GenericEntry p_bottom;
+    GenericEntry i_bottom;
+    GenericEntry d_bottom;
+    GenericEntry p_top;
+    GenericEntry i_top;
+    GenericEntry d_top;
+
     public void debug() {
+        if (!finishedDebugInit) {
+            ShuffleboardTab tab = Shuffleboard.getTab("Arms");
+            p_bottom = tab.add("P_bottom", Constants.ARM_P_BOTTOM).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min", 0, "max", 3)).getEntry();
+            i_bottom = tab.add("I_bottom", Constants.ARM_I_BOTTOM).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min", 0, "max", 3)).getEntry();
+            d_bottom = tab.add("D_bottom", Constants.ARM_D_BOTTOM).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min", 0, "max", 3)).getEntry();
+            p_top = tab.add("P_top", Constants.ARM_P_TOP).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min", 0, "max", 3)).getEntry();
+            i_top = tab.add("I_top", Constants.ARM_I_TOP).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min", 0, "max", 3)).getEntry();
+            d_top = tab.add("D_top", Constants.ARM_D_TOP).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min", 0, "max", 3)).getEntry();
+
+            finishedDebugInit = true;
+        }
         System.out.println("TOP ROTATION: " + getTopRotation() + " | " + "BOTTOM ROTATION: " + getBottomRotation());
         SmartDashboard.putBoolean("ARMS[00]: Is debugging", true);
         SmartDashboard.putNumber("ARMS[01]: Top rotation", getTopRotation());
@@ -174,5 +199,19 @@ public class ArmSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("ARMS[05]: Top Speed", getTopSpeed());
         SmartDashboard.putNumber("ARMS[06]: Bottom Speed", getBottomSpeed());
         SmartDashboard.putNumberArray("ARMS[07]: Position to get to", new double[]{pos.getX(),pos.getY()});
+
+        // Widgets (sliders!) [For tuning PID cause yay]
+        Constants.ARM_P_BOTTOM = p_bottom.getDouble(Constants.ARM_P_BOTTOM);
+        Constants.ARM_I_BOTTOM = i_bottom.getDouble(Constants.ARM_I_BOTTOM);
+        Constants.ARM_D_BOTTOM = d_bottom.getDouble(Constants.ARM_D_BOTTOM);
+        Constants.ARM_P_TOP = p_top.getDouble(Constants.ARM_P_TOP);
+        Constants.ARM_I_TOP = i_top.getDouble(Constants.ARM_I_TOP);
+        Constants.ARM_D_TOP = d_top.getDouble(Constants.ARM_D_TOP);
+
+        if (nextTime < System.currentTimeMillis()) {
+            System.out.println("[TOP] P) " + Constants.ARM_P_TOP + "  I) " + Constants.ARM_I_TOP + "  D) " + Constants.ARM_D_TOP);
+            System.out.println("[BOTTOM] P) " + Constants.ARM_P_BOTTOM + "  I) " + Constants.ARM_I_BOTTOM + "  D) " + Constants.ARM_D_BOTTOM);
+            nextTime = System.currentTimeMillis() + 1000;
+        }
     }
 }

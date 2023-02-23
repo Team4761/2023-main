@@ -27,12 +27,12 @@ public class Constants {
     // Arm Constants
     static final public double ARM_LENGTH_BOTTOM = 25.0;        // Bottom Arm?
     static final public double ARM_LENGTH_TOP = 30.0;           // Top Arm?
-    static final public double ARM_P_TOP = 0.5;                     // PID control for arms
-    static final public double ARM_I_TOP = 0.0;                     // PID control for arms
-    static final public double ARM_D_TOP = 0.0;                     // PID control for arms
-    static final public double ARM_P_BOTTOM = 0.5;                     // PID control for arms
-    static final public double ARM_I_BOTTOM = 0.0;                     // PID control for arms
-    static final public double ARM_D_BOTTOM = 0.0;                     // PID control for arms
+    static public double ARM_P_TOP = 0.5;                     // PID control for arms
+    static public double ARM_I_TOP = 0.0;                     // PID control for arms
+    static public double ARM_D_TOP = 0.0;                     // PID control for arms
+    static public double ARM_P_BOTTOM = 0.5;                     // PID control for arms
+    static public double ARM_I_BOTTOM = 0.0;                     // PID control for arms
+    static public double ARM_D_BOTTOM = 0.0;                     // PID control for arms
     static final public double ARM_MAX_ACCELERATION_SPEED = 0.1;
     static final public double ARM_MAX_ROTATION_SPEED = 1.0;
     static final public double ENCODER_ZERO_VALUE_TOP = 2.5; //PAST: 0.6189683810569215
