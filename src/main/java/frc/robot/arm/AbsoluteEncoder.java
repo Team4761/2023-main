@@ -54,4 +54,8 @@ public class AbsoluteEncoder extends SubsystemBase {
 
     public DutyCycleEncoder getDutyCycleEncoder() { return m_dutyCycleEncoder; }
     public void setDutyCycleEncoder(DutyCycleEncoder newEncoder) { this.m_dutyCycleEncoder = newEncoder; }
+
+ //   public double getVelocity(){
+ //       return m_dutyCycleEncoder.
+ //   }
 }

@@ -15,7 +15,7 @@ public class ArmPIDSubsystem extends ProfiledPIDSubsystem {
     CANSparkMax motor;
     String motorType;
     // <https://www.reca.lc/arm> has a very useful calculator!!!
-    // ArmFeedforward feedforward = new ArmFeedforward(0.01, 0.45, 1.95, 0.02);
+    ArmFeedforward feedforward = new ArmFeedforward(0.01, 0.45, 1.95, 0.02);
 
 
     public ArmPIDSubsystem(AbsoluteEncoder e, CANSparkMax m, String type, double p, double i, double d) {
@@ -64,4 +64,13 @@ public class ArmPIDSubsystem extends ProfiledPIDSubsystem {
         }
     }
 
+ /*   @Override
+    public void periodic() {
+        if (m_enabled) {
+            useOutput(m_controller.calculate(getMeasurement()) + feedforward.calculate(encoder.getRotation(), encoder.), m_controller.getSetpoint());
+        }
+    }
+
+
+  */
 }

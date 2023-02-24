@@ -13,7 +13,7 @@ public class UpdateLED extends CommandBase {
 
     @Override
     public void execute() {
-        xbox.getController().b().onTrue(Commands.runOnce(() -> { setPattern(); }));
+      //  xbox.getController().b().onTrue(Commands.runOnce(() -> { setPattern(); }));
         SmartDashboard.putBoolean("LEDS[00] Is changing", false);
     }
 
