@@ -5,6 +5,7 @@
 
 package frc.robot.main;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -43,10 +44,13 @@ public class Robot extends TimedRobot
   //private final XboxArcadeDrive xboxArcadeDrive = new XboxArcadeDrive();
   private final ArmControl armControl = new ArmControl();
   private final UpdateLED updateLED = new UpdateLED();
+  private final XboxArcadeDrive xboxArcadeDrive = new XboxArcadeDrive();
   // Subsystems
-  //public static DrivetrainSubsystem driveTrain = DrivetrainSubsystem.getInstance();
+  public static DrivetrainSubsystem driveTrain = DrivetrainSubsystem.getInstance();
   public static ArmSubsystem arms = ArmSubsystem.getInstance();
   public static LEDSubsystem leds = LEDSubsystem.getInstance();
+
+  public static Joystick joystick = new Joystick(0);
 
   /**
    * This method is run when the robot is first started up and should be used for any
@@ -108,6 +112,7 @@ public class Robot extends TimedRobot
 
     commandScheduler.schedule(armControl.repeatedly());
     commandScheduler.schedule(updateLED.repeatedly());
+   // commandScheduler.schedule(xboxArcadeDrive.repeatedly());
     SmartDashboard.putNumber("fupper arm angle", 0);
     SmartDashboard.putNumber("flower arm angle", 0);
     SmartDashboard.putNumber("farm x togo", 0);
@@ -125,6 +130,7 @@ public class Robot extends TimedRobot
     SmartDashboard.putNumber("CONTROLLER[01] Right Axis Y", xbox.getRightY());
     SmartDashboard.putNumber("CONTROLLER[02] Left Axis X", xbox.getLeftX());
     SmartDashboard.putNumber("CONTROLLER[03] Left Axis Y", xbox.getLeftY());
+    driveTrain.arcadeDrive(joystick.getRawAxis(0), joystick.getRawAxis(4));
   }
 
 
