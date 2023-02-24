@@ -19,10 +19,10 @@ public class ArmControl extends CommandBase {
 
 
         ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
-        xbox.getController().b().onTrue(Commands.runOnce(this::onPressB, armSubsystem));
-        xbox.getController().y().onTrue(Commands.runOnce(this::onPressY, armSubsystem));
-        xbox.getController().x().onTrue(Commands.runOnce(this::onPressX, armSubsystem));
-        xbox.getController().a().onTrue(Commands.runOnce(this::onPressA, armSubsystem));
+        xbox.b().onTrue(Commands.runOnce(this::onPressB, armSubsystem));
+        xbox.y().onTrue(Commands.runOnce(this::onPressY, armSubsystem));
+        xbox.x().onTrue(Commands.runOnce(this::onPressX, armSubsystem));
+        xbox.a().onTrue(Commands.runOnce(this::onPressA, armSubsystem));
         SmartDashboard.putNumber("fupper arm angle", 0);
         SmartDashboard.putNumber("flower arm angle", 0);
         SmartDashboard.putNumber("farm x togo", 0);

@@ -2,16 +2,13 @@ package frc.robot.controller;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.main.Robot;
 
-public class XboxControl {
-    private CommandXboxController xbox;
+public class XboxControl extends CommandXboxController {
     private boolean inverted = true;
     public XboxControl(int port)
     {
-        xbox = new CommandXboxController(port);
+        super(port);
     }
-
 
     double applyDeadzone (double value, double deadzone) {
         if (Math.abs(value) > deadzone) {
@@ -25,36 +22,32 @@ public class XboxControl {
         }
 
     }
-    public double getLeftX()
-    {
-        double left = xbox.getLeftX() * (inverted ? -1 : 1);
+
+    @Override
+    public double getLeftX() {
+        double left = super.getLeftX() * (inverted ? -1 : 1);
         SmartDashboard.putNumber("CONTROLLER[02] Left Axis X", left);
-        return applyDeadzone(left,0.05);
+        return applyDeadzone(left, 0.05);
     }
-    
-    public double getRightX()
-    {
-        double right = xbox.getRightX() ;
+
+    @Override
+    public double getRightX() {
+        double right = super.getRightX() ;
         SmartDashboard.putNumber("CONTROLLER[00] Right Axis X", right);
         return applyDeadzone(right,0.05);
     }
-    public double getLeftY()
-    {
-        double left = xbox.getLeftY() * (inverted ? -1 : 1);
+
+    @Override
+    public double getLeftY() {
+        double left = super.getLeftY() * (inverted ? -1 : 1);
         SmartDashboard.putNumber("CONTROLLER[03] Left Axis Y", left);
         return applyDeadzone(left,0.05);
     }
-    public double getRightY()
-    {
-        double right = xbox.getRightY() * (inverted ? -1 : 1);
+
+    @Override
+    public double getRightY() {
+        double right = super.getRightY() * (inverted ? -1 : 1);
         SmartDashboard.putNumber("CONTROLLER[01] Right Axis Y", right);
         return applyDeadzone(right,0.05);
     }
-    public CommandXboxController getController()
-    {
-        return xbox;
-    }
-
-
-
 }
