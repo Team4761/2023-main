@@ -62,8 +62,8 @@ public class ArmControl extends CommandBase {
     @Override
     public void execute() {
         //Robot.arms.updatePos(xbox.getRightX(), xbox.getRightY());
-       // Robot.arms.movePID();
-        //obot.arms.setBottomL(xbox.getRightY()/2);
+        //Robot.arms.movePID();
+        //Robot.arms.setBottomL(xbox.getRightY()/2);
         //Robot.arms.setBottomR(xbox.getLeftY()/2);
         //Robot.arms.setBottom(xbox.getRightY());
         //Robot.arms.setTop(xbox.getLeftY()/2);

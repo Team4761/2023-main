@@ -72,10 +72,9 @@ public class ArmSubsystem extends SubsystemBase {
     /* Setters */
     // PID control
     public void movePID() {
-        top.setGoal(getDesiredTopRotation());
+        if (getDesiredBottomRotation() - getDesiredTopRotation() < Math.PI*0.5 + 0.1)
+            top.setGoal(getDesiredTopRotation());
         bottom.setGoal(getDesiredBottomRotation());
-        //top.enable();
-        //bottom.enable();
     }
     // Updating positions
     public void updatePos(double deltaX, double deltaY) {
