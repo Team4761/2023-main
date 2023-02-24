@@ -50,8 +50,6 @@ public class Robot extends TimedRobot
   public static ArmSubsystem arms = ArmSubsystem.getInstance();
   public static LEDSubsystem leds = LEDSubsystem.getInstance();
 
-  public static Joystick joystick = new Joystick(0);
-
   /**
    * This method is run when the robot is first started up and should be used for any
    * initialization code.
@@ -130,7 +128,7 @@ public class Robot extends TimedRobot
     SmartDashboard.putNumber("CONTROLLER[01] Right Axis Y", xbox.getRightY());
     SmartDashboard.putNumber("CONTROLLER[02] Left Axis X", xbox.getLeftX());
     SmartDashboard.putNumber("CONTROLLER[03] Left Axis Y", xbox.getLeftY());
-    driveTrain.arcadeDrive(joystick.getRawAxis(0), joystick.getRawAxis(4));
+    driveTrain.arcadeDrive(xbox.getLeftY() * 0.5 , xbox.getRightX() * 0.5);
   }
 
 
@@ -144,6 +142,7 @@ public class Robot extends TimedRobot
   public void disabledPeriodic() {
     arms.stop();
     leds.disableLEDs();
+    commandScheduler.cancelAll();
   }
 
 

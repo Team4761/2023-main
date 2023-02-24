@@ -43,8 +43,9 @@ public class ArmSubsystem extends SubsystemBase {
         bottom_right = new CANSparkMax(Constants.ARM_MOTOR_BOTTOM_RIGHT_PORT, CANSparkMaxLowLevel.MotorType.kBrushless);
         top_motor = new CANSparkMax(Constants.ARM_MOTOR_TOP_PORT, CANSparkMaxLowLevel.MotorType.kBrushless);
 
-        bottom_left.setInverted(true);
-     //   bottom_right.setInverted(true);
+        //bottom_left.setInverted(true);
+        top_motor.setInverted(true);
+        bottom_right.setInverted(true);
 
         // Do find '//REMOVABLE' and replace all with nothing to activate bottom control
         bottom = new ArmPIDSubsystem(bottomEncoder, bottom_left, "bottom", Constants.ARM_P_BOTTOM, Constants.ARM_I_BOTTOM, Constants.ARM_D_BOTTOM);
@@ -52,8 +53,6 @@ public class ArmSubsystem extends SubsystemBase {
 
         inverseKinematics = new ArmMath();
         pos = inverseKinematics.getPoint(getBottomRotation(), getTopRotation());
-
-      //  bottom.enable();
 
     }
 
@@ -75,8 +74,8 @@ public class ArmSubsystem extends SubsystemBase {
     public void movePID() {
         top.setGoal(getDesiredTopRotation());
         bottom.setGoal(getDesiredBottomRotation());
-        top.enable();
-        bottom.enable();
+        //top.enable();
+        //bottom.enable();
     }
     // Updating positions
     public void updatePos(double deltaX, double deltaY) {
@@ -142,11 +141,11 @@ public class ArmSubsystem extends SubsystemBase {
     }
     public void enablePID() {
         top.enable();
-        //REMOVABLEbottom.enable();
+        bottom.enable();
     }
     public void disablePID() {
         top.disable();
-        //REMOVABLEbottom.disable();
+        bottom.disable();
     }
 
     /* Getters */
@@ -203,6 +202,10 @@ public class ArmSubsystem extends SubsystemBase {
     GenericEntry p_top;
     GenericEntry i_top;
     GenericEntry d_top;
+    GenericEntry top_desired;
+    GenericEntry bottom_desired;
+    GenericEntry bottom_left_speed;
+    GenericEntry bottom_right_speed;
 
     public void debug() {
         if (!finishedDebugInit) {
@@ -210,13 +213,17 @@ public class ArmSubsystem extends SubsystemBase {
             p_bottom = tab.add("P_bottom", Constants.ARM_P_BOTTOM).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min", 0, "max", 3)).getEntry();
             i_bottom = tab.add("I_bottom", Constants.ARM_I_BOTTOM).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min", 0, "max", 3)).getEntry();
             d_bottom = tab.add("D_bottom", Constants.ARM_D_BOTTOM).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min", 0, "max", 3)).getEntry();
-            p_top = tab.add("P_top", Constants.ARM_P_TOP).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min", 0, "max", 3)).getEntry();
+            p_top = tab.add("P_top", Constants.ARM_P_TOP).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min", 0, "max", 20)).getEntry();
             i_top = tab.add("I_top", Constants.ARM_I_TOP).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min", 0, "max", 3)).getEntry();
             d_top = tab.add("D_top", Constants.ARM_D_TOP).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min", 0, "max", 3)).getEntry();
+            top_desired = tab.add("Desired Top Rotation", Constants.ARM_D_TOP).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min", 0, "max", 3.14)).getEntry();
+            bottom_desired = tab.add("Desired Bottom Rotation", Constants.ARM_D_TOP).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min", 0, "max", 3.14)).getEntry();
+            bottom_left_speed = tab.add("Bottom Left Speed",bottom_left.get()).getEntry();;
+            bottom_right_speed = tab.add("Bottom Right Speed",bottom_right.get()).getEntry();
 
             finishedDebugInit = true;
         }
-        System.out.println("TOP ROTATION: " + getTopRotation() + " | " + "BOTTOM ROTATION: " + getBottomRotation());
+        //System.out.println("TOP ROTATION: " + getTopRotation() + " | " + "BOTTOM ROTATION: " + getBottomRotation());
         SmartDashboard.putBoolean("ARMS[00]: Is debugging", true);
         SmartDashboard.putNumber("ARMS[01]: Top rotation", getTopRotation());
         SmartDashboard.putNumber("ARMS[02]: Bottom rotation", getBottomRotation());
@@ -231,6 +238,8 @@ public class ArmSubsystem extends SubsystemBase {
             bottom.updatePIDValues(p_bottom.getDouble(Constants.ARM_P_BOTTOM), i_bottom.getDouble(Constants.ARM_I_BOTTOM), d_bottom.getDouble(Constants.ARM_D_BOTTOM));
         if (Constants.ARM_P_TOP != p_top.getDouble(Constants.ARM_P_TOP) || Constants.ARM_I_TOP != i_top.getDouble(Constants.ARM_I_TOP) || Constants.ARM_D_TOP != d_top.getDouble(Constants.ARM_D_TOP))
             top.updatePIDValues(p_top.getDouble(Constants.ARM_P_TOP), i_top.getDouble(Constants.ARM_I_TOP), d_top.getDouble(Constants.ARM_D_TOP));
+        desiredTopRotation = top_desired.getDouble(0.0);
+        desiredBottomRotation = bottom_desired.getDouble(0.0);
         Constants.ARM_P_BOTTOM = p_bottom.getDouble(Constants.ARM_P_BOTTOM);
         Constants.ARM_I_BOTTOM = i_bottom.getDouble(Constants.ARM_I_BOTTOM);
 
@@ -238,6 +247,8 @@ public class ArmSubsystem extends SubsystemBase {
         Constants.ARM_P_TOP = p_top.getDouble(Constants.ARM_P_TOP);
         Constants.ARM_I_TOP = i_top.getDouble(Constants.ARM_I_TOP);
         Constants.ARM_D_TOP = d_top.getDouble(Constants.ARM_D_TOP);
+        bottom_left_speed.setDouble(bottom_left.get());
+        bottom_right_speed.setDouble(bottom_right.get());
 
         if (nextTime < System.currentTimeMillis()) {
             System.out.println("[TOP] P) " + Constants.ARM_P_TOP + "  I) " + Constants.ARM_I_TOP + "  D) " + Constants.ARM_D_TOP);
