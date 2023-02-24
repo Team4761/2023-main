@@ -5,6 +5,7 @@
 
 package frc.robot.main;
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -83,7 +84,7 @@ public class Robot extends TimedRobot
 
     commandScheduler.schedule(
       new SequentialCommandGroup(
-        new MoveStraightMeasuredCommand(.4, 10.0)
+        new MoveStraightMeasuredCommand(.4, Units.feetToMeters(12.0))
         //            new RotateDegreesCommand(0.5, 90),
         //            new MoveFeetForward(topSpeed, 2),    3
         //            new RotateDegreesCommand(0.5, 90),

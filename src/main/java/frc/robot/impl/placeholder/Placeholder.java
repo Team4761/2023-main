@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import frc.robot.command.Distances;
 import frc.robot.impl.RobotImpl;
 import frc.robot.main.Constants;
 import frc.robot.main.Robot;
@@ -98,6 +99,17 @@ public class Placeholder extends RobotImpl {
         back_right.set(ControlMode.Follower, front_left.getDeviceID());
 
         linear_PIDcontroller.setSetpoint(0);
+    }
+
+
+    @Override
+    public Distances getSensorReadings() {
+        return new Distances(
+            front_left.getSensorCollection().getIntegratedSensorPosition(),
+            front_right.getSensorCollection().getIntegratedSensorPosition(),
+            back_left.getSensorCollection().getIntegratedSensorPosition(),
+            back_right.getSensorCollection().getIntegratedSensorPosition()
+        );
     }
 
     @Override

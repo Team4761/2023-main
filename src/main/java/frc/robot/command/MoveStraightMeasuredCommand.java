@@ -11,7 +11,7 @@ import frc.robot.main.Robot;
 
 public class MoveStraightMeasuredCommand extends CommandBase {
     final int kCountsPerRev = 2048;  //Encoder counts per revolution of the motor shaft.
-    final double kGearRatio = 3.1;
+    final double kGearRatio = 7.5;
     final double kWheelRadiusInches = 2;
     final double linearSpeedIncrease = .01;
     final double kMaxOutput = RobotDriveBase.kDefaultMaxOutput;
@@ -42,15 +42,40 @@ public class MoveStraightMeasuredCommand extends CommandBase {
         if (speed < goalSpeed) {
             speed += linearSpeedIncrease;
         }
+        var speeds = DifferentialDrive.tankDriveIK(speed, speed, true);
 
-        double kP = 1.0;
+        var delta = getDelta();
+        var avgDeltaLeftRight = (delta.frontLeft - delta.frontRight) / 2;
 
-        // Setpoint is implicitly 0, since we don't want the heading to change
-        Gyro gyro = Placeholder.gyro;
-        double error = -gyro.getRate();
+        if ((count++ % 10) == 0) {
+            System.out.println("delta=" + delta);
+            System.out.println("avgDelta=" + avgDeltaLeftRight + " start speeds=" + speeds.left + " speed right=" + speeds.right);
+        }
 
-        // Drives forward continuously at half speed, using the gyro to stabilize the heading
-        Robot.impl.getDrive().tankDrive(speed + kP * error, speed - kP * error);
+//        final double nudge = .02;
+//        if (avgDeltaLeftRight > 0) {
+//            speeds.left *= (1.0 - nudge);
+//            //speeds.right *= (1.0 + nudge);
+//        } else {
+//            speeds.left *= (1.0 + nudge);
+//            //speeds.right *= (1.0 - nudge);
+//        }
+
+//        // the closer the average delta is to zero, the more we want speeds.left to stay the same.
+//        // if the average delta is positive, we want left to slow down just a bit, and go to zero if it's a full
+//        // revolution behind.
+//        speeds.left *= 1 - (avgDeltaLeftRight / kCountsPerRev);
+//
+//        // the closer the average delta is to zero, the more we want speeds.left to stay the same
+//        // if the average delta is positive, we want right to speed up just a bit, and go to 2*speed if it's a full
+//        // revolution behind.
+//        speeds.right *= 1 + (avgDeltaLeftRight / kCountsPerRev);
+
+        System.out.println("Speed left=" + speeds.left + " speed right=" + speeds.right);
+
+        // TODO: this can be extracted to RobotImpl
+        Placeholder.m_leftMotors.set(speeds.left * kMaxOutput);
+        Placeholder.m_rightMotors.set(speeds.right * kMaxOutput);
     }
 
     int count = 0;
@@ -58,6 +83,7 @@ public class MoveStraightMeasuredCommand extends CommandBase {
     public boolean isFinished() {
         Distances delta = getDelta();
         var distance = ticksToMeters(delta.average());
+        System.out.println("I think I am at distance " + distance);
         boolean finished = distance > this.meters;
         if (finished) {
             System.out.println(count + " Finished after " + distance + " meters " + Robot.impl.getSensorReadings());
