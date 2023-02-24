@@ -9,6 +9,8 @@ import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
 import frc.robot.main.Constants;
 import frc.robot.main.Robot;
 
+import static sun.jvm.hotspot.oops.CellTypeState.top;
+
 public class ArmPIDSubsystem extends ProfiledPIDSubsystem {
 
     AbsoluteEncoder encoder;
@@ -64,13 +66,14 @@ public class ArmPIDSubsystem extends ProfiledPIDSubsystem {
         }
     }
 
- /*   @Override
+    @Override
     public void periodic() {
         if (m_enabled) {
-            useOutput(m_controller.calculate(getMeasurement()) + feedforward.calculate(encoder.getRotation(), encoder.), m_controller.getSetpoint());
+            useOutput(m_controller.calculate(getMeasurement()) + feedforward.calculate(encoder.getRotation(), encoder.getVelocity(), encoder.getAcceleration()), m_controller.getSetpoint());
         }
+        encoder.updateEncoder();
     }
 
 
-  */
+
 }

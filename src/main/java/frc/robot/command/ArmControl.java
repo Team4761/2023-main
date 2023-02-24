@@ -73,6 +73,7 @@ public class ArmControl extends CommandBase {
         //xbox.getController().x().onTrue(Commands.runOnce(() -> { zeroEncoders(); }));
         // Debugging purposes only
         Robot.arms.debug();
+
     }
 
     public void movePID(double setTopRotation, double setBottomRotation) {
