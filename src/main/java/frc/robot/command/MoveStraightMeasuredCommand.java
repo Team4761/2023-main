@@ -83,7 +83,6 @@ public class MoveStraightMeasuredCommand extends CommandBase {
     public boolean isFinished() {
         Distances delta = getDelta();
         var distance = ticksToMeters(delta.average());
-        System.out.println("I think I am at distance " + distance);
         boolean finished = distance > this.meters;
         if (finished) {
             System.out.println(count + " Finished after " + distance + " meters " + Robot.impl.getSensorReadings());
@@ -93,13 +92,12 @@ public class MoveStraightMeasuredCommand extends CommandBase {
 
     private Distances getDelta() {
         var rightNow = Robot.impl.getSensorReadings();
-        var delta = new Distances(
+        return new Distances(
             Math.abs(rightNow.frontLeft - start.frontLeft),
             Math.abs(rightNow.frontRight - start.frontRight),
             Math.abs(rightNow.backLeft - start.backLeft),
             Math.abs(rightNow.backRight - start.frontRight)
         );
-        return delta;
     }
 
     private double ticksToMeters(double sensorCounts) {
