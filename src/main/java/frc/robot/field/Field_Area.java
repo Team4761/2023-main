@@ -7,8 +7,16 @@ public class Field_Area {
     private final Translation2d topRight;
 
     public Field_Area(double x1, double y1, double x2, double y2){
-        bottomLeft = new Translation2d (x1,y1);
-        topRight = new Translation2d (x2,y2);
+        this(new Translation2d (x1,y1), new Translation2d(x2, y2));
+    }
+
+    public Field_Area(Translation2d bottomLeft, double x2, double y2){
+        this(bottomLeft, new Translation2d(x2, y2));
+    }
+
+    public Field_Area(Translation2d bottomLeft, Translation2d topRight) {
+        this.bottomLeft = bottomLeft;
+        this.topRight = topRight;
     }
 
     public Translation2d getBottomLeft() {
@@ -48,10 +56,10 @@ public class Field_Area {
     }
 
     public double getWidth() {
-        return bottomLeft.getX() - topRight.getX();
+        return topRight.getX() - bottomLeft.getX();
     }
 
     public double getHeight() {
-        return bottomLeft.getY() - topRight.getY();
+        return topRight.getY() - bottomLeft.getY();
     }
 }
