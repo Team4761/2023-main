@@ -26,10 +26,7 @@ public class AbsoluteEncoder extends SubsystemBase {
     }
     // Returns radians
     public double getRotation() {
-        double raw = m_dutyCycleEncoder.getAbsolutePosition() * 2*Math.PI;
-        if(raw > Math.PI)
-            raw -= 2*Math.PI;
-        return raw;
+        return m_dutyCycleEncoder.getAbsolutePosition() * 2*Math.PI;    // Math can only use POSITIVE rotations, negative rotations don't work.
     }
     public double getRotationDegrees() {
         return (m_dutyCycleEncoder.get() * 360) % 360;
@@ -57,4 +54,20 @@ public class AbsoluteEncoder extends SubsystemBase {
 
     public DutyCycleEncoder getDutyCycleEncoder() { return m_dutyCycleEncoder; }
     public void setDutyCycleEncoder(DutyCycleEncoder newEncoder) { this.m_dutyCycleEncoder = newEncoder; }
+    
+    //private values to save info
+    private double lastRotationValue = 0.0;
+    private double lastVelocityValue = 0.0;
+    
+    //needs to run after all encoder code in perodic
+    public void updateEncoder(){
+        lastRotationValue = getRotation();
+        lastVelocityValue = getVelocity();
+    }
+    public double getVelocity(){
+        return (lastRotationValue - getRotation()) / 0.020;
+    }
+    public double getAcceleration(){
+        return (lastVelocityValue - getVelocity()) / 0.020;
+    }
 }

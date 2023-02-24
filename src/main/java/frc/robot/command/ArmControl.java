@@ -34,23 +34,15 @@ public class ArmControl extends CommandBase {
     //current range of motion is 0.8 to -2.5 use smart dashboard to set rotation angle.
     private void onPressB() {
         movePID(SmartDashboard.getNumber("fupper arm angle",0), SmartDashboard.getNumber("flower arm angle", 0));
+        Robot.arms.movePID();
     }
 
     private void onPressA() {
-
-        SmartDashboard.putNumber("farm 1 theta calc", armMath.arm1Theta(
-                SmartDashboard.getNumber("farm x togo", 0),
-                SmartDashboard.getNumber("farm y togo", 0)
-        ));
-        SmartDashboard.putNumber("farm 2 theta calc", armMath.arm2Theta(
-                SmartDashboard.getNumber("farm x togo", 0),
-                SmartDashboard.getNumber("farm y tog", 0)
-        ));
-
-
+        Robot.arms.enablePID();
     }
     private void onPressX() {
-
+        Robot.arms.disablePID();
+/* 
         SmartDashboard.putNumber("farm x togo", armMath.getPoint(
                 SmartDashboard.getNumber("farm 1 theta calc",0),
                 SmartDashboard.getNumber("farm 2 theta calc", 0)
@@ -58,10 +50,9 @@ public class ArmControl extends CommandBase {
 
         SmartDashboard.putNumber("farm y togo", armMath.getPoint(
                 SmartDashboard.getNumber("farm 1 theta calc",0),
-                SmartDashboard.getNumber("farm 1 theta calc", 0)
+                SmartDashboard.getNumber("farm 2 theta calc", 0)
         ).getY());
-
-
+*/
     }
     private void onPressY() {
         movePID(0.5,0);
@@ -70,10 +61,10 @@ public class ArmControl extends CommandBase {
     @Override
     public void execute() {
         //Robot.arms.updatePos(xbox.getRightX(), xbox.getRightY());
-        //Robot.arms.movePID();
+       // Robot.arms.movePID();
         //obot.arms.setBottomL(xbox.getRightY()/2);
         //Robot.arms.setBottomR(xbox.getLeftY()/2);
-        Robot.arms.setBottom(xbox.getRightY());
+        //Robot.arms.setBottom(xbox.getRightY());
         //Robot.arms.setTop(xbox.getLeftY()/2);
         
         // Emergency Stop!
@@ -82,25 +73,32 @@ public class ArmControl extends CommandBase {
         //xbox.getController().x().onTrue(Commands.runOnce(() -> { zeroEncoders(); }));
         // Debugging purposes only
         Robot.arms.debug();
+
     }
 
     public void movePID(double setTopRotation, double setBottomRotation) {
-        if(setTopRotation > Constants.joint1Min && setTopRotation < Constants.joint1Max){
+        //top is joint 2
+        //if(setTopRotation > Constants.JOINT_2_MIN && setTopRotation < Constants.JOINT_2_MAX){
             ArmSubsystem.setDesiredTopRotation(setTopRotation);
-        }else if(setTopRotation > Constants.joint1Max){
-            ArmSubsystem.setDesiredTopRotation(Constants.joint1Max);
-        }else if(setTopRotation < Constants.joint1Min){
-            ArmSubsystem.setDesiredTopRotation(Constants.joint1Min);
+       /* }else if(setTopRotation > Constants.JOINT_2_MAX){
+            ArmSubsystem.setDesiredTopRotation(Constants.JOINT_2_MAX);
+        }else if(setTopRotation < Constants.JOINT_2_MIN){
+            ArmSubsystem.setDesiredTopRotation(Constants.JOINT_2_MIN);
         }
 
-        if(setBottomRotation > Constants.joint1Min && setBottomRotation < Constants.joint1Max){
-            ArmSubsystem.setDesiredBottomRotation(setTopRotation);
-        }else if(setBottomRotation > Constants.joint2Max){
-            ArmSubsystem.setDesiredBottomRotation(Constants.joint1Max);
-        }else if(setBottomRotation < Constants.joint2Min){
-            ArmSubsystem.setDesiredBottomRotation(Constants.joint1Min);
+        */
+
+        //bototm in joint 1
+       // if(setBottomRotation > Constants.JOINT_2_MIN && setBottomRotation < Constants.JOINT_2_MAX){
+            ArmSubsystem.setDesiredBottomRotation(setBottomRotation);
+        /*}else if(setBottomRotation > Constants.JOINT_1_MAX){
+            ArmSubsystem.setDesiredBottomRotation(Constants.JOINT_2_MAX);
+        }else if(setBottomRotation < Constants.JOINT_1_MIN){
+            ArmSubsystem.setDesiredBottomRotation(Constants.JOINT_2_MIN);
         }
-        Robot.arms.movePID();
+
+         */
+       // Robot.arms.movePID();
     }
     public void emergencyStop() {
         Robot.arms.emergencyStop();

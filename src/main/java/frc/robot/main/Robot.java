@@ -11,6 +11,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Drivetrain.DrivetrainSubsystem;
+import frc.robot.arm.ArmPIDSubsystem;
 import frc.robot.arm.ArmSubsystem;
 import frc.robot.leds.LEDSubsystem;
 import frc.robot.command.*;
@@ -37,14 +39,15 @@ public class Robot extends TimedRobot
   private final SendableChooser<String> chooser = new SendableChooser<>();
   public static RobotImpl impl = new Placeholder();
   // Joystick (XBox) Input
-  public static XboxControl xbox = new XboxControl(0);
+  public static XboxControl xbox = new XboxControl(2);
   // Commands
   public final CommandScheduler commandScheduler = CommandScheduler.getInstance();
   //private final XboxArcadeDrive xboxArcadeDrive = new XboxArcadeDrive();
   private final ArmControl armControl = new ArmControl();
   private final UpdateLED updateLED = new UpdateLED();
+  private final XboxArcadeDrive xboxArcadeDrive = new XboxArcadeDrive();
   // Subsystems
-  //public static DrivetrainSubsystem driveTrain = DrivetrainSubsystem.getInstance();
+  public static DrivetrainSubsystem driveTrain = DrivetrainSubsystem.getInstance();
   public static ArmSubsystem arms = ArmSubsystem.getInstance();
   public static LEDSubsystem leds = LEDSubsystem.getInstance();
 
@@ -109,10 +112,13 @@ public class Robot extends TimedRobot
 
     commandScheduler.schedule(armControl.repeatedly());
     commandScheduler.schedule(updateLED.repeatedly());
+   // commandScheduler.schedule(xboxArcadeDrive.repeatedly());
     SmartDashboard.putNumber("fupper arm angle", 0);
     SmartDashboard.putNumber("flower arm angle", 0);
     SmartDashboard.putNumber("farm x togo", 0);
     SmartDashboard.putNumber("farm y togo", 0);
+    arms.bottom.setGoal(SmartDashboard.getNumber("ARMS[02]: Bottom rotation", 0.2));
+    arms.top.setGoal(SmartDashboard.getNumber("ARMS[01]: Top rotation", 0.2));
   }
 
 
@@ -124,13 +130,6 @@ public class Robot extends TimedRobot
     SmartDashboard.putNumber("CONTROLLER[01] Right Axis Y", xbox.getRightY());
     SmartDashboard.putNumber("CONTROLLER[02] Left Axis X", xbox.getLeftX());
     SmartDashboard.putNumber("CONTROLLER[03] Left Axis Y", xbox.getLeftY());
-    int pattern = 0;
-    if (time <= System.currentTimeMillis()) {
-      leds.setLEDs(pattern);
-      pattern++;
-      pattern%=4;
-      time = System.currentTimeMillis() + 1000;
-    }
   }
 
 
