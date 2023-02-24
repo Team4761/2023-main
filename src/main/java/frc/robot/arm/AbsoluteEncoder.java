@@ -54,8 +54,20 @@ public class AbsoluteEncoder extends SubsystemBase {
 
     public DutyCycleEncoder getDutyCycleEncoder() { return m_dutyCycleEncoder; }
     public void setDutyCycleEncoder(DutyCycleEncoder newEncoder) { this.m_dutyCycleEncoder = newEncoder; }
-
- //   public double getVelocity(){
- //       return m_dutyCycleEncoder.
- //   }
+    
+    //private values to save info
+    private double lastRotationValue = 0.0;
+    private double lastVelocityValue = 0.0;
+    
+    //needs to run after all encoder code in perodic
+    public void updateEncoder(){
+        lastRotationValue = getRotation();
+        lastVelocityValue = getVelocity();
+    }
+    public double getVelocity(){
+        return (lastRotationValue - getRotation()) / 0.020;
+    }
+    public double getAcceleration(){
+        return (lastVelocityValue - getVelocity()) / 0.020;
+    }
 }
