@@ -9,8 +9,6 @@ import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
 import frc.robot.main.Constants;
 import frc.robot.main.Robot;
 
-import static sun.jvm.hotspot.oops.CellTypeState.top;
-
 public class ArmPIDSubsystem extends ProfiledPIDSubsystem {
 
     AbsoluteEncoder encoder;
