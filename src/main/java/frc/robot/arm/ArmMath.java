@@ -38,8 +38,13 @@ public class ArmMath {
         // Calculate both possible values of the first joint angle
         double k1_0 = armLength1 + armLength2 * c2;
         double k2_0 = armLength2 * s2;
+<<<<<<< Updated upstream
         angles[0][0] = Math.atan2(y, x) - Math.atan2(k2_0, k1_0) + Constants.KINEMATICS_OFFSET_TOP;
 
+=======
+        angles[0][0] = Math.atan2(y, x) - Math.atan2(k2_0, k1_0);
+        
+>>>>>>> Stashed changes
         double k1_1 = armLength1 + armLength2 * c2;
         double k2_1 = -armLength2 * s2;
         angles[1][0] = Math.atan2(y, x) - Math.atan2(k2_1, k1_1) + Constants.KINEMATICS_OFFSET_BOTTOM;

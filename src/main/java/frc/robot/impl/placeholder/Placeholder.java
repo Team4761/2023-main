@@ -126,10 +126,24 @@ public class Placeholder extends RobotImpl {
         back_left.getSensorCollection().setIntegratedSensorPosition(0, 100);
     }
 
-
+    
     public static double averageMotorGroupVelocity(WPI_TalonFX front_motor, WPI_TalonFX back_motor) {
         //Needs to account for gear ratio
         return ((front_motor.getSensorCollection().getIntegratedSensorVelocity() + back_motor.getSensorCollection().getIntegratedSensorVelocity()) / 2);
+    }
+
+    public static double frontLeftPosition() {
+        return front_left.getSensorCollection().getIntegratedSensorPosition();
+    }
+    public static double frontRightPosition() {
+        return front_right.getSensorCollection().getIntegratedSensorPosition();
+    }
+
+    public static void setVoltages(double left, double right) {
+        front_left.setVoltage(left);
+        front_right.setVoltage(right);
+        back_left.setVoltage(left);
+        back_right.setVoltage(right);
     }
 
     public void setSpeeds(DifferentialDriveWheelSpeeds speeds) {

@@ -17,16 +17,19 @@ public class Constants {
 
 
     // Drivetrain constants.
-    public static final double drivetrainGearRatio = 0.01; //TODO to be determined, will be degrees of CANCoder to distance
-    public static final double wheelRadius = 0.01; //TODO to be determined, will be in yards or meters, dunno
+    public static final double drivetrainGearRatio = 7.5; //TODO to be determined, will be degrees of CANCoder to distance
+    public static final double wheelRadius = 0.0508; //meters, dunno
     public static final double wheelCircumference = wheelRadius * 2 * Math.PI;
     public static final double weight = 10; //TODO in lbs, need to find
 
-    public static final double distancePerEncoderTick = wheelCircumference / Constants.talonEncoderResolution;
-
     public static final double talonEncoderResolution = 2048;
 
+    public static final double distancePerEncoderTick = wheelCircumference / talonEncoderResolution / drivetrainGearRatio;
+
     public static final double trackWidth = 19.5;//Inches : 19.5 //Meters : 0.4953
+
+    public static final double DRIVETRAIN_MAX_ACCELERATION = 10; // random number for purepuresuit
+    public static final double DRIVETRAIN_MAX_VELOCITY = 3.3; // random number for purepuresuit
 
     // Arm Constants
     static final public double ARM_LENGTH_BOTTOM = 22.5;         // Bottom Arm?  //now 22.5 was 25

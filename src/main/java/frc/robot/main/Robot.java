@@ -5,14 +5,27 @@
 
 package frc.robot.main;
 
+<<<<<<< Updated upstream
 import edu.wpi.first.wpilibj.Joystick;
+=======
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+>>>>>>> Stashed changes
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Auto.PurePursuit.PathFollower;
+import frc.robot.Auto.PurePursuit.PathoGen;
 import frc.robot.Drivetrain.DrivetrainSubsystem;
+<<<<<<< Updated upstream
 import frc.robot.arm.ArmPIDSubsystem;
+=======
+import frc.robot.Vision.visionVarsAndMethods;
+>>>>>>> Stashed changes
 import frc.robot.arm.ArmSubsystem;
 import frc.robot.leds.LEDSubsystem;
 import frc.robot.command.*;
@@ -50,6 +63,16 @@ public class Robot extends TimedRobot
   public static ArmSubsystem arms = ArmSubsystem.getInstance();
   public static LEDSubsystem leds = LEDSubsystem.getInstance();
 
+  public static DifferentialDriveOdometry odometry;
+  public static Pose2d pose;
+  
+  public double[][] pathPoints = {{0, 0}, {0, 2}, {1, 3}};
+  public PathoGen path = new PathoGen(pathPoints);
+  public PathFollower follower = new PathFollower(path.getPoints(), path.getTargetVelocities());
+
+  public Timer timer = new Timer();
+
+
   /**
    * This method is run when the robot is first started up and should be used for any
    * initialization code.
@@ -79,25 +102,26 @@ public class Robot extends TimedRobot
 
   @Override
   public void autonomousInit()
-  {
-
-
-    commandScheduler.schedule(
-            new SequentialCommandGroup(
-                    new MoveFeetForward(.5, 6)
-//                    new RotateDegreesCommand(0.5, 90),
-//                    new MoveFeetForward(topSpeed, 2),
-//                    new RotateDegreesCommand(0.5, 90),
-//                    new MoveFeetForward(topSpeed, 20)
-            )
-    );
-
+  {    
+    timer.start();
+    odometry = new DifferentialDriveOdometry(new Rotation2d(Placeholder.m_gyro.getAngle()*0.0174533), Placeholder.frontLeftPosition()*Constants.distancePerEncoderTick, Placeholder.frontRightPosition()*Constants.distancePerEncoderTick, new Pose2d(0, 0, new Rotation2d()));
   }
 
   /** This method is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic()
   {
+    // uses vision
+    // double[] voltages = follower.calculate(visionVarsAndMethods.getEstimatedPose().getFirst().toPose2d(), Placeholder.averageMotorGroupVelocity(Placeholder.front_left, Placeholder.back_left)*Constants.distancePerEncoderTick, Placeholder.averageMotorGroupVelocity(Placeholder.front_right, Placeholder.back_right)*Constants.distancePerEncoderTick, timer.get());
+    
+    // uses encoders
+    pose = odometry.update(new Rotation2d(Placeholder.m_gyro.getAngle()), Placeholder.frontLeftPosition()*Constants.distancePerEncoderTick, Placeholder.frontRightPosition()*Constants.distancePerEncoderTick);
+    double[] voltages = follower.calculate(pose, Placeholder.averageMotorGroupVelocity(Placeholder.front_left, Placeholder.back_left)*Constants.distancePerEncoderTick, Placeholder.averageMotorGroupVelocity(Placeholder.front_right, Placeholder.back_right)*Constants.distancePerEncoderTick, timer.get());
+   
+    SmartDashboard.putNumber("odometry x", pose.getX());
+    SmartDashboard.putNumber("odometry y", pose.getY());
+    //Placeholder.setVoltages(Math.max(-12, Math.min(12, voltages[0])), Math.max(-12, Math.min(12, voltages[1])));
+
     commandScheduler.run();
   }
 
@@ -134,7 +158,9 @@ public class Robot extends TimedRobot
 
   /** This method is called once when the robot is disabled. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    Placeholder.setVoltages(0, 0);
+  }
 
 
   /** This method is called periodically when disabled. */
