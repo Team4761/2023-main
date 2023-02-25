@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Auto.command.MainAutoCommand;
 import frc.robot.Drivetrain.DrivetrainSubsystem;
 import frc.robot.arm.ArmPIDSubsystem;
 import frc.robot.arm.ArmSubsystem;
@@ -41,7 +42,6 @@ public class Robot extends TimedRobot
   public static XboxControl xbox = new XboxControl(2);
   // Commands
   public final CommandScheduler commandScheduler = CommandScheduler.getInstance();
-  //private final XboxArcadeDrive xboxArcadeDrive = new XboxArcadeDrive();
   private final ArmControl armControl = new ArmControl();
   private final UpdateLED updateLED = new UpdateLED();
   private final XboxArcadeDrive xboxArcadeDrive = new XboxArcadeDrive();
@@ -61,8 +61,6 @@ public class Robot extends TimedRobot
     chooser.addOption("West Coast", WEST_COAST);
     chooser.addOption("Place Holder Name",PLACEHOLDER);
     SmartDashboard.putData("Robot Choices", chooser);
-
-
   }
 
   /**
@@ -80,18 +78,7 @@ public class Robot extends TimedRobot
   @Override
   public void autonomousInit()
   {
-
-
-    commandScheduler.schedule(
-            new SequentialCommandGroup(
-                    new MoveFeetForward(.5, 6)
-//                    new RotateDegreesCommand(0.5, 90),
-//                    new MoveFeetForward(topSpeed, 2),
-//                    new RotateDegreesCommand(0.5, 90),
-//                    new MoveFeetForward(topSpeed, 20)
-            )
-    );
-
+    commandScheduler.schedule(new MainAutoCommand(getAutoSelector()));
   }
 
   /** This method is called periodically during autonomous. */
@@ -188,5 +175,10 @@ public class Robot extends TimedRobot
           break;
       }
     }
+  }
+
+  private String getAutoSelector() {
+    String autoSelected = SmartDashboard.getString("Auto", "1");
+    return autoSelected;
   }
 }
