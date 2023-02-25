@@ -5,15 +5,12 @@
 
 package frc.robot.main;
 
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Auto.command.MainAutoCommand;
 import frc.robot.Drivetrain.DrivetrainSubsystem;
-import frc.robot.arm.ArmPIDSubsystem;
 import frc.robot.arm.ArmSubsystem;
 import frc.robot.leds.LEDSubsystem;
 import frc.robot.command.*;
@@ -44,7 +41,7 @@ public class Robot extends TimedRobot
   public final CommandScheduler commandScheduler = CommandScheduler.getInstance();
   private final ArmControl armControl = new ArmControl();
   private final UpdateLED updateLED = new UpdateLED();
-  private final XboxArcadeDrive xboxArcadeDrive = new XboxArcadeDrive();
+  private final DriveController driveController = new DriveController(1);
   // Subsystems
   public static DrivetrainSubsystem driveTrain = DrivetrainSubsystem.getInstance();
   public static ArmSubsystem arms = ArmSubsystem.getInstance();
@@ -92,7 +89,7 @@ public class Robot extends TimedRobot
   /** This method is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
-    //commandScheduler.schedule(xboxArcadeDrive.repeatedly());
+    commandScheduler.schedule(driveController.repeatedly());
     leds.enableLEDs();
 
     commandScheduler.schedule(armControl.repeatedly());
