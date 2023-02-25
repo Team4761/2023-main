@@ -5,13 +5,10 @@
 
 package frc.robot.main;
 
-<<<<<<< Updated upstream
 import edu.wpi.first.wpilibj.Joystick;
-=======
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
->>>>>>> Stashed changes
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -21,11 +18,8 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Auto.PurePursuit.PathFollower;
 import frc.robot.Auto.PurePursuit.PathoGen;
 import frc.robot.Drivetrain.DrivetrainSubsystem;
-<<<<<<< Updated upstream
 import frc.robot.arm.ArmPIDSubsystem;
-=======
 import frc.robot.Vision.visionVarsAndMethods;
->>>>>>> Stashed changes
 import frc.robot.arm.ArmSubsystem;
 import frc.robot.leds.LEDSubsystem;
 import frc.robot.command.*;
@@ -51,7 +45,7 @@ public class Robot extends TimedRobot
   private final SendableChooser<String> chooser = new SendableChooser<>();
   public static RobotImpl impl = new Placeholder();
   // Joystick (XBox) Input
-  public static XboxControl xbox = new XboxControl(2);
+  public static XboxControl xbox = new XboxControl(1);
   // Commands
   public final CommandScheduler commandScheduler = CommandScheduler.getInstance();
   //private final XboxArcadeDrive xboxArcadeDrive = new XboxArcadeDrive();
@@ -66,9 +60,10 @@ public class Robot extends TimedRobot
   public static DifferentialDriveOdometry odometry;
   public static Pose2d pose;
   
-  public double[][] pathPoints = {{0, 0}, {0, 2}, {1, 3}};
-  public PathoGen path = new PathoGen(pathPoints);
-  public PathFollower follower = new PathFollower(path.getPoints(), path.getTargetVelocities());
+  // where x is forwards
+  public double[][] pathPoints = {{0, 0}, {3.048, 0}};//, {1, 3}};
+  public PathoGen path;
+  public PathFollower follower;
 
   public Timer timer = new Timer();
 
@@ -85,6 +80,18 @@ public class Robot extends TimedRobot
     chooser.addOption("Place Holder Name",PLACEHOLDER);
     SmartDashboard.putData("Robot Choices", chooser);
 
+    Placeholder.zeroEncoders();
+
+    path = new PathoGen(pathPoints);
+    follower = new PathFollower(path.getPoints(), path.getTargetVelocities());
+
+    for(double[] i:path.getPoints()) {
+      System.out.println(i[0]+", "+i[1]);
+    }
+
+    odometry = new DifferentialDriveOdometry(new Rotation2d(Placeholder.m_gyro.getAngle()*0.0174533), Placeholder.frontLeftPosition()*Constants.distancePerEncoderTick, Placeholder.frontRightPosition()*Constants.distancePerEncoderTick, new Pose2d(0, 0, new Rotation2d()));
+  
+    pose = odometry.getPoseMeters();
 
   }
 
@@ -97,6 +104,11 @@ public class Robot extends TimedRobot
    */
   @Override
   public void robotPeriodic() {
+    SmartDashboard.putNumber("odometry x", pose.getX());
+    SmartDashboard.putNumber("odometry y", pose.getY());
+    
+    SmartDashboard.putNumber("gyro", Placeholder.m_gyro.getAngle());
+    pose = odometry.update(new Rotation2d(Placeholder.m_gyro.getAngle()*0.0174533), Placeholder.frontLeftPosition()*Constants.distancePerEncoderTick, Placeholder.frontRightPosition()*Constants.distancePerEncoderTick);
     initFromSelector();
   }
 
@@ -104,7 +116,11 @@ public class Robot extends TimedRobot
   public void autonomousInit()
   {    
     timer.start();
-    odometry = new DifferentialDriveOdometry(new Rotation2d(Placeholder.m_gyro.getAngle()*0.0174533), Placeholder.frontLeftPosition()*Constants.distancePerEncoderTick, Placeholder.frontRightPosition()*Constants.distancePerEncoderTick, new Pose2d(0, 0, new Rotation2d()));
+
+    for(double i:path.getTargetVelocities()) {
+      System.out.println(i);
+    }
+    
   }
 
   /** This method is called periodically during autonomous. */
@@ -114,13 +130,22 @@ public class Robot extends TimedRobot
     // uses vision
     // double[] voltages = follower.calculate(visionVarsAndMethods.getEstimatedPose().getFirst().toPose2d(), Placeholder.averageMotorGroupVelocity(Placeholder.front_left, Placeholder.back_left)*Constants.distancePerEncoderTick, Placeholder.averageMotorGroupVelocity(Placeholder.front_right, Placeholder.back_right)*Constants.distancePerEncoderTick, timer.get());
     
+    
+    SmartDashboard.putNumber("encoders left", Placeholder.frontLeftPosition());
+    SmartDashboard.putNumber("encoders right", Placeholder.frontRightPosition());
+    SmartDashboard.putNumber("left velocity", Placeholder.getLeftVelocity());
+    SmartDashboard.putNumber("right velocity", Placeholder.getRightVelocity());
+    
+    //SmartDashboard.putNumber("gyro", Placeholder.);
+
     // uses encoders
-    pose = odometry.update(new Rotation2d(Placeholder.m_gyro.getAngle()), Placeholder.frontLeftPosition()*Constants.distancePerEncoderTick, Placeholder.frontRightPosition()*Constants.distancePerEncoderTick);
-    double[] voltages = follower.calculate(pose, Placeholder.averageMotorGroupVelocity(Placeholder.front_left, Placeholder.back_left)*Constants.distancePerEncoderTick, Placeholder.averageMotorGroupVelocity(Placeholder.front_right, Placeholder.back_right)*Constants.distancePerEncoderTick, timer.get());
+    double[] voltages = follower.calculate(pose, Placeholder.getLeftVelocity()*Constants.distancePerEncoderTick, Placeholder.getRightVelocity()*Constants.distancePerEncoderTick, timer.get());
    
-    SmartDashboard.putNumber("odometry x", pose.getX());
-    SmartDashboard.putNumber("odometry y", pose.getY());
-    //Placeholder.setVoltages(Math.max(-12, Math.min(12, voltages[0])), Math.max(-12, Math.min(12, voltages[1])));
+    
+    SmartDashboard.putNumber("volts left", voltages[0]);
+    SmartDashboard.putNumber("volts right", voltages[1]);
+
+    Placeholder.setVoltages(Math.max(-12, Math.min(12, voltages[0])), Math.max(-12, Math.min(12, voltages[1])));
 
     commandScheduler.run();
   }
@@ -134,11 +159,12 @@ public class Robot extends TimedRobot
 
     commandScheduler.schedule(armControl.repeatedly());
     commandScheduler.schedule(updateLED.repeatedly());
-   // commandScheduler.schedule(xboxArcadeDrive.repeatedly());
+    commandScheduler.schedule(xboxArcadeDrive.repeatedly());
+    /*
     SmartDashboard.putNumber("fupper arm angle", 0);
     SmartDashboard.putNumber("flower arm angle", 0);
     SmartDashboard.putNumber("farm x togo", 0);
-    SmartDashboard.putNumber("farm y togo", 0);
+    SmartDashboard.putNumber("farm y togo", 0);*/
     arms.bottom.setGoal(SmartDashboard.getNumber("ARMS[02]: Bottom rotation", 0.2));
     arms.top.setGoal(SmartDashboard.getNumber("ARMS[01]: Top rotation", 0.2));
   }
@@ -147,12 +173,12 @@ public class Robot extends TimedRobot
   /** This method is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    commandScheduler.run();
+    commandScheduler.run();/*
     SmartDashboard.putNumber("CONTROLLER[00] Right Axis X", xbox.getRightX());
     SmartDashboard.putNumber("CONTROLLER[01] Right Axis Y", xbox.getRightY());
     SmartDashboard.putNumber("CONTROLLER[02] Left Axis X", xbox.getLeftX());
-    SmartDashboard.putNumber("CONTROLLER[03] Left Axis Y", xbox.getLeftY());
-    driveTrain.arcadeDrive(xbox.getLeftY() * 0.5 , xbox.getRightX() * 0.5);
+    SmartDashboard.putNumber("CONTROLLER[03] Left Axis Y", xbox.getLeftY());*/
+    //driveTrain.arcadeDrive(xbox.getLeftY() * 0.5 , xbox.getRightX() * 0.5);
   }
 
 

@@ -120,10 +120,10 @@ public class Placeholder extends RobotImpl {
     }
 
     public static void zeroEncoders() {
-        front_right.getSensorCollection().setIntegratedSensorPosition(0, 100);
-        front_left.getSensorCollection().setIntegratedSensorPosition(0, 100);
-        back_right.getSensorCollection().setIntegratedSensorPosition(0, 100);
-        back_left.getSensorCollection().setIntegratedSensorPosition(0, 100);
+        front_right.getSensorCollection().setIntegratedSensorPosition(0, 0);
+        front_left.getSensorCollection().setIntegratedSensorPosition(0, 0);
+        back_right.getSensorCollection().setIntegratedSensorPosition(0, 0);
+        back_left.getSensorCollection().setIntegratedSensorPosition(0, 0);
     }
 
     
@@ -131,9 +131,17 @@ public class Placeholder extends RobotImpl {
         //Needs to account for gear ratio
         return ((front_motor.getSensorCollection().getIntegratedSensorVelocity() + back_motor.getSensorCollection().getIntegratedSensorVelocity()) / 2);
     }
+    public static double getLeftVelocity() {
+        //Needs to account for gear ratio
+        return -((front_left.getSensorCollection().getIntegratedSensorVelocity() + back_left.getSensorCollection().getIntegratedSensorVelocity()) / 2);
+    }
+    public static double getRightVelocity() {
+        //Needs to account for gear ratio
+        return ((front_right.getSensorCollection().getIntegratedSensorVelocity() + back_right.getSensorCollection().getIntegratedSensorVelocity()) / 2);
+    }
 
     public static double frontLeftPosition() {
-        return front_left.getSensorCollection().getIntegratedSensorPosition();
+        return -front_left.getSensorCollection().getIntegratedSensorPosition();
     }
     public static double frontRightPosition() {
         return front_right.getSensorCollection().getIntegratedSensorPosition();

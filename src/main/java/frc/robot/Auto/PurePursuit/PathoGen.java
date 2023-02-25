@@ -9,7 +9,7 @@ public class PathoGen {
 	private final double SPACING = 0.1;
 	// whhere (path max velocity, k / curvature at point)
 	private final double k = 2;
-	ArrayList<double[]> pointsTemp;
+	ArrayList<double[]> pointsTemp = new ArrayList<>();
 	private double[][] points;
 
 	// distAtPoint[i] should be the distance along path that points[i] is
@@ -47,7 +47,9 @@ public class PathoGen {
 
 		//3: smooth points
 		//the paper says a value of b between 0.75 and 0.98 to work well, with a set to 1 - b and tolerance = 0.001, can tune b on a per-path basis
-		points = smoother((double[][])pointsTemp.toArray(), 0.2, 0.8, 0.001);
+		double[][] pointsTempArray = new double[pointsTemp.size()][];
+		pointsTemp.toArray(pointsTempArray);
+		points = smoother(pointsTempArray, 0.2, 0.8, 0.001);
 		
 
 		//4: store distance along path, target velocity, and curvature of path at each point
@@ -86,16 +88,16 @@ public class PathoGen {
 		//the minimum of: the point’s current velocity, and the largest velocity the robot can reach by that point when starting at the last point
 		// combine this and last loop?
 		targetVelAtPoint = new double[points.length];
-		targetVelAtPoint[0] = 0; // i don't know
+
+		// what this do?
+		targetVelAtPoint[0] = maxVelAtPoint[0]; // i don't know
 		for (int i = 1; i<points.length-1; i++) {
 			targetVelAtPoint[i] = Math.min(maxVelAtPoint[i], Math.sqrt(targetVelAtPoint[i-1]*targetVelAtPoint[i-1] + 2*Constants.DRIVETRAIN_MAX_ACCELERATION*( distAtPoint[i]-distAtPoint[i-1])));
-		}
+		} 
 		targetVelAtPoint[points.length-1] = 0;
 		for (int i = points.length-2; i>=0; i--) {
 			targetVelAtPoint[i] = Math.min(targetVelAtPoint[i], Math.sqrt(targetVelAtPoint[i + 1]) + 2*Constants.DRIVETRAIN_MAX_ACCELERATION*distAtPoint[i+1]-distAtPoint[i]);
-		}
-
-		// DONE I THINK
+		} 
 	}
 
 	public double[][] getPoints() {
