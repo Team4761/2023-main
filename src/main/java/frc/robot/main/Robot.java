@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Auto.EncoderAuto.GoMetersEncoder;
 import frc.robot.Auto.PurePursuit.PathFollower;
 import frc.robot.Auto.PurePursuit.PathoGen;
 import frc.robot.Drivetrain.DrivetrainSubsystem;
@@ -61,7 +62,8 @@ public class Robot extends TimedRobot
   public static Pose2d pose;
   
   // where x is forwards
-  public double[][] pathPoints = {{0, 0}, {3.048, 0}};//, {1, 3}};
+  //public double[][] pathPoints = {{0, 0}, {3.048, 0}};//, {1, 3}};
+  public double[][] pathPoints = {{0, 0}, {2.048, 0.2}, {3.048, 1}, {3.6, 1.9}};//, {1, 3}};
   public PathoGen path;
   public PathFollower follower;
 
@@ -120,7 +122,7 @@ public class Robot extends TimedRobot
     for(double i:path.getTargetVelocities()) {
       System.out.println(i);
     }
-    
+    commandScheduler.schedule(new GoMetersEncoder(4));
   }
 
   /** This method is called periodically during autonomous. */
@@ -145,7 +147,7 @@ public class Robot extends TimedRobot
     SmartDashboard.putNumber("volts left", voltages[0]);
     SmartDashboard.putNumber("volts right", voltages[1]);
 
-    Placeholder.setVoltages(Math.max(-12, Math.min(12, voltages[0])), Math.max(-12, Math.min(12, voltages[1])));
+    //Placeholder.setVoltages(Math.max(-12, Math.min(12, voltages[0])), Math.max(-12, Math.min(12, voltages[1])));
 
     commandScheduler.run();
   }

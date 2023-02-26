@@ -20,7 +20,7 @@ public class PathFollower {
 
     // lookahead radius
     // thing says pick a lookahead distance for a path around 12-25 based on how curvy the path is, with shorter lookahead distances for curvier paths
-    private double CIRCLE = 20;
+    private double CIRCLE = 2;
 
     public PathFollower(double[][] ps, double[] targetVels) {
         points = ps;
@@ -51,37 +51,52 @@ public class PathFollower {
             }
         }
 
-        // do stuff w/ lookahead point
-        double tanned = Math.tan(pos.getRotation().getRadians());
-        double x = Math.abs(-tanned * (lookaheadPoint[0]-pos.getX()) + lookaheadPoint[1]-pos.getY()) / Math.sqrt(tanned*tanned + 1);
-        double side = Math.signum(Math.sin(pos.getRotation().getRadians() * (lookaheadPoint[0]-pos.getX())) - Math.cos(pos.getRotation().getRadians()) * (lookaheadPoint[1]-pos.getY()));
-        // right is positive
-        double curvature = side*2*x/(CIRCLE*CIRCLE);
-
-        //get the wheel velocities using the stufff
-        //To get the target velocity take the target velocity associated with the closest point, and constantly feed this value through the rate limiter to get the acceleration-limited target velocity.
-        
-        // W(angular velocity) = (left wheel speed - right wheel speed) / track width
-
-        // still need to do accel limiter
-
         double maxChange = (t-time) * Constants.DRIVETRAIN_MAX_ACCELERATION;
         double targetAccel = Math.max(Math.min(targetVelocities[closestIndex] - output, maxChange), -maxChange);
         
         double velocityToGo = output+targetAccel;
         output+=targetAccel;
 
+        // do stuff w/ lookahead point
+        /*double tanned = (lookaheadPoint[1]-pos.getY())/(lookaheadPoint[0]-pos.getX());
+        double x = Math.abs(-tanned * lookaheadPoint[0] + lookaheadPoint[1] + tanned*pos.getX()-pos.getY()) / Math.sqrt(tanned*tanned + 1);
+        double side = Math.signum(Math.sin(pos.getRotation().getRadians() * (lookaheadPoint[0]-pos.getX())) - Math.cos(pos.getRotation().getRadians()) * (lookaheadPoint[1]-pos.getY()));
+        */
+        
+        // my x that i think makes sense
+        double x = (lookaheadPoint[1]-pos.getY())*Math.cos(-pos.getRotation().getRadians())-(lookaheadPoint[0]-pos.getX())*Math.sin(-pos.getRotation().getRadians());
+        if (x!=0) {
+            double radius = (CIRCLE*CIRCLE)/(2*x);// *side;
 
-        velocities[0] = velocityToGo * (2+curvature*Constants.trackWidth)/2;
-        velocities[1] = velocityToGo * (2-curvature*Constants.trackWidth)/2;
 
+            //get the wheel velocities using the stufff
+            //To get the target velocity take the target velocity associated with the closest point, and constantly feed this value through the rate limiter to get the acceleration-limited target velocity.
+            
+            // W(angular velocity) = (left wheel speed - right wheel speed) / track width
+
+            // still need to do accel limiter
+
+
+            System.out.println("Lookahead: "+lookaheadPoint[0]+", "+lookaheadPoint[1]);
+            System.out.println("Curve radius: "+radius);
+
+            velocities[0] = velocityToGo * (radius+Constants.trackWidth/2)/(radius-Constants.trackWidth/2);
+            velocities[1] = velocityToGo * (radius-Constants.trackWidth/2)/(radius+Constants.trackWidth/2);
+        } else {
+            velocities[0] = velocityToGo;
+            velocities[1] = velocityToGo;
+
+        }
         // FF = Kv * velocities[0] + Ka * targetAccel;
         // FB = Kp * (velocities[0] - actualVel);
 
 
         // units are in meters
-        velocities[0] = - (0.5 * velocities[0] + 0.002 * targetAccel +  0.05 * (velocities[0] - leftVel));
-        velocities[1] = 0.5 * velocities[1] + 0.002 * targetAccel +  0.05 * (velocities[1] - rightVel);
+        velocities[0] = - (0.4 * velocities[0] + 0.002 * targetAccel +  0.03 * (velocities[0] - leftVel));
+        velocities[1] = 0.4 * velocities[1] + 0.002 * targetAccel +  0.03 * (velocities[1] - rightVel);
+        
+        velocities[0] += Math.signum(velocities[0])*0.6;
+        velocities[1] += Math.signum(velocities[1])*0.6;
 
         time = t;
         return velocities;

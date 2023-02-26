@@ -26,10 +26,10 @@ public class Constants {
 
     public static final double distancePerEncoderTick = wheelCircumference / talonEncoderResolution / drivetrainGearRatio;
 
-    public static final double trackWidth = 0.4953;//Inches : 19.5 //Meters : 0.4953
+    public static final double trackWidth = 0.5;//Inches : 19.5 //Meters : 0.4953
 
-    public static final double DRIVETRAIN_MAX_ACCELERATION = 10; // random number for purepuresuit
-    public static final double DRIVETRAIN_MAX_VELOCITY = 3.3; // random number for purepuresuit
+    public static final double DRIVETRAIN_MAX_ACCELERATION = 1.5; // random number for purepuresuit
+    public static final double DRIVETRAIN_MAX_VELOCITY = 1.1; // random number for purepuresuit
 
     // Arm Constants
     static final public double ARM_LENGTH_BOTTOM = 22.5;         // Bottom Arm?  //now 22.5 was 25
