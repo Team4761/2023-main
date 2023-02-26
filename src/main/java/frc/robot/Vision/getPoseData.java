@@ -5,8 +5,10 @@
 package frc.robot.Vision;
 
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.field.Field;
 
 public class getPoseData extends CommandBase {
 
@@ -37,14 +39,13 @@ public class getPoseData extends CommandBase {
     visionVarsAndMethods.getEstimatedPose();
     prevPose = visionVarsAndMethods.getEstimatedPose().getFirst();
 
-    SmartDashboard.putNumber("pose x", prevPose.getX());
-    SmartDashboard.putNumber("pose y", prevPose.getY());
-    SmartDashboard.putNumber("best tag x", visionVarsAndMethods.getBestTagTransform().getFirst());
-    SmartDashboard.putNumber("best tag y", visionVarsAndMethods.getBestTagTransform().getSecond());
+    SmartDashboard.putNumber("pose x", Units.metersToInches(prevPose.getX()));
+    SmartDashboard.putNumber("pose y", Units.metersToInches(prevPose.getY()));
+    SmartDashboard.putNumber("best tag x", Units.metersToInches(visionVarsAndMethods.getBestTagTransform().getFirst()));
+    SmartDashboard.putNumber("best tag y", Units.metersToInches(visionVarsAndMethods.getBestTagTransform().getSecond()));
     SmartDashboard.putNumber("best tag ID", visionVarsAndMethods.getBestTagID());
     SmartDashboard.putNumber("best tag pose ambi", visionVarsAndMethods.getBestTagPoseAmbi());
     SmartDashboard.putBoolean("is tag", visionVarsAndMethods.getIsTarget());
-
   }
 
 

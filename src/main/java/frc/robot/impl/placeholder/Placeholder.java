@@ -23,6 +23,10 @@ public class Placeholder extends RobotImpl {
     public static WPI_TalonFX back_left = new WPI_TalonFX(7);
     public static WPI_TalonFX back_right = new WPI_TalonFX(1);
 
+    public static final double ROBOT_WIDTH_INCHES = 24.0;
+    public static final double ROBOT_LENGTH_INCHES = 27.0;
+    public static final double ROBOT_HEIGHT_INCHES = 7.0;
+
     //Gyro and PID controllers for PID
     public static ADXRS450_Gyro m_gyro = new ADXRS450_Gyro();
 

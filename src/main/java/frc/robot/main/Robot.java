@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Auto.command.MainAutoCommand;
 import frc.robot.Drivetrain.DrivetrainSubsystem;
+import frc.robot.Vision.getPoseData;
 import frc.robot.arm.ArmSubsystem;
 import frc.robot.leds.LEDSubsystem;
 import frc.robot.command.*;
@@ -92,6 +93,7 @@ public class Robot extends TimedRobot
     commandScheduler.schedule(driveController.repeatedly());
     leds.enableLEDs();
 
+    commandScheduler.schedule(new getPoseData());
     commandScheduler.schedule(armControl.repeatedly());
     commandScheduler.schedule(updateLED.repeatedly());
    // commandScheduler.schedule(xboxArcadeDrive.repeatedly());

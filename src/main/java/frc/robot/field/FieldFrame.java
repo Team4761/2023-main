@@ -4,6 +4,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.util.Units;
 import frc.robot.Vision.TagPositions;
 
 import javax.swing.*;
@@ -131,8 +132,8 @@ public class FieldFrame extends JPanel {
             var text = "" + firstNumber++;
             addLabelToGraph(
                 text,
-                pose.getX() + delta,
-                pose.getY() + height/2,
+                Units.metersToInches(pose.getX()) + delta,
+                Units.metersToInches(pose.getY()) + height/2,
                 toGraph(width),
                 toGraph(height),
                 Color.gray
