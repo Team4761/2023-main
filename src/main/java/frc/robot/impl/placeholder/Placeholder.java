@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import frc.robot.command.Distances;
 import frc.robot.impl.RobotImpl;
 import frc.robot.main.Constants;
 
@@ -78,6 +79,16 @@ public class Placeholder extends RobotImpl {
 //        m_rightMotors.setInverted(true);
         m_leftMotors.setInverted(true);
 
+    }
+
+    @Override
+    public Distances getSensorReadings() {
+        return new Distances(
+            front_left.getSensorCollection().getIntegratedSensorPosition(),
+            front_right.getSensorCollection().getIntegratedSensorPosition(),
+            back_left.getSensorCollection().getIntegratedSensorPosition(),
+            back_right.getSensorCollection().getIntegratedSensorPosition()
+        );
     }
 
     @Override
@@ -156,7 +167,7 @@ public class Placeholder extends RobotImpl {
     private double nativeUnitsToDistanceMeters(double sensorCounts) {
         double motorRotations = (double) sensorCounts / Constants.talonEncoderResolution;
         double wheelRotations = motorRotations / Constants.drivetrainGearRatio;
-        double positionMeters = wheelRotations * (2 * Math.PI * Units.inchesToMeters(Constants.wheelRadius));
+        double positionMeters = wheelRotations * (2 * Math.PI * Units.inchesToMeters(Constants.wheelRadiusInches));
         return positionMeters;
     }
 }

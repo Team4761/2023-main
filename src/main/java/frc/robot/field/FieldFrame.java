@@ -162,6 +162,7 @@ public class FieldFrame extends JPanel {
                 height
             )
         );
+        label.setToolTipText("x="+x+" y="+y+" center="+(x+width/2)+","+(y-height/2));
         label.setBorder(BorderFactory.createLineBorder(Color.black));
         label.setBackground(lightGray);
         label.setOpaque(true);

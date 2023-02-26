@@ -14,12 +14,14 @@ public class Constants {
     public static final int ARM_MOTOR_BOTTOM_RIGHT_PORT = 2;    // CAN, initialized port //42 for new arm, 2 for old
     public static final int ARM_MOTOR_TOP_PORT = 1;             // CAN, initialized port //same ports
     public static final int ARM_MOTOR_INTAKE_PORT = 4;          // CAN, initialized port //only for new arm
-
+    public static final double ROBOT_LENGTH = 27;
+    public static final double ROBOT_WIDTH = 24;
+    public static final double ROBOT_HEIGHT = 5;
 
     // Drivetrain constants.
-    public static final double drivetrainGearRatio = 0.01; //TODO to be determined, will be degrees of CANCoder to distance
-    public static final double wheelRadius = 0.01; //TODO to be determined, will be in yards or meters, dunno
-    public static final double wheelCircumference = wheelRadius * 2 * Math.PI;
+    public static final double drivetrainGearRatio = 8.0;
+    public static final double wheelRadiusInches = 2.0;
+    public static final double wheelCircumference = wheelRadiusInches * 2 * Math.PI;
     public static final double weight = 10; //TODO in lbs, need to find
 
     public static final double distancePerEncoderTick = wheelCircumference / Constants.talonEncoderResolution;

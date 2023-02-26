@@ -175,7 +175,7 @@ public class Robot extends TimedRobot
   }
 
   private String getAutoSelector() {
-    String autoSelected = SmartDashboard.getString("Auto", "1");
+    String autoSelected = SmartDashboard.getString("Auto", "2");
     return autoSelected;
   }
 }
