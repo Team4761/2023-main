@@ -29,6 +29,7 @@ import frc.robot.impl.RobotImpl;
 import frc.robot.impl.placeholder.Placeholder;
 import frc.robot.impl.terry.Terry;
 import frc.robot.impl.westcoast.WestCoast;
+import frc.robot.intake.IntakeSubsystem;
 
 /**
  * The VM is configured to automatically run this class, and to call the methods corresponding to
@@ -56,6 +57,7 @@ public class Robot extends TimedRobot
   // Subsystems
   public static DrivetrainSubsystem driveTrain = DrivetrainSubsystem.getInstance();
   public static ArmSubsystem arms = ArmSubsystem.getInstance();
+  public static IntakeSubsystem intake = IntakeSubsystem.getInstance();
   public static LEDSubsystem leds = LEDSubsystem.getInstance();
 
   public static DifferentialDriveOdometry odometry;
@@ -175,7 +177,15 @@ public class Robot extends TimedRobot
   /** This method is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    commandScheduler.run();/*
+    intake.setSpeed(0);
+    xbox.leftBumper().onTrue(new InTakeCommand(intake));
+    
+    if (xbox.rightBumper().getAsBoolean()) {
+      intake.setSpeed(0.9);
+    }
+
+    commandScheduler.run();
+    /*
     SmartDashboard.putNumber("CONTROLLER[00] Right Axis X", xbox.getRightX());
     SmartDashboard.putNumber("CONTROLLER[01] Right Axis Y", xbox.getRightY());
     SmartDashboard.putNumber("CONTROLLER[02] Left Axis X", xbox.getLeftX());

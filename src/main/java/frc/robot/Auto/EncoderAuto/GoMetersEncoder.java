@@ -51,6 +51,8 @@ public class GoMetersEncoder extends CommandBase {
         targetVelocity = Math.min((distance-pose.getX())*2, Constants.DRIVETRAIN_MAX_VELOCITY);
 
         double maxChange = (timer.get()-lastTime) * Constants.DRIVETRAIN_MAX_ACCELERATION;
+        lastTime = timer.get();
+
         output = Math.max(Math.min(targetVelocity, output+maxChange), output-maxChange);
 
 
@@ -61,7 +63,7 @@ public class GoMetersEncoder extends CommandBase {
         rightSpeed += Math.signum(rightSpeed)*0.6;
 
         Placeholder.setVoltages(Math.max(-12, Math.min(12, leftSpeed)), Math.max(-12, Math.min(12, rightSpeed)));
-    
+        
     }
 
     @Override
