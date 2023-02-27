@@ -57,7 +57,7 @@ public class visionVarsAndMethods {
         new Transform3d(
             new Translation3d(
                 Units.inchesToMeters(25 - Placeholder.ROBOT_LENGTH_INCHES / 2),
-                Units.inchesToMeters(Placeholder.ROBOT_WIDTH_INCHES / 2 - 5),
+                Units.inchesToMeters(-(Placeholder.ROBOT_WIDTH_INCHES / 2 - 5)),
                 Units.inchesToMeters(10 - Placeholder.ROBOT_HEIGHT_INCHES / 2)),
             new Rotation3d(0,0,0)
         );
