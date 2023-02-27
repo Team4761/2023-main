@@ -74,8 +74,6 @@ public class PathFollower {
             
             // W(angular velocity) = (left wheel speed - right wheel speed) / track width
 
-            // still need to do accel limiter
-
 
             System.out.println("Lookahead: "+lookaheadPoint[0]+", "+lookaheadPoint[1]);
             System.out.println("Curve radius: "+radius);
@@ -126,11 +124,13 @@ public class PathFollower {
             double t2 = (-b + discriminant)/(2*a);
             if (t1 >= 0 && t1 <=1){
                 //return t1 intersection
+                intersection[0] = 1.0;
                 intersection[1] = start[0] + t1 * d[0];
                 intersection[2] = start[1] + t1 * d[1];
             }
             if (t2 >= 0 && t2 <=1 && t2>t1){
                 //return t2 intersection
+                intersection[0] = 1.0;
                 intersection[1] = start[0] + t2 * d[0];
                 intersection[2] = start[1] + t2 * d[1];
                 return intersection;

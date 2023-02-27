@@ -6,7 +6,7 @@ public class Constants {
 
     // Ports & LEDs
     public static final int LED_PORT = 0;                       // RoboRIO, PWM port
-    public static final int LED_NUMBER = 60;                    // Number of LEDs
+    public static final int LED_NUMBER = 100;                    // Number of LEDs
     public static final int ARM_ENCODER_TOP_PORT = 9;           // RoboRIO, DIO port
     public static final int ARM_ENCODER_BOTTOM_PORT = 0;        // RoboRIO, DIO port
     //Ports are for new arm old ports on side or the same
@@ -28,8 +28,8 @@ public class Constants {
 
     public static final double trackWidth = 0.5;//Inches : 19.5 //Meters : 0.4953
 
-    public static final double DRIVETRAIN_MAX_ACCELERATION = 1.5; // random number for purepuresuit
-    public static final double DRIVETRAIN_MAX_VELOCITY = 1.1; // random number for purepuresuit
+    public static final double DRIVETRAIN_MAX_ACCELERATION = 2.5; // meters/s^2
+    public static final double DRIVETRAIN_MAX_VELOCITY = 1.1; // meters/s
 
     // Arm Constants
     static final public double ARM_LENGTH_BOTTOM = 22.5;         // Bottom Arm?  //now 22.5 was 25

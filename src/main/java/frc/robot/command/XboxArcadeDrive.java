@@ -23,18 +23,20 @@ public class XboxArcadeDrive extends XboxDriveBase {
     public void execute() {
         WheelSpeeds wheelSpeeds = arcadeDriveIK(xbox.getLeftY(), xbox.getRightX());
 
-        double maxChange = (timer.get()-lastTime) * Constants.DRIVETRAIN_MAX_ACCELERATION;
-        outputL = Math.max(Math.min(wheelSpeeds.left*1.5, outputL+maxChange), outputL-maxChange);        
-        outputR = Math.max(Math.min(wheelSpeeds.right*1.5, outputR+maxChange), outputR-maxChange);
+        double maxChange = Math.abs((timer.get()-lastTime) * Constants.DRIVETRAIN_MAX_ACCELERATION * 2);
+        outputL = MathUtil.clamp(wheelSpeeds.left*1.5, outputL-maxChange, outputL+maxChange);        
+        outputR = MathUtil.clamp(wheelSpeeds.right*1.5, outputR-maxChange, outputR+maxChange);
+        //System.out.println(outputL+", "+outputR);
+        
         lastTime = timer.get();
         
-        outputL = - (2.5 * outputL +  0.2 * (outputL - Placeholder.getLeftVelocity()*Constants.distancePerEncoderTick));
-        outputR = 2.5 * outputR +  0.2 * (outputR - Placeholder.getRightVelocity()*Constants.distancePerEncoderTick);
+        //double lVolts = - (3 * outputL +  0.2 * (outputL - Placeholder.getLeftVelocity()*Constants.distancePerEncoderTick));
+        //double rVolts = 3 * outputR +  0.2 * (outputR - Placeholder.getRightVelocity()*Constants.distancePerEncoderTick);
         
-        outputL += Math.signum(outputL)*0.65;
-        outputR += Math.signum(outputR)*0.6;
+        //lVolts += Math.signum(outputL)*0.6;
+        //rVolts += Math.signum(outputR)*0.6;
 
-        Placeholder.setVoltages(outputL, outputR);
+        Placeholder.setVoltages(-outputL*4, outputR*4);
     }
 
     @Override
@@ -43,9 +45,9 @@ public class XboxArcadeDrive extends XboxDriveBase {
     }
 
     // math from differentialDrive
-    public static WheelSpeeds arcadeDriveIK(double xSpeed, double zRotation) {
-        xSpeed = MathUtil.clamp(xSpeed, -1.0, 1.0);
-        zRotation = MathUtil.clamp(zRotation, -1.0, 1.0);
+    WheelSpeeds arcadeDriveIK(double xSpeed, double zRotation) {
+        xSpeed = MathUtil.clamp(MathUtil.applyDeadband(xSpeed, 0.1), -1.0, 1.0);
+        zRotation = MathUtil.clamp(MathUtil.applyDeadband(zRotation, 0.1), -1.0, 1.0);
     
         // Square the inputs (while preserving the sign) to increase fine control
         // while permitting full power.

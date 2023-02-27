@@ -24,7 +24,8 @@ public class InTakeCommand extends CommandBase {
     public boolean isFinished() {
         return timer.get()>3;
     }
-    public void end() {
+    @Override
+    public void end(boolean interrupted) {
         m_intake.setSpeed(0);
     }
 }
