@@ -86,7 +86,7 @@ public class Field {
     //------------------------------------------------------------------------------------------------------------
     // Starting positions for Auto.  They are also named for the April Tag zone they are closest to.
     //------------------------------------------------------------------------------------------------------------
-    private static final double STARTING_POS_OFFSET = 2.0;
+    private static final double STARTING_POS_OFFSET = 12.0;
     private static final Translation2d START_8 =
         ZONE_8.bottomShelfBelowCenter.getCenterRight().plus(new Translation2d(STARTING_POS_OFFSET, 0));
     private static final Translation2d START_7 =

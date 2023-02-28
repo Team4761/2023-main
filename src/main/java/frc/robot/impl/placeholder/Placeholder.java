@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import frc.robot.command.Distances;
 import frc.robot.impl.RobotImpl;
 import frc.robot.main.Constants;
 
@@ -21,6 +22,10 @@ public class Placeholder extends RobotImpl {
     public static WPI_TalonFX front_right = new WPI_TalonFX(0);
     public static WPI_TalonFX back_left = new WPI_TalonFX(7);
     public static WPI_TalonFX back_right = new WPI_TalonFX(1);
+
+    public static final double ROBOT_WIDTH_INCHES = 24.0;
+    public static final double ROBOT_LENGTH_INCHES = 27.0;
+    public static final double ROBOT_HEIGHT_INCHES = 7.0;
 
     //Gyro and PID controllers for PID
     public static ADXRS450_Gyro m_gyro = new ADXRS450_Gyro();
@@ -81,6 +86,16 @@ public class Placeholder extends RobotImpl {
     }
 
     @Override
+    public Distances getSensorReadings() {
+        return new Distances(
+            front_left.getSensorCollection().getIntegratedSensorPosition(),
+            front_right.getSensorCollection().getIntegratedSensorPosition(),
+            back_left.getSensorCollection().getIntegratedSensorPosition(),
+            back_right.getSensorCollection().getIntegratedSensorPosition()
+        );
+    }
+
+    @Override
     public DifferentialDrive getDrive() {
         return m_drive;
     }
@@ -120,16 +135,38 @@ public class Placeholder extends RobotImpl {
     }
 
     public static void zeroEncoders() {
-        front_right.getSensorCollection().setIntegratedSensorPosition(0, 100);
-        front_left.getSensorCollection().setIntegratedSensorPosition(0, 100);
-        back_right.getSensorCollection().setIntegratedSensorPosition(0, 100);
-        back_left.getSensorCollection().setIntegratedSensorPosition(0, 100);
+        front_right.getSensorCollection().setIntegratedSensorPosition(0, 0);
+        front_left.getSensorCollection().setIntegratedSensorPosition(0, 0);
+        back_right.getSensorCollection().setIntegratedSensorPosition(0, 0);
+        back_left.getSensorCollection().setIntegratedSensorPosition(0, 0);
     }
 
-
+    
     public static double averageMotorGroupVelocity(WPI_TalonFX front_motor, WPI_TalonFX back_motor) {
         //Needs to account for gear ratio
         return ((front_motor.getSensorCollection().getIntegratedSensorVelocity() + back_motor.getSensorCollection().getIntegratedSensorVelocity()) / 2);
+    }
+    public static double getLeftVelocity() {
+        //Needs to account for gear ratio
+        return -((front_left.getSensorCollection().getIntegratedSensorVelocity() + back_left.getSensorCollection().getIntegratedSensorVelocity()) / 2);
+    }
+    public static double getRightVelocity() {
+        //Needs to account for gear ratio
+        return ((front_right.getSensorCollection().getIntegratedSensorVelocity() + back_right.getSensorCollection().getIntegratedSensorVelocity()) / 2);
+    }
+
+    public static double frontLeftPosition() {
+        return -front_left.getSensorCollection().getIntegratedSensorPosition();
+    }
+    public static double frontRightPosition() {
+        return front_right.getSensorCollection().getIntegratedSensorPosition();
+    }
+
+    public static void setVoltages(double left, double right) {
+        front_left.setVoltage(left);
+        front_right.setVoltage(right);
+        back_left.setVoltage(left);
+        back_right.setVoltage(right);
     }
 
     public void setSpeeds(DifferentialDriveWheelSpeeds speeds) {
@@ -156,7 +193,7 @@ public class Placeholder extends RobotImpl {
     private double nativeUnitsToDistanceMeters(double sensorCounts) {
         double motorRotations = (double) sensorCounts / Constants.talonEncoderResolution;
         double wheelRotations = motorRotations / Constants.drivetrainGearRatio;
-        double positionMeters = wheelRotations * (2 * Math.PI * Units.inchesToMeters(Constants.wheelRadius));
+        double positionMeters = wheelRotations * (2 * Math.PI * Units.inchesToMeters(Constants.wheelRadiusInches));
         return positionMeters;
     }
 }
