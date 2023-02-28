@@ -7,7 +7,9 @@ import frc.robot.Drivetrain.DrivetrainSubsystem;
 import frc.robot.impl.placeholder.Placeholder;
 import frc.robot.main.Constants;
 import frc.robot.main.Robot;
-public class XboxArcadeDrive extends XboxDriveBase {
+import edu.wpi.first.wpilibj2.command.CommandBase;
+
+public class XboxArcadeDrive extends CommandBase {
     DrivetrainSubsystem drivetrainSubsystem = DrivetrainSubsystem.getInstance();
     Timer timer = new Timer();
     double lastTime;
@@ -21,7 +23,7 @@ public class XboxArcadeDrive extends XboxDriveBase {
     }
     @Override
     public void execute() {
-        WheelSpeeds wheelSpeeds = arcadeDriveIK(xbox.getLeftY(), xbox.getRightX());
+        WheelSpeeds wheelSpeeds = arcadeDriveIK(Robot.xbox.getLeftY(), Robot.xbox.getRightX());
 
         double maxChange = Math.abs((timer.get()-lastTime) * Constants.DRIVETRAIN_MAX_ACCELERATION * 2);
         outputL = MathUtil.clamp(wheelSpeeds.left*1.5, outputL-maxChange, outputL+maxChange);        

@@ -59,6 +59,7 @@ public class Robot extends TimedRobot
   public final CommandScheduler commandScheduler = CommandScheduler.getInstance();
   private final ArmControl armControl = new ArmControl();
   private final UpdateLED updateLED = new UpdateLED();
+  private final XboxArcadeDrive xboxArcadeDrive = new XboxArcadeDrive();
   private final DriveController driveController = new DriveController(1);
   // Subsystems
   public static DrivetrainSubsystem driveTrain = DrivetrainSubsystem.getInstance();
