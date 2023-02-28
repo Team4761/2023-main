@@ -11,10 +11,8 @@ import frc.robot.main.Constants;
 
 
 
-public class GoMetersEncoder extends CommandBase {
-    private double distance;
-    private double backwardsFactor = 0;
-    private double backwards = 1;
+public class TurnToGyro extends CommandBase {
+    private double setAngle;
 
     private double leftSpeed;
     private double rightSpeed;
@@ -24,22 +22,11 @@ public class GoMetersEncoder extends CommandBase {
     private double lastTime;
     private double output = 0;
 
-    private DifferentialDriveOdometry odometry;
-    private Pose2d pose;
-
-    // can't negative yet
-    public GoMetersEncoder(double distance) {
+    // degrees relative to start
+    public TurnToGyro(double angle) {
         // each subsystem used by the command must be passed into the
         // addRequirements() method (which takes a vararg of Subsystem)\
-        if(Math.signum(distance) == -1.0) {
-            backwardsFactor = Math.PI;
-            backwards = -1;
-        }
-        this.distance = Math.abs(distance);
-
-        odometry = new DifferentialDriveOdometry(new Rotation2d(Placeholder.m_gyro.getAngle()*0.0174533+backwardsFactor), Placeholder.frontLeftPosition()*Constants.distancePerEncoderTick, Placeholder.frontRightPosition()*Constants.distancePerEncoderTick);
-        pose = odometry.getPoseMeters();
-
+        setAngle = angle;
 
         addRequirements();
     }
@@ -52,18 +39,15 @@ public class GoMetersEncoder extends CommandBase {
 
     @Override
     public void execute() {
-        pose = odometry.update(new Rotation2d(Placeholder.m_gyro.getAngle()*0.0174533+backwardsFactor), Placeholder.frontLeftPosition()*Constants.distancePerEncoderTick, Placeholder.frontRightPosition()*Constants.distancePerEncoderTick);
-        SmartDashboard.putNumber("forward command", pose.getX());
-        targetVelocity = Math.min((distance-pose.getX())*2, Constants.DRIVETRAIN_MAX_VELOCITY);
-
         double maxChange = (timer.get()-lastTime) * Constants.DRIVETRAIN_MAX_ACCELERATION;
         lastTime = timer.get();
+        targetVelocity = Math.min((setAngle-Placeholder.m_gyro.getAngle())/180*Constants.trackWidth/Constants.wheelRadius, Constants.DRIVETRAIN_MAX_VELOCITY);
 
         output = Math.max(Math.min(targetVelocity, output+maxChange), output-maxChange);
 
 
-        leftSpeed = - (2.5 * output +  0.2 * (output - Placeholder.getLeftVelocity()*Constants.distancePerEncoderTick))*backwards;
-        rightSpeed = 2.5 * output +  0.2 * (output - Placeholder.getRightVelocity()*Constants.distancePerEncoderTick)*backwards;
+        leftSpeed = - (2.5 * output +  0.2 * (output - Placeholder.getLeftVelocity()*Constants.distancePerEncoderTick));
+        rightSpeed = 2.5 * output +  0.2 * (output - Placeholder.getRightVelocity()*Constants.distancePerEncoderTick);
         
         // maybe not needed
         leftSpeed += Math.signum(leftSpeed)*0.65;
@@ -75,7 +59,7 @@ public class GoMetersEncoder extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return targetVelocity<=0;
+        return Math.abs(targetVelocity)<=0.1;
     }
 
     @Override
