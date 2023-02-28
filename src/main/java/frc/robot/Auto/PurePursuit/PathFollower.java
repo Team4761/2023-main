@@ -1,5 +1,6 @@
 package frc.robot.Auto.PurePursuit;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -45,14 +46,15 @@ public class PathFollower {
         // find lookahead
         for (int i = (int)lookaheadIndex; i<points.length-1; i++) {
             double[] intersect = intersection(points[i], points[i+1], pos, CIRCLE);
-            if(intersect[0] != 1.0 && intersect[0]+i > lookaheadIndex) {
+            if(intersect[0] != -1.0 && intersect[0]+i > lookaheadIndex) {
                 lookaheadPoint[0] = intersect[1];
                 lookaheadPoint[1] = intersect[2];
             }
         }
 
         double maxChange = (t-time) * Constants.DRIVETRAIN_MAX_ACCELERATION;
-        double targetAccel = Math.max(Math.min(targetVelocities[closestIndex] - output, maxChange), -maxChange);
+        
+        double targetAccel = MathUtil.clamp(targetVelocities[closestIndex] - output, -maxChange, maxChange);
         
         double velocityToGo = output+targetAccel;
         output+=targetAccel;
@@ -122,22 +124,36 @@ public class PathFollower {
             discriminant = Math.sqrt(discriminant);
             double t1 = (-b - discriminant)/(2*a);
             double t2 = (-b + discriminant)/(2*a);
+            // if t1 valid
             if (t1 >= 0 && t1 <=1){
-                //return t1 intersection
                 intersection[0] = 1.0;
                 intersection[1] = start[0] + t1 * d[0];
                 intersection[2] = start[1] + t1 * d[1];
+
+                // if t2 valid and more than t1
+                if (t2 >= 0 && t2 <=1 && t2>t1){
+                    //return t2 intersection
+                    intersection[0] = 1.0;
+                    intersection[1] = start[0] + t2 * d[0];
+                    intersection[2] = start[1] + t2 * d[1];
+                    return intersection;
+                } else {
+                    // return t1 if t2 not valid or not further along
+                    return intersection;
+                }
             }
-            if (t2 >= 0 && t2 <=1 && t2>t1){
+            // if t1 invalid and t2 valid
+            else if (t2 >= 0 && t2 <=1){
                 //return t2 intersection
                 intersection[0] = 1.0;
                 intersection[1] = start[0] + t2 * d[0];
                 intersection[2] = start[1] + t2 * d[1];
                 return intersection;
             }
-
-            //otherwise, no intersection
-            intersection[0] = -1.0;
+            else {
+                //otherwise, no intersection
+                intersection[0] = -1.0;
+            }
         }
         return intersection;
     }

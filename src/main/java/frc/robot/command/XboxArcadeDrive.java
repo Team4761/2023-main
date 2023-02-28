@@ -66,7 +66,7 @@ public class XboxArcadeDrive extends XboxDriveBase {
         if (greaterInput == 0.0) {
           return new WheelSpeeds(0.0, 0.0);
         }
-        double saturatedInput = (greaterInput + lesserInput) / greaterInput;
+        double saturatedInput = (greaterInput + lesserInput/*  /1.2  */) / greaterInput; //see if should divide lesserInput by ~1.2 to slightly increase speed of corner joystic inputs
         leftSpeed /= saturatedInput;
         rightSpeed /= saturatedInput;
     
