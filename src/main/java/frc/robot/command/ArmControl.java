@@ -6,7 +6,6 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.arm.ArmMath;
 import frc.robot.arm.ArmSubsystem;
 import frc.robot.controller.XboxControl;
-import frc.robot.main.Constants;
 import frc.robot.main.Robot;
 
 public class ArmControl extends CommandBase {

@@ -73,7 +73,7 @@ public class ArmSubsystem extends SubsystemBase {
     // PID control
     public void movePID() {
         top.setGoal(getDesiredTopRotation());
-        bottom.setGoal(getDesiredBottomRotation());
+        //REMOVABLEbottom.setGoal(getDesiredBottomRotation());
         //top.enable();
         //bottom.enable();
     }
@@ -141,7 +141,7 @@ public class ArmSubsystem extends SubsystemBase {
     }
     public void enablePID() {
         top.enable();
-        bottom.enable();
+        //REMOVABLEbottom.enable();
     }
     public void disablePID() {
         top.disable();
@@ -156,10 +156,11 @@ public class ArmSubsystem extends SubsystemBase {
         return top_motor.get();
     }
     public double getBottomRotation() {
-        if (bottomEncoder.getRotation() >= Constants.ENCODER_ZERO_VALUE_BOTTOM)
-            return bottomEncoder.getRotation() - Constants.ENCODER_ZERO_VALUE_BOTTOM;
+        double bottomRotation = (Math.PI*2) - bottomEncoder.getRotation();
+        if (bottomRotation >= Constants.ENCODER_ZERO_VALUE_BOTTOM)
+            return bottomRotation - Constants.ENCODER_ZERO_VALUE_BOTTOM;
         else
-            return bottomEncoder.getRotation() + (Math.PI * 2) - Constants.ENCODER_ZERO_VALUE_BOTTOM;
+            return bottomRotation + (Math.PI * 2) - Constants.ENCODER_ZERO_VALUE_BOTTOM;
     }
     public double getTopRotation() {
         if (topEncoder.getRotation() >= Constants.ENCODER_ZERO_VALUE_TOP)
@@ -238,8 +239,8 @@ public class ArmSubsystem extends SubsystemBase {
             bottom.updatePIDValues(p_bottom.getDouble(Constants.ARM_P_BOTTOM), i_bottom.getDouble(Constants.ARM_I_BOTTOM), d_bottom.getDouble(Constants.ARM_D_BOTTOM));
         if (Constants.ARM_P_TOP != p_top.getDouble(Constants.ARM_P_TOP) || Constants.ARM_I_TOP != i_top.getDouble(Constants.ARM_I_TOP) || Constants.ARM_D_TOP != d_top.getDouble(Constants.ARM_D_TOP))
             top.updatePIDValues(p_top.getDouble(Constants.ARM_P_TOP), i_top.getDouble(Constants.ARM_I_TOP), d_top.getDouble(Constants.ARM_D_TOP));
-        //desiredTopRotation = top_desired.getDouble(0.0);
-        //desiredBottomRotation = bottom_desired.getDouble(0.0);
+        desiredTopRotation = top_desired.getDouble(0.0);
+        desiredBottomRotation = bottom_desired.getDouble(0.0);
         Constants.ARM_P_BOTTOM = p_bottom.getDouble(Constants.ARM_P_BOTTOM);
         Constants.ARM_I_BOTTOM = i_bottom.getDouble(Constants.ARM_I_BOTTOM);
 

@@ -7,7 +7,6 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
 import frc.robot.main.Constants;
-import frc.robot.main.Robot;
 
 public class ArmPIDSubsystem extends ProfiledPIDSubsystem {
 
@@ -17,7 +16,7 @@ public class ArmPIDSubsystem extends ProfiledPIDSubsystem {
     // <https://www.reca.lc/arm> has a very useful calculator!!!
 
     //was commneted
-    ArmFeedforward feedforward = new ArmFeedforward(0.01, 0.45, 1.95, 0.02);
+    //ArmFeedforward feedforward = new ArmFeedforward(0.01, 0.45, 1.95, 0.02);
 
 
     public ArmPIDSubsystem(AbsoluteEncoder e, CANSparkMax m, String type, double p, double i, double d) {
@@ -37,7 +36,8 @@ public class ArmPIDSubsystem extends ProfiledPIDSubsystem {
 
     @Override
     public void useOutput(double output, TrapezoidProfile.State setpoint) {
-        double ff = feedforward.calculate(encoder.getVelocity(), encoder.getAcceleration());//0.0;
+        System.out.println("Calculation: " + m_controller.getSetpoint() + " | " + m_controller.getGoal());
+        double ff = 0.0; //feedforward.calculate(encoder.getVelocity(), encoder.getAcceleration());//0.0;
         System.out.println("CURRENT OUTPUT: " + output);
         System.out.println("ERROR: " + (ArmSubsystem.getInstance().getDesiredTopRotation()-ArmSubsystem.getInstance().getTopRotation()));
         if (motorType.equalsIgnoreCase("top"))
@@ -73,11 +73,9 @@ public class ArmPIDSubsystem extends ProfiledPIDSubsystem {
     @Override
     public void periodic() {
         if (m_enabled) {
+            System.out.println("Periodic: " + m_controller.getSetpoint() + " | " + m_controller.getGoal());
             useOutput(m_controller.calculate(getMeasurement()) /*+ feedforward.calculate(encoder.getRotation(), encoder.getVelocity(), encoder.getAcceleration())*/, m_controller.getSetpoint());
         }
         encoder.updateEncoder();
     }
-
-
-
 }
