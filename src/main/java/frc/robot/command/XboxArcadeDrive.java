@@ -46,7 +46,7 @@ public class XboxArcadeDrive extends CommandBase {
         //Robot.driveTrain.arcadeDrive(0,0);
     }
 
-    // math from differentialDrive
+    // math from DifferentialDrive
     WheelSpeeds arcadeDriveIK(double xSpeed, double zRotation) {
         xSpeed = MathUtil.clamp(MathUtil.applyDeadband(xSpeed, 0.1), -1.0, 1.0);
         zRotation = MathUtil.clamp(MathUtil.applyDeadband(zRotation, 0.1), -1.0, 1.0);

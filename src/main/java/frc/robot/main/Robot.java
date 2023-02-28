@@ -70,7 +70,7 @@ public class Robot extends TimedRobot
   public static DifferentialDriveOdometry odometry;
   public static Pose2d pose;
   
-  // where x is forwards
+  // where positive x is forwards, positive y should be to the right
   //public double[][] pathPoints = {{0, 0}, {3.048, 0}};//, {1, 3}};
   public double[][] pathPoints = {{0, 0}, {2.048, 0.2}, {3.048, 1}, {3.6, 1.9}};//, {1, 3}};
   public PathoGen path;
@@ -167,7 +167,6 @@ public class Robot extends TimedRobot
 
     commandScheduler.schedule(new getPoseData());
     commandScheduler.schedule(armControl.repeatedly());
-    leds.enableLEDs();
 
     //commandScheduler.schedule(armControl.repeatedly());
 
