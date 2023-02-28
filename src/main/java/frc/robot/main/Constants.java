@@ -6,7 +6,7 @@ public class Constants {
 
     // Ports & LEDs
     public static final int LED_PORT = 0;                       // RoboRIO, PWM port
-    public static final int LED_NUMBER = 60;                    // Number of LEDs
+    public static final int LED_NUMBER = 100;                    // Number of LEDs
     public static final int ARM_ENCODER_TOP_PORT = 9;           // RoboRIO, DIO port
     public static final int ARM_ENCODER_BOTTOM_PORT = 0;        // RoboRIO, DIO port
     //Ports are for new arm old ports on side or the same
@@ -21,14 +21,19 @@ public class Constants {
     // Drivetrain constants.
     public static final double drivetrainGearRatio = 8.0;
     public static final double wheelRadiusInches = 2.0;
-    public static final double wheelCircumference = wheelRadiusInches * 2 * Math.PI;
+    //public static final double wheelCircumference = wheelRadiusInches * 2 * Math.PI;
+    public static final double wheelRadius = 0.0508; //meters
+    public static final double wheelCircumference = wheelRadius * 2 * Math.PI;
     public static final double weight = 10; //TODO in lbs, need to find
-
-    public static final double distancePerEncoderTick = wheelCircumference / Constants.talonEncoderResolution;
 
     public static final double talonEncoderResolution = 2048;
 
-    public static final double trackWidth = 19.5;//Inches : 19.5 //Meters : 0.4953
+    public static final double distancePerEncoderTick = wheelCircumference / talonEncoderResolution / drivetrainGearRatio;
+
+    public static final double trackWidth = 0.5;//Inches : 19.5 //Meters : 0.4953
+
+    public static final double DRIVETRAIN_MAX_ACCELERATION = 2.5; // meters/s^2
+    public static final double DRIVETRAIN_MAX_VELOCITY = 1.1; // meters/s
 
     // Arm Constants
     static final public double ARM_LENGTH_BOTTOM = 22.5;         // Bottom Arm?  //now 22.5 was 25
