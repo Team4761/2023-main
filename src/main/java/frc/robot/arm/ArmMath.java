@@ -106,9 +106,7 @@ public class ArmMath {
         theta2 -= Constants.KINEMATICS_OFFSET_TOP;
         if (theta1 < 0) { theta1 += Math.PI*2; }
         if (theta2 < 0) { theta2 += Math.PI*2; }
-        return new Translation2d(
-                armLength1 * Math.cos(theta1) + armLength2 * Math.cos(theta1 + theta2) + Constants.KINEMATICS_OFFSET_BOTTOM,
-                armLength1 * Math.sin(theta1) + armLength2 * Math.sin(theta1 + theta2) + Constants.KINEMATICS_OFFSET_TOP);  //Checked 2/18, added theta1 - theta 2
+        return new Translation2d(armLength1 * Math.cos(theta1) + armLength2 * Math.cos(theta1 + theta2 - Math.PI), armLength1 * Math.sin(theta1) + armLength2 * Math.sin(theta1 + theta2 - Math.PI));
     }
 
     public boolean comparePoint(Translation2d wantedPoint, Translation2d currentPoint, double variation) {
