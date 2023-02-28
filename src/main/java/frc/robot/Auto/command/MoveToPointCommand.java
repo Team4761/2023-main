@@ -5,6 +5,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Auto.EncoderAuto.GoMetersEncoder;
 import frc.robot.Auto.tagAuto.moveToPointCommands.goToPoseAprilTag;
 import frc.robot.command.MoveStraightMeasuredCommand;
 import frc.robot.main.Robot;
@@ -34,20 +35,21 @@ public class MoveToPointCommand extends SequentialCommandGroup {
                 int pointedAwayFromOrigin = currentPos.getAngle().getDegrees() < 45 ? 1 : -1;
                 int sign = pointedAwayFromOrigin * ((goalPostion.getX() > currentPos.getX()) ? 1 : -1);
                 double distanceX = Units.inchesToMeters(Math.abs(goalPostion.getX() - currentPos.getX()));
-                SmartDashboard.putNumber("DistanceX", Units.metersToInches(distanceX));
-                SmartDashboard.putNumber("Sign", sign);
-                addCommands(
-                    new MoveStraightMeasuredCommand(sign * .5, distanceX)
-                );
+                if (sign < 0) {
+                    // TODO: kill this when GoMetersEncoder can go backwards
+                    addCommands(new MoveStraightMeasuredCommand(sign * .5, distanceX));
+                } else {
+                    addCommands(new GoMetersEncoder(distanceX));
+                }
             } else {
                 int pointedAwayFromOrigin = currentPos.getAngle().getDegrees() > 45 && currentPos.getAngle().getDegrees() < 135  ? 1 : -1;
                 int sign = pointedAwayFromOrigin * ((goalPostion.getY() < currentPos.getY()) ? -1 : 1);
                 double distanceY = Units.inchesToMeters(Math.abs(goalPostion.getY() - currentPos.getY()));
-                SmartDashboard.putNumber("DistanceY", distanceY);
-                SmartDashboard.putNumber("Sign", sign);
-                addCommands(
-                    new MoveStraightMeasuredCommand(sign * .5, distanceY)
-                );
+                if (sign < 0) {
+                    addCommands(new MoveStraightMeasuredCommand(sign * .5, distanceY));
+                } else {
+                    addCommands(new GoMetersEncoder(distanceY));
+                }
             }
         }
     }
