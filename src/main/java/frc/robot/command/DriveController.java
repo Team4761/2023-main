@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Drivetrain.DrivetrainSubsystem;
 import frc.robot.controller.XboxControl;
 import frc.robot.impl.placeholder.Placeholder;
+import frc.robot.leds.LEDSubsystem;
 import frc.robot.main.Constants;
 import frc.robot.main.Robot;
 
@@ -54,7 +55,8 @@ public class DriveController extends CommandBase {
     }
 
     private void onLeftTrigger() {
-        isArcade = false;
+        LEDSubsystem.getInstance().setAllLEDs(190
+                ,0, 0);
     }
 
     private void onRightTrigger() {
@@ -62,11 +64,11 @@ public class DriveController extends CommandBase {
     }
 
     private void onLeftBumper() {
-
+        LEDSubsystem.getInstance().setAllLEDs(240, 136, 10);
     }
 
     private void onRightBumper() {
-
+        LEDSubsystem.getInstance().setAllLEDs(31, 28, 189);
     }
 
     @Override
