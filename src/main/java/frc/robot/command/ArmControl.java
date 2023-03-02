@@ -37,8 +37,9 @@ public class ArmControl extends CommandBase {
     }
 
     private void onPressA() {
-        Robot.arms.movePID();
         Robot.arms.enablePID();
+        Robot.arms.movePID();
+        
     }
     private void onPressX() {
         Robot.arms.disablePID();

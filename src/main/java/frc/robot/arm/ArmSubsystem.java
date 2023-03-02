@@ -43,9 +43,9 @@ public class ArmSubsystem extends SubsystemBase {
         bottom_right = new CANSparkMax(Constants.ARM_MOTOR_BOTTOM_RIGHT_PORT, CANSparkMaxLowLevel.MotorType.kBrushless);
         top_motor = new CANSparkMax(Constants.ARM_MOTOR_TOP_PORT, CANSparkMaxLowLevel.MotorType.kBrushless);
 
-        //bottom_left.setInverted(true);
+        bottom_left.setInverted(true);
         top_motor.setInverted(true);
-        bottom_right.setInverted(true);
+        //bottom_right.setInverted(true);
 
         // Do find '//REMOVABLE' and replace all with nothing to activate bottom control
         bottom = new ArmPIDSubsystem(bottomEncoder, bottom_left, "bottom", Constants.ARM_P_BOTTOM, Constants.ARM_I_BOTTOM, Constants.ARM_D_BOTTOM);
@@ -73,7 +73,7 @@ public class ArmSubsystem extends SubsystemBase {
     // PID control
     public void movePID() {
         top.setGoal(getDesiredTopRotation());
-        //REMOVABLEbottom.setGoal(getDesiredBottomRotation());
+        bottom.setGoal(getDesiredBottomRotation());
         //top.enable();
         //bottom.enable();
     }
@@ -141,7 +141,7 @@ public class ArmSubsystem extends SubsystemBase {
     }
     public void enablePID() {
         top.enable();
-        //REMOVABLEbottom.enable();
+        bottom.enable();
     }
     public void disablePID() {
         top.disable();

@@ -36,7 +36,7 @@ public class ArmPIDSubsystem extends ProfiledPIDSubsystem {
 
     @Override
     public void useOutput(double output, TrapezoidProfile.State setpoint) {
-        System.out.println("Calculation: " + m_controller.getSetpoint() + " | " + m_controller.getGoal());
+        System.out.println("Calculation: " + m_controller.getSetpoint().position + " | " + m_controller.getGoal().position);
         double ff = 0.0; //feedforward.calculate(encoder.getVelocity(), encoder.getAcceleration());//0.0;
         System.out.println("CURRENT OUTPUT: " + output);
         System.out.println("ERROR: " + (ArmSubsystem.getInstance().getDesiredTopRotation()-ArmSubsystem.getInstance().getTopRotation()));
@@ -51,13 +51,14 @@ public class ArmPIDSubsystem extends ProfiledPIDSubsystem {
     public double getMeasurement() {
         //System.out.println("Our current rotation is | " + ArmSubsystem.getInstance().getTopRotation() + " | and our desired rotation is | " + ArmSubsystem.getInstance().getDesiredTopRotation());
         ArmSubsystem instance = ArmSubsystem.getInstance();
-        if (instance != null) {
-          if (motorType.equalsIgnoreCase("top"))
+        if (motorType.equalsIgnoreCase("top")) {
+            System.out.println(ArmSubsystem.getInstance().getTopRotation());
             return ArmSubsystem.getInstance().getTopRotation();
-          else
+        }
+        else {
+            System.out.println(ArmSubsystem.getInstance().getBottomRotation());
             return ArmSubsystem.getInstance().getBottomRotation();
         }
-        return 0.0;
 
     }
 
