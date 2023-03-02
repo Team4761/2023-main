@@ -40,6 +40,8 @@ public class ArmMath {
         double k2_0 = armLength2 * s2;
         angles[0][0] = Math.atan2(y, x) - Math.atan2(k2_0, k1_0) + Constants.KINEMATICS_OFFSET_TOP;
 
+        angles[0][0] = Math.atan2(y, x) - Math.atan2(k2_0, k1_0);
+        
         double k1_1 = armLength1 + armLength2 * c2;
         double k2_1 = -armLength2 * s2;
         angles[1][0] = Math.atan2(y, x) - Math.atan2(k2_1, k1_1) + Constants.KINEMATICS_OFFSET_BOTTOM;
@@ -49,12 +51,12 @@ public class ArmMath {
 
     //thing to fit given parameters
     //inches
-    final private double robotLength = 30.0;//robot's length (parallel to arms)
+    final private double robotLength = 26.7;//robot's length (parallel to arms)
     final private double jointIn = 3.0;//distance joint is in from front
-    final private double robotHeight = 40.0;//robot's height //maybe not actual height
-    final private double jointHeight = 8.0;//joint height from robot
+    final private double robotHeight = 6.2;//robot's height //maybe not actual height
+    final private double jointHeight = 7.0;//joint height from robot
     final private double maxX = 48.0;//max x distance from robot
-    final private double maxY = 78.0;//max y distance from robot
+    final private double maxY = 65.8;//max y distance from robot
     final private double maxD = Math.sqrt(armLength1 * armLength1 + armLength2 * armLength2);
     //also max and mins distances to be configured
 
@@ -104,9 +106,7 @@ public class ArmMath {
         theta2 -= Constants.KINEMATICS_OFFSET_TOP;
         if (theta1 < 0) { theta1 += Math.PI*2; }
         if (theta2 < 0) { theta2 += Math.PI*2; }
-        return new Translation2d(
-                armLength1 * Math.cos(theta1) + armLength2 * Math.cos(theta1 + theta2) + Constants.KINEMATICS_OFFSET_BOTTOM,
-                armLength1 * Math.sin(theta1) + armLength2 * Math.sin(theta1 + theta2) + Constants.KINEMATICS_OFFSET_TOP);  //Checked 2/18, added theta1 - theta 2
+        return new Translation2d(armLength1 * Math.cos(theta1) + armLength2 * Math.cos(theta1 + theta2 - Math.PI), armLength1 * Math.sin(theta1) + armLength2 * Math.sin(theta1 + theta2 - Math.PI));
     }
 
     public boolean comparePoint(Translation2d wantedPoint, Translation2d currentPoint, double variation) {
