@@ -7,7 +7,6 @@ import com.revrobotics.CANSparkMaxLowLevel;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -105,6 +104,12 @@ public class ArmSubsystem extends SubsystemBase {
         setDesiredBottomRotation(inverseKinematics.arm1Theta(pos.getX(),pos.getY()));
         setDesiredTopRotation(inverseKinematics.arm2Theta(pos.getX(),pos.getY()));
         goingToSetPosition = true;
+    }
+    public void moveToSetRotation(Translation2d rotations) {
+        setDesiredBottomRotation(rotations.getY());
+        setDesiredTopRotation(rotations.getX());
+        goingToSetPosition = true;
+        movePID();
     }
     // Bottom Motor Control
     public void setBottom(double speed) {
@@ -238,8 +243,8 @@ public class ArmSubsystem extends SubsystemBase {
             bottom.updatePIDValues(p_bottom.getDouble(Constants.ARM_P_BOTTOM), i_bottom.getDouble(Constants.ARM_I_BOTTOM), d_bottom.getDouble(Constants.ARM_D_BOTTOM));
         if (Constants.ARM_P_TOP != p_top.getDouble(Constants.ARM_P_TOP) || Constants.ARM_I_TOP != i_top.getDouble(Constants.ARM_I_TOP) || Constants.ARM_D_TOP != d_top.getDouble(Constants.ARM_D_TOP))
             top.updatePIDValues(p_top.getDouble(Constants.ARM_P_TOP), i_top.getDouble(Constants.ARM_I_TOP), d_top.getDouble(Constants.ARM_D_TOP));
-        desiredTopRotation = top_desired.getDouble(0.0);
-        desiredBottomRotation = bottom_desired.getDouble(0.0);
+        //desiredTopRotation = top_desired.getDouble(0.0);
+        //desiredBottomRotation = bottom_desired.getDouble(0.0);
         Constants.ARM_P_BOTTOM = p_bottom.getDouble(Constants.ARM_P_BOTTOM);
         Constants.ARM_I_BOTTOM = i_bottom.getDouble(Constants.ARM_I_BOTTOM);
 
