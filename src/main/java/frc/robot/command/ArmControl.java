@@ -10,19 +10,21 @@ import frc.robot.main.Constants;
 import frc.robot.main.Robot;
 
 public class ArmControl extends CommandBase {
-    protected XboxControl xbox = Robot.xbox;
+    protected XboxControl xbox;
     ArmMath armMath = new ArmMath();
 
-    public ArmControl() {
-        //xbox.getController().b().onTrue(this::onPressB);
-
-
+    public ArmControl(int port) {
+        xbox = new XboxControl(port);
 
         ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
         xbox.b().onTrue(Commands.runOnce(this::onPressB, armSubsystem));
         xbox.y().onTrue(Commands.runOnce(this::onPressY, armSubsystem));
         xbox.x().onTrue(Commands.runOnce(this::onPressX, armSubsystem));
         xbox.a().onTrue(Commands.runOnce(this::onPressA, armSubsystem));
+
+        xbox.leftBumper().onTrue(new InTakeCommand(intakeSubsystem));
+        xbox.rightBumper().onTrue(new OutTakeCommand(intakeSubsystem));
+
         SmartDashboard.putNumber("fupper arm angle", 0);
         SmartDashboard.putNumber("flower arm angle", 0);
         SmartDashboard.putNumber("farm x togo", 0);
@@ -42,8 +44,8 @@ public class ArmControl extends CommandBase {
         //Robot.arms.enablePID();
         //Robot.arms.movePID();
         Robot.arms.moveToSetRotation(Constants.MID_RUNG_POSITION);
-        
     }
+
     private void onPressX() {
         //Robot.arms.disablePID();
 /* 
