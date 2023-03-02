@@ -81,7 +81,7 @@ public class DriveController extends CommandBase {
     }
 
     private void arcadeDrive() {
-        DifferentialDrive.WheelSpeeds wheelSpeeds = arcadeDriveIK(Robot.xbox.getLeftY(), Robot.xbox.getRightX());
+        DifferentialDrive.WheelSpeeds wheelSpeeds = arcadeDriveIK(xbox.getLeftY(), xbox.getRightX());
 
         double maxChange = Math.abs((timer.get()-lastTime) * Constants.DRIVETRAIN_MAX_ACCELERATION * 2);
         outputL = MathUtil.clamp(wheelSpeeds.left*1.5, outputL-maxChange, outputL+maxChange);

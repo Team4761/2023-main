@@ -6,6 +6,8 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.arm.ArmMath;
 import frc.robot.arm.ArmSubsystem;
 import frc.robot.controller.XboxControl;
+import frc.robot.intake.IntakeSubsystem;
+import frc.robot.main.Constants;
 import frc.robot.main.Robot;
 
 public class ArmControl extends CommandBase {
@@ -16,12 +18,16 @@ public class ArmControl extends CommandBase {
         //xbox.getController().b().onTrue(this::onPressB);
 
 
-
         ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
         xbox.b().onTrue(Commands.runOnce(this::onPressB, armSubsystem));
         xbox.y().onTrue(Commands.runOnce(this::onPressY, armSubsystem));
         xbox.x().onTrue(Commands.runOnce(this::onPressX, armSubsystem));
         xbox.a().onTrue(Commands.runOnce(this::onPressA, armSubsystem));
+
+        IntakeSubsystem intakeSubsystem = IntakeSubsystem.getInstance();
+        xbox.leftBumper().onTrue(new InTakeCommand(intakeSubsystem));
+        xbox.rightBumper().onTrue(new OutTakeCommand(intakeSubsystem));
+    
         SmartDashboard.putNumber("fupper arm angle", 0);
         SmartDashboard.putNumber("flower arm angle", 0);
         SmartDashboard.putNumber("farm x togo", 0);

@@ -180,13 +180,6 @@ public class Robot extends TimedRobot
   /** This method is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    intake.setSpeed(0);
-
-    xbox.leftBumper().onTrue(new InTakeCommand(intake));
-
-    if (xbox.rightBumper().getAsBoolean()) {
-      intake.setSpeed(0.9);
-    }
 
     commandScheduler.run();
     /*
