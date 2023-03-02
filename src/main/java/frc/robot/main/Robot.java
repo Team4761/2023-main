@@ -5,7 +5,6 @@
 
 package frc.robot.main;
 
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
@@ -20,13 +19,9 @@ import frc.robot.Auto.command.MainAutoCommand;
 import frc.robot.Drivetrain.DrivetrainSubsystem;
 import frc.robot.Vision.getPoseData;
 
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Auto.EncoderAuto.GoMetersEncoder;
 import frc.robot.Auto.PurePursuit.PathFollower;
 import frc.robot.Auto.PurePursuit.PathoGen;
-import frc.robot.Drivetrain.DrivetrainSubsystem;
-import frc.robot.arm.ArmPIDSubsystem;
-import frc.robot.Vision.visionVarsAndMethods;
 
 import frc.robot.arm.ArmSubsystem;
 import frc.robot.leds.LEDSubsystem;
@@ -37,6 +32,7 @@ import frc.robot.impl.placeholder.Placeholder;
 import frc.robot.impl.terry.Terry;
 import frc.robot.impl.westcoast.WestCoast;
 import frc.robot.intake.IntakeSubsystem;
+import frc.robot.leds.UpdateLED;
 
 /**
  * The VM is configured to automatically run this class, and to call the methods corresponding to
@@ -57,20 +53,19 @@ public class Robot extends TimedRobot
   public static XboxControl xbox = new XboxControl(1);
   // Commands
   public final CommandScheduler commandScheduler = CommandScheduler.getInstance();
-  private final ArmControl armControl = new ArmControl();
   private final UpdateLED updateLED = new UpdateLED();
-  private final XboxArcadeDrive xboxArcadeDrive = new XboxArcadeDrive();
-  private final DriveController driveController = new DriveController(1);
   // Subsystems
   public static DrivetrainSubsystem driveTrain = DrivetrainSubsystem.getInstance();
+  private final DriveController driveController = new DriveController(1);
   public static ArmSubsystem arms = ArmSubsystem.getInstance();
+  private final ArmControl armControl = new ArmControl();
   public static IntakeSubsystem intake = IntakeSubsystem.getInstance();
   public static LEDSubsystem leds = LEDSubsystem.getInstance();
 
   public static DifferentialDriveOdometry odometry;
   public static Pose2d pose;
   
-  // where x is forwards
+  // where positive x is forwards, positive y should be to the right
   //public double[][] pathPoints = {{0, 0}, {3.048, 0}};//, {1, 3}};
   public double[][] pathPoints = {{0, 0}, {2.048, 0.2}, {3.048, 1}, {3.6, 1.9}};//, {1, 3}};
   public PathoGen path;
@@ -162,17 +157,15 @@ public class Robot extends TimedRobot
   /** This method is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
-    commandScheduler.schedule(driveController.repeatedly());
     leds.enableLEDs();
 
     commandScheduler.schedule(new getPoseData());
     commandScheduler.schedule(armControl.repeatedly());
-    leds.enableLEDs();
 
     //commandScheduler.schedule(armControl.repeatedly());
 
     commandScheduler.schedule(updateLED.repeatedly());
-    commandScheduler.schedule(xboxArcadeDrive.repeatedly());
+    commandScheduler.schedule(driveController.repeatedly());
     /*
     SmartDashboard.putNumber("fupper arm angle", 0);
     SmartDashboard.putNumber("flower arm angle", 0);

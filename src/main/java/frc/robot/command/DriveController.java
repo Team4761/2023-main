@@ -1,15 +1,31 @@
 package frc.robot.command;
 
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Drivetrain.DrivetrainSubsystem;
 import frc.robot.controller.XboxControl;
+import frc.robot.impl.placeholder.Placeholder;
+import frc.robot.leds.LEDSubsystem;
+import frc.robot.main.Constants;
 import frc.robot.main.Robot;
 
 public class DriveController extends CommandBase {
     private XboxControl xbox;
     private boolean isArcade = true;
     DrivetrainSubsystem drivetrainSubsystem = DrivetrainSubsystem.getInstance();
+    Timer timer = new Timer();
+    double lastTime;
+    double outputL = 0;
+    double outputR = 0;
+
+    @Override
+    public void initialize(){
+        timer.start();
+        lastTime = timer.get();
+    }
 
     public DriveController(int port) {
         xbox = new XboxControl(port);
@@ -39,7 +55,8 @@ public class DriveController extends CommandBase {
     }
 
     private void onLeftTrigger() {
-        isArcade = false;
+        LEDSubsystem.getInstance().setAllLEDs(190
+                ,0, 0);
     }
 
     private void onRightTrigger() {
@@ -47,23 +64,71 @@ public class DriveController extends CommandBase {
     }
 
     private void onLeftBumper() {
-
+        LEDSubsystem.getInstance().setAllLEDs(240, 136, 10);
     }
 
     private void onRightBumper() {
-
+        LEDSubsystem.getInstance().setAllLEDs(31, 28, 189);
     }
 
     @Override
     public void execute() {
         if (isArcade) {
-            drivetrainSubsystem.arcadeDrive(xbox.getLeftY() / 2, xbox.getLeftX() / 2);
+            arcadeDrive();
         } else {
             drivetrainSubsystem.tankDrive(xbox.getLeftY(), xbox.getRightY());
         }
     }
 
+    private void arcadeDrive() {
+        DifferentialDrive.WheelSpeeds wheelSpeeds = arcadeDriveIK(Robot.xbox.getLeftY(), Robot.xbox.getRightX());
+
+        double maxChange = Math.abs((timer.get()-lastTime) * Constants.DRIVETRAIN_MAX_ACCELERATION * 2);
+        outputL = MathUtil.clamp(wheelSpeeds.left*1.5, outputL-maxChange, outputL+maxChange);
+        outputR = MathUtil.clamp(wheelSpeeds.right*1.5, outputR-maxChange, outputR+maxChange);
+        //System.out.println(outputL+", "+outputR);
+
+        lastTime = timer.get();
+
+        //double lVolts = - (3 * outputL +  0.2 * (outputL - Placeholder.getLeftVelocity()*Constants.distancePerEncoderTick));
+        //double rVolts = 3 * outputR +  0.2 * (outputR - Placeholder.getRightVelocity()*Constants.distancePerEncoderTick);
+
+        //lVolts += Math.signum(outputL)*0.6;
+        //rVolts += Math.signum(outputR)*0.6;
+
+        Placeholder.setVoltages(-outputL*4, outputR*4);
+    }
+
     @Override
     public void end(boolean interrupted) {
+    }
+
+    // math from differentialDrive
+    DifferentialDrive.WheelSpeeds arcadeDriveIK(double xSpeed, double zRotation) {
+        xSpeed = MathUtil.clamp(MathUtil.applyDeadband(xSpeed, 0.1), -1.0, 1.0);
+        zRotation = MathUtil.clamp(MathUtil.applyDeadband(zRotation, 0.1), -1.0, 1.0);
+
+        // Square the inputs (while preserving the sign) to increase fine control
+        // while permitting full power.
+        /*if (squareInputs) {
+          xSpeed = Math.copySign(xSpeed * xSpeed, xSpeed);
+          zRotation = Math.copySign(zRotation * zRotation, zRotation);
+        }*/
+
+        double leftSpeed = xSpeed - zRotation;
+        double rightSpeed = xSpeed + zRotation;
+
+        // Find the maximum possible value of (throttle + turn) along the vector
+        // that the joystick is pointing, then desaturate the wheel speeds
+        double greaterInput = Math.max(Math.abs(xSpeed), Math.abs(zRotation));
+        double lesserInput = Math.min(Math.abs(xSpeed), Math.abs(zRotation));
+        if (greaterInput == 0.0) {
+            return new DifferentialDrive.WheelSpeeds(0.0, 0.0);
+        }
+        double saturatedInput = (greaterInput + lesserInput/*  /1.2  */) / greaterInput; //see if should divide lesserInput by ~1.2 to slightly increase speed of corner joystic inputs
+        leftSpeed /= saturatedInput;
+        rightSpeed /= saturatedInput;
+
+        return new DifferentialDrive.WheelSpeeds(leftSpeed, rightSpeed);
     }
 }
