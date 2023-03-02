@@ -86,15 +86,8 @@ public class DriveController extends CommandBase {
         double maxChange = Math.abs((timer.get()-lastTime) * Constants.DRIVETRAIN_MAX_ACCELERATION * 2);
         outputL = MathUtil.clamp(wheelSpeeds.left*1.5, outputL-maxChange, outputL+maxChange);
         outputR = MathUtil.clamp(wheelSpeeds.right*1.5, outputR-maxChange, outputR+maxChange);
-        //System.out.println(outputL+", "+outputR);
 
         lastTime = timer.get();
-
-        //double lVolts = - (3 * outputL +  0.2 * (outputL - Placeholder.getLeftVelocity()*Constants.distancePerEncoderTick));
-        //double rVolts = 3 * outputR +  0.2 * (outputR - Placeholder.getRightVelocity()*Constants.distancePerEncoderTick);
-
-        //lVolts += Math.signum(outputL)*0.6;
-        //rVolts += Math.signum(outputR)*0.6;
 
         Placeholder.setVoltages(-outputL*4, outputR*4);
     }

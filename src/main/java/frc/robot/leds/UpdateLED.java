@@ -2,18 +2,14 @@ package frc.robot.leds;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.controller.XboxControl;
 import frc.robot.main.Robot;
 
 public class UpdateLED extends CommandBase {
-    protected XboxControl xbox = Robot.xbox;
     static int curPattern = 0;
     static long nextTime = 0;
 
     @Override
     public void execute() {
-      //  xbox.getController().b().onTrue(Commands.runOnce(() -> { setPattern(); }));
         SmartDashboard.putBoolean("LEDS[00] Is changing", false);
     }
 
