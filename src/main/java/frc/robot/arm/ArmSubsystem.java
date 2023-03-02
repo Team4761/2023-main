@@ -43,9 +43,9 @@ public class ArmSubsystem extends SubsystemBase {
         bottom_right = new CANSparkMax(Constants.ARM_MOTOR_BOTTOM_RIGHT_PORT, CANSparkMaxLowLevel.MotorType.kBrushless);
         top_motor = new CANSparkMax(Constants.ARM_MOTOR_TOP_PORT, CANSparkMaxLowLevel.MotorType.kBrushless);
 
-        //bottom_left.setInverted(true);
+        bottom_left.setInverted(true);
         top_motor.setInverted(true);
-        bottom_right.setInverted(true);
+        //bottom_right.setInverted(true);
 
         // Do find '//REMOVABLE' and replace all with nothing to activate bottom control
         bottom = new ArmPIDSubsystem(bottomEncoder, bottom_left, "bottom", Constants.ARM_P_BOTTOM, Constants.ARM_I_BOTTOM, Constants.ARM_D_BOTTOM);
@@ -84,7 +84,7 @@ public class ArmSubsystem extends SubsystemBase {
                 goingToSetPosition = false;
             }
             if (inverseKinematics.inBounds(pos.plus(new Translation2d(deltaX, deltaY))))
-                pos.plus(new Translation2d(deltaX, deltaY));
+                pos = pos.plus(new Translation2d(deltaX, deltaY));
             setDesiredBottomRotation(inverseKinematics.arm1Theta(pos.getX(),pos.getY()));
             setDesiredTopRotation(inverseKinematics.arm2Theta(pos.getX(),pos.getY()));
         }
@@ -96,7 +96,7 @@ public class ArmSubsystem extends SubsystemBase {
                 goingToSetPosition = false;
             }
             if (inverseKinematics.inBounds(pos.plus(delta)))
-                pos.plus(delta);
+                pos = pos.plus(delta);
             setDesiredBottomRotation(inverseKinematics.arm1Theta(pos.getX(),pos.getY()));
             setDesiredTopRotation(inverseKinematics.arm2Theta(pos.getX(),pos.getY()));
         }
@@ -155,10 +155,11 @@ public class ArmSubsystem extends SubsystemBase {
         return top_motor.get();
     }
     public double getBottomRotation() {
-        if (bottomEncoder.getRotation() >= Constants.ENCODER_ZERO_VALUE_BOTTOM)
-            return bottomEncoder.getRotation() - Constants.ENCODER_ZERO_VALUE_BOTTOM;
+        double bottomRotation = (Math.PI*2) - bottomEncoder.getRotation();
+        if (bottomRotation >= Constants.ENCODER_ZERO_VALUE_BOTTOM)
+            return bottomRotation - Constants.ENCODER_ZERO_VALUE_BOTTOM;
         else
-            return bottomEncoder.getRotation() + (Math.PI * 2) - Constants.ENCODER_ZERO_VALUE_BOTTOM;
+            return bottomRotation + (Math.PI * 2) - Constants.ENCODER_ZERO_VALUE_BOTTOM;
     }
     public double getTopRotation() {
         if (topEncoder.getRotation() >= Constants.ENCODER_ZERO_VALUE_TOP)

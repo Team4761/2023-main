@@ -6,7 +6,7 @@ public class Constants {
 
     // Ports & LEDs
     public static final int LED_PORT = 0;                       // RoboRIO, PWM port
-    public static final int LED_NUMBER = 100;                    // Number of LEDs
+    public static final int LED_NUMBER = 30;                    // Number of LEDs
     public static final int ARM_ENCODER_TOP_PORT = 9;           // RoboRIO, DIO port
     public static final int ARM_ENCODER_BOTTOM_PORT = 0;        // RoboRIO, DIO port
     //Ports are for new arm old ports on side or the same
@@ -41,13 +41,13 @@ public class Constants {
     static public double ARM_P_TOP = 0.6;                        // PID control for arms
     static public double ARM_I_TOP = 0.0;                        // PID control for arms
     static public double ARM_D_TOP = 0.1;                        // PID control for arms
-    static public double ARM_P_BOTTOM = 0.8;                     // PID control for arms
+    static public double ARM_P_BOTTOM = 0.6;                     // PID control for arms
     static public double ARM_I_BOTTOM = 0.0;                     // PID control for arms
     static public double ARM_D_BOTTOM = 0.0;                     // PID control for arms
     static final public double ARM_MAX_ACCELERATION_SPEED = 0.1;
     static final public double ARM_MAX_ROTATION_SPEED = 1.0;
     static final public double ENCODER_ZERO_VALUE_TOP = 4.6; //PAST: 0.6189683810569215
-    static final public double ENCODER_ZERO_VALUE_BOTTOM = 5.9; //PAST: 5.06664074953627
+    static final public double ENCODER_ZERO_VALUE_BOTTOM = 3.9; //PAST: 5.06664074953627
     public static final double JOINT_2_MAX = 110.8;
     public static final double JOINT_2_MIN = -200.5;
     public static final double JOINT_1_MAX = 100;
@@ -67,5 +67,5 @@ public class Constants {
 
 
     // Set Positions
-    public static final Translation2d INTAKE_POSITION = new Translation2d(0.0, 0.0);    // x & y are angles in radians (top_rotation, bottom_rotation)
+    public static final Translation2d INTAKE_POSITION = new Translation2d(0.18, 0.274);    // x & y are angles in radians (top_rotation, bottom_rotation)
 }
