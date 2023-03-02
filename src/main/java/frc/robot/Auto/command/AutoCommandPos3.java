@@ -1,5 +1,6 @@
 package frc.robot.Auto.command;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.command.RotateDegreesCommand;
 import frc.robot.field.Field;
@@ -9,10 +10,10 @@ import frc.robot.main.Robot;
 /**
  * Auto starting from the starting position in front of AprilTag 6
  */
-public class AutoCommandPos3 extends SequentialCommandGroup {
+public class AutoCommandPos3 extends SequentialCommandGroup implements StartPoseProvider {
     private static final double PAST_ITEM = 12;
     public AutoCommandPos3(){
-        var startPose = Field.STARTING_POSE_3;
+        var startPose = getStartPose();
         var item = Field.ItemInLineWithZone3;
         var goalPosition = Field.ZONE_3.bottomShelfMid.getCenterRight();
 
@@ -28,5 +29,10 @@ public class AutoCommandPos3 extends SequentialCommandGroup {
             new RotateDegreesCommand(.5, -90),
             new MoveToPointCommand(goalPosition)
         );
+    }
+
+    @Override
+    public Pose2d getStartPose() {
+        return Field.STARTING_POSE_3;
     }
 }
