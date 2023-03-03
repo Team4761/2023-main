@@ -103,6 +103,7 @@ public class Robot extends TimedRobot
   public void autonomousInit()
   {
     commandScheduler.schedule(new MainAutoCommand(getAutoSelector()));
+    //commandScheduler.schedule(new GoMetersEncoder(3));
     timer.start();
   }
 

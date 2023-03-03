@@ -23,9 +23,6 @@ public class ArmControl extends CommandBase {
         xbox.x().onTrue(Commands.runOnce(this::onPressX, armSubsystem));
         xbox.a().onTrue(Commands.runOnce(this::onPressA, armSubsystem));
         
-        IntakeSubsystem intakeSubsystem = IntakeSubsystem.getInstance();
-        xbox.leftBumper().onTrue(new InTakeCommand(intakeSubsystem));
-        xbox.rightBumper().onTrue(new OutTakeCommand(intakeSubsystem, 1));
 
         SmartDashboard.putNumber("fupper arm angle", 0);
         SmartDashboard.putNumber("flower arm angle", 0);

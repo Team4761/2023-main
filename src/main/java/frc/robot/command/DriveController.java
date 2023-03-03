@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Drivetrain.DrivetrainSubsystem;
 import frc.robot.controller.XboxControl;
 import frc.robot.impl.placeholder.Placeholder;
+import frc.robot.intake.IntakeSubsystem;
 import frc.robot.leds.LEDSubsystem;
 import frc.robot.main.Constants;
 import frc.robot.main.Robot;
@@ -35,8 +36,13 @@ public class DriveController extends CommandBase {
         xbox.y().onTrue(Commands.runOnce(this::onPressY, drivetrainSubsystem));
         xbox.leftTrigger().onTrue(Commands.runOnce(this::onLeftTrigger, drivetrainSubsystem));
         xbox.rightTrigger().onTrue(Commands.runOnce(this::onRightTrigger, drivetrainSubsystem));
-        xbox.leftBumper().onTrue(Commands.runOnce(this::onLeftBumper, drivetrainSubsystem));
-        xbox.rightBumper().onTrue(Commands.runOnce(this::onRightBumper, drivetrainSubsystem));
+        
+        //xbox.leftBumper().onTrue(Commands.runOnce(this::onLeftBumper, drivetrainSubsystem));
+        //xbox.rightBumper().onTrue(Commands.runOnce(this::onRightBumper, drivetrainSubsystem));
+
+        IntakeSubsystem intakeSubsystem = IntakeSubsystem.getInstance();
+        xbox.leftBumper().onTrue(new InTakeCommand(intakeSubsystem));
+        xbox.rightBumper().onTrue(new OutTakeCommand(intakeSubsystem, 1));
     }
 
 
