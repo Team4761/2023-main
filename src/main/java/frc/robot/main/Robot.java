@@ -102,16 +102,16 @@ public class Robot extends TimedRobot
   @Override
   public void autonomousInit()
   {
-    commandScheduler.schedule(new MainAutoCommand(getAutoSelector()));
+    //commandScheduler.schedule(new MainAutoCommand(getAutoSelector()));
     //commandScheduler.schedule(new GoMetersEncoder(3));
-    timer.start();
+    //timer.start();
   }
 
   /** This method is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic()
   {
-    commandScheduler.run();
+   // commandScheduler.run();
   }
 
   /** This method is called once when teleop is enabled. */

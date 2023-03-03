@@ -16,6 +16,7 @@ public class OutTakeCommand extends CommandBase {
     }
     @Override
     public void initialize() {
+        timer.reset();
         timer.start();
     }
     @Override

@@ -71,8 +71,8 @@ public class ArmControl extends CommandBase {
         //Robot.arms.movePID();
         //Robot.arms.setBottomL(xbox.getRightY()/2);
         //Robot.arms.setBottomR(xbox.getLeftY()/2);
-        //Robot.arms.setBottom(xbox.getRightY());
-        //Robot.arms.setTop(xbox.getLeftY()/2);
+        //Robot.arms.setBottom(xbox.getRightY()*0.2);
+        //Robot.arms.setTop(xbox.getLeftY()*0.2);
         
         // Emergency Stop!
 
