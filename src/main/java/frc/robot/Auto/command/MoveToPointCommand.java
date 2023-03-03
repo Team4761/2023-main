@@ -35,21 +35,13 @@ public class MoveToPointCommand extends SequentialCommandGroup {
                 int pointedAwayFromOrigin = currentPos.getAngle().getDegrees() < 45 ? 1 : -1;
                 int sign = pointedAwayFromOrigin * ((goalPostion.getX() > currentPos.getX()) ? 1 : -1);
                 double distanceX = Units.inchesToMeters(Math.abs(goalPostion.getX() - currentPos.getX()));
-                if (sign < 0) {
-                    // TODO: kill this when GoMetersEncoder can go backwards
-                    addCommands(new MoveStraightMeasuredCommand(sign * .5, distanceX));
-                } else {
-                    addCommands(new GoMetersEncoder(distanceX));
-                }
-            } else {
+                addCommands(new GoMetersEncoder(distanceX));
+            }  else {
                 int pointedAwayFromOrigin = currentPos.getAngle().getDegrees() > 45 && currentPos.getAngle().getDegrees() < 135  ? 1 : -1;
                 int sign = pointedAwayFromOrigin * ((goalPostion.getY() < currentPos.getY()) ? -1 : 1);
                 double distanceY = Units.inchesToMeters(Math.abs(goalPostion.getY() - currentPos.getY()));
-                if (sign < 0) {
-                    addCommands(new MoveStraightMeasuredCommand(sign * .5, distanceY));
-                } else {
-                    addCommands(new GoMetersEncoder(distanceY));
-                }
+                addCommands(new GoMetersEncoder(distanceY));
+                
             }
         }
     }

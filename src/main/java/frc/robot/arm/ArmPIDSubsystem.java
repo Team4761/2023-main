@@ -26,6 +26,7 @@ public class ArmPIDSubsystem extends ProfiledPIDSubsystem {
         super(new ProfiledPIDController(p, i, d, 
             new TrapezoidProfile.Constraints( Constants.ARM_MAX_ROTATION_SPEED, Constants.ARM_MAX_ACCELERATION_SPEED)), 
         0);
+        
 
         encoder = e;
         motor = m;
