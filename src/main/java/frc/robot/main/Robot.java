@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Auto.command.MainAutoCommand;
 import frc.robot.Drivetrain.DrivetrainSubsystem;
 import frc.robot.Vision.getPoseData;
@@ -103,15 +103,18 @@ public class Robot extends TimedRobot
   public void autonomousInit()
   {
     //commandScheduler.schedule(new MainAutoCommand(getAutoSelector()));
-    //commandScheduler.schedule(new GoMetersEncoder(3));
-    //timer.start();
+    commandScheduler.schedule( new SequentialCommandGroup(
+      new OutTakeCommand(IntakeSubsystem.getInstance(), 2),
+      new GoMetersEncoder(-2)
+    ));
+    timer.start();
   }
 
   /** This method is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic()
   {
-   // commandScheduler.run();
+    commandScheduler.run();
   }
 
   /** This method is called once when teleop is enabled. */

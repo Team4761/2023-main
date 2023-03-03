@@ -34,17 +34,22 @@ public class DriveController extends CommandBase {
         xbox.b().onTrue(Commands.runOnce(this::onPressB, drivetrainSubsystem));
         xbox.x().onTrue(Commands.runOnce(this::onPressX, drivetrainSubsystem));
         xbox.y().onTrue(Commands.runOnce(this::onPressY, drivetrainSubsystem));
-        xbox.leftTrigger().onTrue(Commands.runOnce(this::onLeftTrigger, drivetrainSubsystem));
-        xbox.rightTrigger().onTrue(Commands.runOnce(this::onRightTrigger, drivetrainSubsystem));
-        
-        //xbox.leftBumper().onTrue(Commands.runOnce(this::onLeftBumper, drivetrainSubsystem));
-        //xbox.rightBumper().onTrue(Commands.runOnce(this::onRightBumper, drivetrainSubsystem));
+        //xbox.leftTrigger().onTrue(Commands.runOnce(this::onLeftTrigger, drivetrainSubsystem));
+        //xbox.rightTrigger().onTrue(Commands.runOnce(this::onRightTrigger, drivetrainSubsystem));
 
         IntakeSubsystem intakeSubsystem = IntakeSubsystem.getInstance();
-        xbox.leftBumper().onTrue(new InTakeCommand(intakeSubsystem));
-        xbox.rightBumper().onTrue(new OutTakeCommand(intakeSubsystem, 1));
+        xbox.leftBumper().whileTrue(Commands.run(this::inTake, intakeSubsystem));
+        xbox.rightBumper().whileTrue(Commands.run(this::outTake, intakeSubsystem));
+        //xbox.leftBumper().onTrue(Commands.runOnce(this::onLeftBumper, drivetrainSubsystem));
+        //xbox.rightBumper().onTrue(Commands.runOnce(this::onRightBumper, drivetrainSubsystem));
     }
 
+    private void inTake() {
+        IntakeSubsystem.getInstance().setSpeed(-0.85);
+    }
+    private void outTake() {
+        IntakeSubsystem.getInstance().setSpeed(0.85);
+    }
 
     private void onPressA() {
     }
