@@ -7,9 +7,11 @@ import frc.robot.intake.IntakeSubsystem;
 public class OutTakeCommand extends CommandBase {
     private IntakeSubsystem m_intake;
     private Timer timer = new Timer();
+    private double seconds;
 
-    public OutTakeCommand(IntakeSubsystem intake) {
+    public OutTakeCommand(IntakeSubsystem intake, double s) {
         m_intake = intake;
+        seconds = s;
         addRequirements(m_intake);
     }
     @Override
@@ -22,7 +24,7 @@ public class OutTakeCommand extends CommandBase {
     }
     @Override
     public boolean isFinished() {
-        return timer.get()>3;
+        return timer.get()>seconds;
     }
     @Override
     public void end(boolean interrupted) {

@@ -23,7 +23,7 @@ public class ArmSubsystem extends SubsystemBase {
     CANSparkMax bottom_right;
     CANSparkMax top_motor;
     public ArmPIDSubsystem bottom;
-   public  ArmPIDSubsystem top;
+    public ArmPIDSubsystem top;
 
     ArmMath inverseKinematics;
     Translation2d pos;
