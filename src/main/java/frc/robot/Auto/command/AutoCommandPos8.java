@@ -4,6 +4,8 @@ import frc.robot.Auto.EncoderAuto.TurnToGyro;
 import frc.robot.field.Field;
 import frc.robot.main.Robot;
 
+import static frc.robot.Auto.command.AutoCommandPos1.isOnlyBackup;
+
 public class AutoCommandPos8 extends SequentialCommandGroup {
     private static final double PAST_ITEM = 12; // inches
 
@@ -12,20 +14,21 @@ public class AutoCommandPos8 extends SequentialCommandGroup {
         var item = Field.ItemInlineWithZone8;
         var goalPosition = Field.ZONE_8.bottomShelfMid.getCenterRight();
 
-        // TODO: implement a simple pose on the robot as a setter/getter
         Robot.impl.setPose(startPose);
 
-        // TODO: create each of these commands and make sure they make sense for position 6
+        boolean onlyBackup = isOnlyBackup();
         addCommands(
                 new ScoreDirectlyInFront(),
-                new MoveToPointCommand(item.getX() + PAST_ITEM, startPose.getY()),
+                new MoveToPointCommand(item.getX() + PAST_ITEM, startPose.getY())
+        );
+
+        if (!onlyBackup) {
+            addCommands(
                 new TurnToGyro(-90),
                 new MoveToPointCommand(item.getX(), item.getY() - Robot.impl.getLength() / 2.0),
                 new TurnToGyro(0),
-                //  new MoveToPointCommand(item.getX(), item.getY())
-                // new PickUpItem()
                 new MoveToPointCommand(goalPosition)
-        );
-
+            );
+        }
     }
 }

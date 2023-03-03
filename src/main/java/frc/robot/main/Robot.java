@@ -102,11 +102,11 @@ public class Robot extends TimedRobot
   @Override
   public void autonomousInit()
   {
-    //commandScheduler.schedule(new MainAutoCommand(getAutoSelector()));
-    commandScheduler.schedule( new SequentialCommandGroup(
-      new OutTakeCommand(IntakeSubsystem.getInstance(), 2),
-      new GoMetersEncoder(-2)
-    ));
+    commandScheduler.schedule(new MainAutoCommand(getAutoSelector()));
+//    commandScheduler.schedule( new SequentialCommandGroup(
+//      new OutTakeCommand(IntakeSubsystem.getInstance(), 2),
+//      new GoMetersEncoder(-2)
+//    ));
     timer.start();
   }
 

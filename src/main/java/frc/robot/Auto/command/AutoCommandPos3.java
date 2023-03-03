@@ -1,9 +1,12 @@
 package frc.robot.Auto.command;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Auto.EncoderAuto.TurnToGyro;
 import frc.robot.field.Field;
 import frc.robot.main.Robot;
+
+import static frc.robot.Auto.command.AutoCommandPos1.isOnlyBackup;
 
 
 /**
@@ -16,17 +19,20 @@ public class AutoCommandPos3 extends SequentialCommandGroup {
         var item = Field.ItemInLineWithZone3;
         var goalPosition = Field.ZONE_3.bottomShelfMid.getCenterRight();
 
-        // TODO: implement a simple pose on the robot as a setter/getter
         Robot.impl.setPose(startPose);
 
-        // TODO: create each of these commands and make sure they make sense for position 6
+        boolean onlyBackup = isOnlyBackup();
         addCommands(
             new ScoreDirectlyInFront(),
-            new MoveToPointCommand(item.getX() - PAST_ITEM, startPose.getY()),
-            new TurnToGyro(90),
-            new MoveToPointCommand(item.getX(), item.getY() - Robot.impl.getLength() / 2.0),
-            new TurnToGyro(0),
-            new MoveToPointCommand(goalPosition)
+            new MoveToPointCommand(item.getX() - PAST_ITEM, startPose.getY())
         );
+        if (!onlyBackup) {
+            addCommands(
+                new TurnToGyro(90),
+                new MoveToPointCommand(item.getX(), item.getY() - Robot.impl.getLength() / 2.0),
+                new TurnToGyro(0),
+                new MoveToPointCommand(goalPosition)
+            );
+        }
     }
 }
