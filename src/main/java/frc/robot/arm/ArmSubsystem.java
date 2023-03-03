@@ -109,6 +109,7 @@ public class ArmSubsystem extends SubsystemBase {
         setDesiredBottomRotation(rotations.getY());
         setDesiredTopRotation(rotations.getX());
         goingToSetPosition = true;
+        enablePID();
         movePID();
     }
     // Bottom Motor Control

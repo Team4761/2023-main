@@ -38,7 +38,7 @@ public class Constants {
     // Arm Constants
     static final public double ARM_LENGTH_BOTTOM = 22.5;         // Bottom Arm?  //now 22.5 was 25
     static final public double ARM_LENGTH_TOP = 28.5;            // Top Arm?     //now 28.5 was 30
-    static public double ARM_P_TOP = 0.6;                        // PID control for arms
+    static public double ARM_P_TOP = 0.4;                        // PID control for arms
     static public double ARM_I_TOP = 0.0;                        // PID control for arms
     static public double ARM_D_TOP = 0.1;                        // PID control for arms
     static public double ARM_P_BOTTOM = 0.6;                     // PID control for arms
@@ -70,4 +70,5 @@ public class Constants {
     public static final Translation2d INTAKE_POSITION = new Translation2d(0.18, 0.270);    // x & y are angles in radians (top_rotation, bottom_rotation)
     public static final Translation2d MID_RUNG_POSITION = new Translation2d(2.0, 2.4);    // x & y are angles in radians (top_rotation, bottom_rotation) [Went to 2.1, 2.2]
     public static final Translation2d TOP_RUNG_POSITION = new Translation2d(2.22, 3.14);    // x & y are angles in radians (top_rotation, bottom_rotation) [Went to 2.4, 3.02]
+    public static final Translation2d STARTING_POSITION = new Translation2d(1.50, 0.08);    // x & y are angles in radians (top_rotation, bottom_rotation) [Went to 2.4, 3.02]
 }

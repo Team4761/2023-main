@@ -64,7 +64,7 @@ public class DriveController extends CommandBase {
     }
 
     private void onLeftBumper() {
-        LEDSubsystem.getInstance().setAllLEDs(240, 136, 10);
+        //LEDSubsystem.getInstance().setAllLEDs(240, 136, 10);
     }
 
     private void onRightBumper() {
@@ -81,7 +81,7 @@ public class DriveController extends CommandBase {
     }
 
     private void arcadeDrive() {
-        DifferentialDrive.WheelSpeeds wheelSpeeds = arcadeDriveIK(xbox.getLeftY(), xbox.getRightX());
+        DifferentialDrive.WheelSpeeds wheelSpeeds = arcadeDriveIK(xbox.getLeftY(), (0-xbox.getRightX())*0.5);
 
         double maxChange = Math.abs((timer.get()-lastTime) * Constants.DRIVETRAIN_MAX_ACCELERATION * 2);
         outputL = MathUtil.clamp(wheelSpeeds.left*1.5, outputL-maxChange, outputL+maxChange);

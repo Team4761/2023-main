@@ -53,9 +53,9 @@ public class Robot extends TimedRobot
   private final UpdateLED updateLED = new UpdateLED();
   // Subsystems
   public static DrivetrainSubsystem driveTrain = DrivetrainSubsystem.getInstance();
-  private final DriveController driveController = new DriveController(1);
+  private final DriveController driveController = new DriveController(2);
   public static ArmSubsystem arms = ArmSubsystem.getInstance();
-  private final ArmControl armControl = new ArmControl(2);
+  private final ArmControl armControl = new ArmControl(4);
   public static IntakeSubsystem intake = IntakeSubsystem.getInstance();
   public static LEDSubsystem leds = LEDSubsystem.getInstance();
 
