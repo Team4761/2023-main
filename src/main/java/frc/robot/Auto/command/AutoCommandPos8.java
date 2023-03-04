@@ -5,9 +5,9 @@ import frc.robot.Auto.EncoderAuto.TurnToGyro;
 import frc.robot.field.Field;
 import frc.robot.main.Robot;
 
-public class AutoCommandPos8 extends SequentialCommandGroup {
-    private static final double PAST_ITEM = 12; // inches
+import static frc.robot.Auto.command.AutoCommandPos1.PAST_ITEM;
 
+public class AutoCommandPos8 extends SequentialCommandGroup {
     public AutoCommandPos8(){
         var startPose = Field.STARTING_POSE_8;
         var item = Field.ItemInlineWithZone8;
