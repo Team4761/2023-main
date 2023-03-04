@@ -1,5 +1,6 @@
 package frc.robot.Auto.command;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Auto.EncoderAuto.TurnToGyro;
 import frc.robot.field.Field;
@@ -7,9 +8,9 @@ import frc.robot.main.Robot;
 
 import static frc.robot.Auto.command.AutoCommandPos1.PAST_ITEM;
 
-public class AutoCommandPos8 extends SequentialCommandGroup {
+public class AutoCommandPos8 extends SequentialCommandGroup implements StartPoseProvider  {
     public AutoCommandPos8(){
-        var startPose = Field.STARTING_POSE_8;
+        var startPose = getStartPose();
         var item = Field.ItemInlineWithZone8;
         var goalPosition = Field.ZONE_8.bottomShelfMid.getCenterRight();
 
@@ -21,5 +22,11 @@ public class AutoCommandPos8 extends SequentialCommandGroup {
             new TurnToGyro(0),
             new MoveToPointCommand(goalPosition)
         );
+
+    }
+
+    @Override
+    public Pose2d getStartPose() {
+        return Field.STARTING_POSE_8;
     }
 }
