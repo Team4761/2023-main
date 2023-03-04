@@ -6,15 +6,12 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.command.MoveStraightMeasuredCommand;
 
 public class MainAutoCommand extends SequentialCommandGroup {
-
-    public static final String POS_1= "1";
-    public static final String POS_2= "2";
+    public static final String POS_1 = "1";
+    public static final String POS_2 = "2";
     public static final String POS_3 = "3";
     public static final String POS_6 = "6";
     public static final String POS_7 = "7";
     public static final String POS_8 = "8";
-
-
 
     public MainAutoCommand(String autoSelector){
         addCommands(
@@ -36,6 +33,7 @@ public class MainAutoCommand extends SequentialCommandGroup {
                 case POS_8: return new AutoCommandPos8();
             }
         }
+        // The goal of this is to achieve mobility ... just haul backward 4.0 meters and stay put
         return new MoveStraightMeasuredCommand(-1.0,4.0);
     }
 
