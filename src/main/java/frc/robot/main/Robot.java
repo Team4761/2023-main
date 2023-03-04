@@ -53,9 +53,9 @@ public class Robot extends TimedRobot
   private final UpdateLED updateLED = new UpdateLED();
   // Subsystems
   public static DrivetrainSubsystem driveTrain = DrivetrainSubsystem.getInstance();
-  private final DriveController driveController = new DriveController(2);
+  private final DriveController driveController = new DriveController(1);
   public static ArmSubsystem arms = ArmSubsystem.getInstance();
-  private final ArmControl armControl = new ArmControl(4);
+  private final ArmControl armControl = new ArmControl(0);
   public static IntakeSubsystem intake = IntakeSubsystem.getInstance();
   public static LEDSubsystem leds = LEDSubsystem.getInstance();
 
@@ -104,8 +104,10 @@ public class Robot extends TimedRobot
   {
     //commandScheduler.schedule(new MainAutoCommand(getAutoSelector()));
     commandScheduler.schedule( new SequentialCommandGroup(
+      // TODO: move arm down
+      new ArmMoveCommand().withTimeout(1.0),
       new OutTakeCommand(IntakeSubsystem.getInstance(), 2),
-      new GoMetersEncoder(-2)
+      new MoveStraightMeasuredCommand(-1.0,4.0)
     ));
     timer.start();
   }

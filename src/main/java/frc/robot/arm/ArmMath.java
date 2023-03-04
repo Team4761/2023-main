@@ -9,20 +9,30 @@ public class ArmMath {
 
     //x and y relative to arm1's joint
     public double arm1Theta(double x, double y) {
+        Translation2d point = new Translation2d(x, y);
+        if(!inBounds(point))
+            point = inPoint(point);
+        x = point.getX();
+        y = point.getY();
         double d = Math.sqrt(x * x + y * y);
+        double theta1 = 0.0;
         double thetaC = Math.acos((armLength2 * armLength2 - d * d - armLength1 * armLength1) / (-2 * armLength1 * d));
         if (x < 0)
-            return Math.atan(y / x) + thetaC;
+            theta1 = Math.atan(y / x) + thetaC;
         if (x == 0)
-            return Math.PI / 2 + thetaC;
-        if (x > 0)
-            return Math.atan(-x / y) + thetaC + Math.PI / 2;
-        return Math.PI / 4 + Constants.KINEMATICS_OFFSET_TOP;
+            theta1 = Math.PI / 2 + thetaC;
+        else
+            theta1 =  Math.atan(-x / y) + thetaC + Math.PI / 2;
+        return (Math.PI - theta1) + Constants.KINEMATICS_OFFSET_BOTTOM;
     }
-
     public double arm2Theta(double x, double y) {
+        Translation2d point = new Translation2d(x, y);
+        if(!inBounds(point))
+            point = inPoint(point);
+        x = point.getX();
+        y = point.getY();
         double d = Math.sqrt(x * x + y * y);
-        return Math.acos((d * d - armLength1 * armLength1 - armLength2 * armLength2) / (-2 * armLength1 * armLength2)) + Constants.KINEMATICS_OFFSET_BOTTOM;
+        return Math.acos((d * d - armLength1 * armLength1 - armLength2 * armLength2) / (-2 * armLength1 * armLength2)) + Constants.KINEMATICS_OFFSET_TOP;
     }
 
     //chatGPT did this lol. It works, returns both values
@@ -51,12 +61,12 @@ public class ArmMath {
 
     //thing to fit given parameters
     //inches
-    final private double robotLength = 30.0;//robot's length (parallel to arms)
+    final private double robotLength = 27.0;//robot's length (parallel to arms)
     final private double jointIn = 3.0;//distance joint is in from front
-    final private double robotHeight = 40.0;//robot's height //maybe not actual height
-    final private double jointHeight = 8.0;//joint height from robot
+    final private double robotHeight = 5.0;//robot's height //maybe not actual height
+    final private double jointHeight = 7.0;//joint height from robot
     final private double maxX = 48.0;//max x distance from robot
-    final private double maxY = 78.0;//max y distance from robot
+    final private double maxY = 67.0;//max y distance from robot
     final private double maxD = Math.sqrt(armLength1 * armLength1 + armLength2 * armLength2);
     //also max and mins distances to be configured
 
@@ -90,26 +100,37 @@ public class ArmMath {
         //only for default joint configuration
         Translation2d jLock1 = new Translation2d(-Math.sqrt(armLength1 * armLength1 - jointHeight * jointHeight), -jointHeight);
         Translation2d origin = new Translation2d();
+        /*boolean inPassOne = false;
         if (testPoint.getDistance(jLock1) >= armLength1 && testPoint.getDistance(origin) <= maxD && testPoint.getDistance(origin) >= Math.abs(armLength1 - armLength2) && testPoint.getX() <= maxX + jointIn && testPoint.getX() >= -(maxX + robotLength - jointIn) && testPoint.getY() <= robotHeight + maxY && testPoint.getY() >= -(robotHeight + jointHeight)) {
             if (testPoint.getY() <= -jointHeight) {
                 if (testPoint.getX() >= jointIn || testPoint.getX() <= -robotLength + jointIn)
-                    return true;
+                    inPassOne = true;
             } else
+                inPassOne = true;
+        }*/
+        //if(inPassOne)
+        //{
+            if(testPoint.getX() <= maxX - 4.0 && testPoint.getY() <= maxY - 4.0)//&& testPoint.getY() >= -(robotHeight + jointIn))
                 return true;
-        }
+        //}
         return false;
     }
 
     //gets point from two thetas of two arms
     public Translation2d getPoint(double theta1, double theta2) {
-        theta1 -= Constants.KINEMATICS_OFFSET_BOTTOM;
-        theta2 -= Constants.KINEMATICS_OFFSET_TOP;
-        if (theta1 < 0) { theta1 += Math.PI*2; }
-        if (theta2 < 0) { theta2 += Math.PI*2; }
-        return new Translation2d(armLength1 * Math.cos(theta1) + armLength2 * Math.cos(theta1 + theta2 - Math.PI), armLength1 * Math.sin(theta1) + armLength2 * Math.sin(theta1 + theta2 - Math.PI));
+        //if (theta1 < 0) { theta1 += Math.PI*2; }
+        //if (theta2 < 0) { theta2 += Math.PI*2; }
+        theta1 += Constants.KINEMATICS_OFFSET_BOTTOM;
+        //theta2 += Constants.KINEMATICS_OFFSET_TOP;
+        return new Translation2d(armLength1 * Math.cos(Math.PI - theta1) + armLength2 * Math.cos(theta2 - theta1), armLength1 * Math.sin(Math.PI - theta1) + armLength2 * Math.sin(theta2 - theta1));
     }
 
     public boolean comparePoint(Translation2d wantedPoint, Translation2d currentPoint, double variation) {
         return Math.abs(wantedPoint.getX() - currentPoint.getX()) < variation && Math.abs(wantedPoint.getY() - currentPoint.getY()) < variation;
     }
+    /*
+    public static void main(String[] args) {
+        System.out.println(new ArmMath().getPoint(Math.toRadians(45), 0));
+    }
+    */
 }
