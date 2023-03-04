@@ -16,22 +16,12 @@ public class AutoCommandPos1 extends SequentialCommandGroup {
 
         Robot.impl.setPose(startPose);
 
-        boolean onlyBackup = isOnlyBackup();
         addCommands(
-            new MoveToPointCommand(item.getX() - PAST_ITEM, startPose.getY())
+            new MoveToPointCommand(item.getX() - PAST_ITEM, startPose.getY()),
+            new TurnToGyro(-90),
+            new MoveToPointCommand(item.getX(), item.getY() - Robot.impl.getLength() / 2.0),
+            new TurnToGyro(0),
+            new MoveToPointCommand(goalPosition)
         );
-
-        if (!onlyBackup) {
-            addCommands(
-                new TurnToGyro(-90),
-                new MoveToPointCommand(item.getX(), item.getY() - Robot.impl.getLength() / 2.0),
-                new TurnToGyro(0),
-                new MoveToPointCommand(goalPosition)
-            );
-        }
-    }
-
-    public static boolean isOnlyBackup() {
-        return SmartDashboard.getBoolean("autoSimple", true);
     }
 }

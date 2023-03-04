@@ -40,6 +40,6 @@ public class MainAutoCommand extends SequentialCommandGroup {
     }
 
     public boolean getAutoOnlyScoreMobility() {
-        return SmartDashboard.getBoolean("autoOnlyMobility", true);
+        return SmartDashboard.getBoolean("autoSimple", true);
     }
 }
