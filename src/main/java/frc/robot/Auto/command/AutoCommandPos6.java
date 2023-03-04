@@ -21,7 +21,6 @@ public class AutoCommandPos6 extends SequentialCommandGroup {
 
         boolean onlyBackup = isOnlyBackup();
         addCommands(
-            new ScoreDirectlyInFront(),
             new MoveToPointCommand(item.getX() + PAST_ITEM, startPose.getY())
         );
         if (!onlyBackup) {

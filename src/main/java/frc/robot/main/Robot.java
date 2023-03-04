@@ -53,9 +53,9 @@ public class Robot extends TimedRobot
   private final UpdateLED updateLED = new UpdateLED();
   // Subsystems
   public static DrivetrainSubsystem driveTrain = DrivetrainSubsystem.getInstance();
-  private final DriveController driveController = new DriveController(2);
+  private final DriveController driveController = new DriveController(1);
   public static ArmSubsystem arms = ArmSubsystem.getInstance();
-  private final ArmControl armControl = new ArmControl(4);
+  private final ArmControl armControl = new ArmControl(0);
   public static IntakeSubsystem intake = IntakeSubsystem.getInstance();
   public static LEDSubsystem leds = LEDSubsystem.getInstance();
 
@@ -71,14 +71,19 @@ public class Robot extends TimedRobot
   @Override
   public void robotInit()
   {
-    chooser.setDefaultOption("Terry", TERRY);
+    chooser.setDefaultOption("Terry", PLACEHOLDER);
     chooser.addOption("West Coast", WEST_COAST);
     chooser.addOption("Place Holder Name",PLACEHOLDER);
     SmartDashboard.putData("Robot Choices", chooser);
 
     Placeholder.zeroEncoders();
 
-    odometry = new DifferentialDriveOdometry(Placeholder.m_gyro.getRotation2d(), Placeholder.frontLeftPosition()*Constants.distancePerEncoderTick, Placeholder.frontRightPosition()*Constants.distancePerEncoderTick, new Pose2d(0, 0, new Rotation2d()));
+    odometry = new DifferentialDriveOdometry(
+          Placeholder.m_gyro.getRotation2d(),
+          Placeholder.frontLeftPosition()*Constants.distancePerEncoderTick,
+          Placeholder.frontRightPosition()*Constants.distancePerEncoderTick,
+          new Pose2d(0, 0, new Rotation2d())
+    );
     pose = odometry.getPoseMeters();
   }
 
@@ -95,7 +100,11 @@ public class Robot extends TimedRobot
     SmartDashboard.putNumber("odometry y", pose.getY());
     
     SmartDashboard.putNumber("gyro", Placeholder.m_gyro.getAngle());
-    pose = odometry.update(Placeholder.m_gyro.getRotation2d(), Placeholder.frontLeftPosition()*Constants.distancePerEncoderTick, Placeholder.frontRightPosition()*Constants.distancePerEncoderTick);
+    pose = odometry.update(
+          Placeholder.m_gyro.getRotation2d(),
+          Placeholder.frontLeftPosition()*Constants.distancePerEncoderTick,
+          Placeholder.frontRightPosition()*Constants.distancePerEncoderTick
+    );
     initFromSelector();
   }
 
@@ -103,10 +112,6 @@ public class Robot extends TimedRobot
   public void autonomousInit()
   {
     commandScheduler.schedule(new MainAutoCommand(getAutoSelector()));
-//    commandScheduler.schedule( new SequentialCommandGroup(
-//      new OutTakeCommand(IntakeSubsystem.getInstance(), 2),
-//      new GoMetersEncoder(-2)
-//    ));
     timer.start();
   }
 
@@ -156,15 +161,6 @@ public class Robot extends TimedRobot
   @Override
   public void testPeriodic() {}
 
-  /**
-   * This shows how to select between different modes using the dashboard. The sendable chooser code
-   * works with the Java SmartDashboard. If you prefer the LabVIEW Dashboard, remove all of the chooser
-   * code and uncomment the getString line to get the auto name from the text box below the Gyro
-   *
-   * <p>You can add additional  modes by adding additional comparisons to the switch structure
-   * below with additional strings. If using the SendableChooser make sure to add them to the
-   * chooser code above as well.
-   */
   private void initFromSelector()
   {
     if (impl == null) {

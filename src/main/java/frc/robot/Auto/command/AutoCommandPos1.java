@@ -18,8 +18,7 @@ public class AutoCommandPos1 extends SequentialCommandGroup {
 
         boolean onlyBackup = isOnlyBackup();
         addCommands(
-                new ScoreDirectlyInFront(),
-                new MoveToPointCommand(item.getX() - PAST_ITEM, startPose.getY())
+            new MoveToPointCommand(item.getX() - PAST_ITEM, startPose.getY())
         );
 
         if (!onlyBackup) {
@@ -27,8 +26,6 @@ public class AutoCommandPos1 extends SequentialCommandGroup {
                 new TurnToGyro(-90),
                 new MoveToPointCommand(item.getX(), item.getY() - Robot.impl.getLength() / 2.0),
                 new TurnToGyro(0),
-                //  new MoveToPointCommand(item.getX(), item.getY())
-                // new PickUpItem()
                 new MoveToPointCommand(goalPosition)
             );
         }
