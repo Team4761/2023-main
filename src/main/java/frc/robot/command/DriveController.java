@@ -3,8 +3,12 @@ package frc.robot.command;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.Auto.EncoderAuto.GoMetersEncoder;
+import frc.robot.Auto.EncoderAuto.TurnToGyro;
 import frc.robot.Drivetrain.DrivetrainSubsystem;
 import frc.robot.controller.XboxControl;
 import frc.robot.impl.placeholder.Placeholder;
@@ -57,17 +61,27 @@ public class DriveController extends CommandBase {
     }
 
     private void onPressA() {
+        CommandScheduler.getInstance().schedule(
+            new GoMetersEncoder(SmartDashboard.getNumber("goDistance", 3.0))
+        );
     }
 
     private void onPressB() {
+        CommandScheduler.getInstance().schedule(
+            new GoMetersEncoder(SmartDashboard.getNumber("goDistance", -3.0))
+        );
     }
 
     private void onPressX() {
-
+        CommandScheduler.getInstance().schedule(
+            new TurnToGyro(SmartDashboard.getNumber("turn", 90.0))
+        );
     }
 
     private void onPressY() {
-
+        CommandScheduler.getInstance().schedule(
+            new TurnToGyro(SmartDashboard.getNumber("turn", -90.0))
+        );
     }
 
     private void onLeftTrigger() {

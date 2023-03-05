@@ -20,9 +20,7 @@ public class AutoCommandPos7 extends SequentialCommandGroup {
         Robot.impl.setPose(startPose);
 
         addCommands(
-            new ScoreDirectlyInFront(),
             new MoveToPointCommand(goalPosition)
         );
-
     }
 }
