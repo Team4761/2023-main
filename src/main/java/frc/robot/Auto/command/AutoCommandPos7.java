@@ -1,11 +1,8 @@
 package frc.robot.Auto.command;
 
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.command.RotateDegreesCommand;
 import frc.robot.field.Field;
-import frc.robot.impl.placeholder.Placeholder;
 import frc.robot.main.Constants;
 import frc.robot.main.Robot;
 

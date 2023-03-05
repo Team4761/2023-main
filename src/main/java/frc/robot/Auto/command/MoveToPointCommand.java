@@ -3,11 +3,9 @@ package frc.robot.Auto.command;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Auto.EncoderAuto.GoMetersEncoder;
 import frc.robot.Auto.tagAuto.moveToPointCommands.goToPoseAprilTag;
-import frc.robot.command.MoveStraightMeasuredCommand;
 import frc.robot.main.Robot;
 
 public class MoveToPointCommand extends SequentialCommandGroup {

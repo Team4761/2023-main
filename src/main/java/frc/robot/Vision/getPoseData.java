@@ -39,12 +39,8 @@ public class getPoseData extends CommandBase {
     visionVarsAndMethods.getEstimatedPose();
     prevPose = visionVarsAndMethods.getEstimatedPose().getFirst();
 
-    SmartDashboard.putNumber("pose x", Units.metersToInches(prevPose.getX()));
-    SmartDashboard.putNumber("pose y", Units.metersToInches(prevPose.getY()));
-    SmartDashboard.putNumber("best tag x", Units.metersToInches(visionVarsAndMethods.getBestTagTransform().getFirst()));
-    SmartDashboard.putNumber("best tag y", Units.metersToInches(visionVarsAndMethods.getBestTagTransform().getSecond()));
-    SmartDashboard.putNumber("best tag ID", visionVarsAndMethods.getBestTagID());
-    SmartDashboard.putNumber("best tag pose ambi", visionVarsAndMethods.getBestTagPoseAmbi());
+    SmartDashboard.putNumber("vision pose x", Units.metersToInches(prevPose.getX()));
+    SmartDashboard.putNumber("vision pose y", Units.metersToInches(prevPose.getY()));
     SmartDashboard.putBoolean("is tag", visionVarsAndMethods.getIsTarget());
   }
 

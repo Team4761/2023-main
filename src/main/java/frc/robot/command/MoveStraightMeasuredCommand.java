@@ -64,7 +64,6 @@ public class MoveStraightMeasuredCommand extends CommandBase {
         Distances delta = getDelta();
         var distance = Math.abs(ticksToMeters(delta.average()));
         boolean finished = distance > this.meters;
-        SmartDashboard.putBoolean("Finished", finished);
         if (finished) {
             System.out.println(count + " Finished after " + distance + " meters " + Robot.impl.getSensorReadings());
         }
