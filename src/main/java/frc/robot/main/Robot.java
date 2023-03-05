@@ -14,21 +14,15 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Auto.command.MainAutoCommand;
 import frc.robot.Drivetrain.DrivetrainSubsystem;
 import frc.robot.Vision.getPoseData;
 
-import frc.robot.Auto.EncoderAuto.GoMetersEncoder;
-import frc.robot.Auto.PurePursuit.PathFollower;
-import frc.robot.Auto.PurePursuit.PathoGen;
-
 import frc.robot.arm.ArmSubsystem;
 import frc.robot.leds.LEDSubsystem;
 import frc.robot.command.*;
-import frc.robot.controller.XboxControl;
 import frc.robot.impl.RobotImpl;
-import frc.robot.impl.placeholder.Placeholder;
+import frc.robot.impl.Paligator.Paligator;
 import frc.robot.impl.terry.Terry;
 import frc.robot.impl.westcoast.WestCoast;
 import frc.robot.intake.IntakeSubsystem;
@@ -48,7 +42,7 @@ public class Robot extends TimedRobot
   private static final String PLACEHOLDER= "Placeholder Name";
   long time = 0;
   private final SendableChooser<String> chooser = new SendableChooser<>();
-  public static RobotImpl impl = new Placeholder();
+  public static RobotImpl impl = new Paligator();
   public final CommandScheduler commandScheduler = CommandScheduler.getInstance();
   private final UpdateLED updateLED = new UpdateLED();
   // Subsystems
@@ -76,12 +70,12 @@ public class Robot extends TimedRobot
     chooser.addOption("Place Holder Name",PLACEHOLDER);
     SmartDashboard.putData("Robot Choices", chooser);
 
-    Placeholder.zeroEncoders();
+    Paligator.zeroEncoders();
 
     odometry = new DifferentialDriveOdometry(
-          Placeholder.m_gyro.getRotation2d(),
-          Placeholder.frontLeftPosition()*Constants.distancePerEncoderTick,
-          Placeholder.frontRightPosition()*Constants.distancePerEncoderTick,
+          Paligator.m_gyro.getRotation2d(),
+          Paligator.frontLeftPosition()*Constants.distancePerEncoderTick,
+          Paligator.frontRightPosition()*Constants.distancePerEncoderTick,
           new Pose2d(0, 0, new Rotation2d())
     );
     pose = odometry.getPoseMeters();
@@ -99,11 +93,11 @@ public class Robot extends TimedRobot
     SmartDashboard.putNumber("odometry x", pose.getX());
     SmartDashboard.putNumber("odometry y", pose.getY());
     
-    SmartDashboard.putNumber("gyro", Placeholder.m_gyro.getAngle());
+    SmartDashboard.putNumber("gyro", Paligator.m_gyro.getAngle());
     pose = odometry.update(
-          Placeholder.m_gyro.getRotation2d(),
-          Placeholder.frontLeftPosition()*Constants.distancePerEncoderTick,
-          Placeholder.frontRightPosition()*Constants.distancePerEncoderTick
+          Paligator.m_gyro.getRotation2d(),
+          Paligator.frontLeftPosition()*Constants.distancePerEncoderTick,
+          Paligator.frontRightPosition()*Constants.distancePerEncoderTick
     );
     initFromSelector();
   }
@@ -142,7 +136,7 @@ public class Robot extends TimedRobot
   /** This method is called once when the robot is disabled. */
   @Override
   public void disabledInit() {
-    Placeholder.setVoltages(0, 0);
+    Paligator.setVoltages(0, 0);
   }
 
   /** This method is called periodically when disabled. */
@@ -176,7 +170,7 @@ public class Robot extends TimedRobot
           break;
 
         case PLACEHOLDER:
-          impl = new Placeholder();
+          impl = new Paligator();
           break;
 
         default:

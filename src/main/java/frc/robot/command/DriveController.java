@@ -11,11 +11,10 @@ import frc.robot.Auto.EncoderAuto.GoMetersEncoder;
 import frc.robot.Auto.EncoderAuto.TurnToGyro;
 import frc.robot.Drivetrain.DrivetrainSubsystem;
 import frc.robot.controller.XboxControl;
-import frc.robot.impl.placeholder.Placeholder;
+import frc.robot.impl.Paligator.Paligator;
 import frc.robot.intake.IntakeSubsystem;
 import frc.robot.leds.LEDSubsystem;
 import frc.robot.main.Constants;
-import frc.robot.main.Robot;
 
 public class DriveController extends CommandBase {
     private XboxControl xbox;
@@ -119,7 +118,7 @@ public class DriveController extends CommandBase {
 
         lastTime = timer.get();
 
-        Placeholder.setVoltages(-outputL*5, outputR*5);
+        Paligator.setVoltages(-outputL*5, outputR*5);
     }
 
     @Override

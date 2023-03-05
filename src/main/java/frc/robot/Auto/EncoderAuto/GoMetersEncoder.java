@@ -6,7 +6,7 @@ import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.impl.placeholder.Placeholder;
+import frc.robot.impl.Paligator.Paligator;
 import frc.robot.main.Constants;
 
 
@@ -37,7 +37,7 @@ public class GoMetersEncoder extends CommandBase {
         }
         this.distance = Math.abs(distance);
 
-        odometry = new DifferentialDriveOdometry(new Rotation2d(Placeholder.m_gyro.getAngle()*0.0174533+backwardsFactor), Placeholder.frontLeftPosition()*Constants.distancePerEncoderTick, Placeholder.frontRightPosition()*Constants.distancePerEncoderTick);
+        odometry = new DifferentialDriveOdometry(new Rotation2d(Paligator.m_gyro.getAngle()*0.0174533+backwardsFactor), Paligator.frontLeftPosition()*Constants.distancePerEncoderTick, Paligator.frontRightPosition()*Constants.distancePerEncoderTick);
         pose = odometry.getPoseMeters();
 
 
@@ -52,7 +52,7 @@ public class GoMetersEncoder extends CommandBase {
 
     @Override
     public void execute() {
-        pose = odometry.update(new Rotation2d(Placeholder.m_gyro.getAngle()*0.0174533+backwardsFactor), Placeholder.frontLeftPosition()*Constants.distancePerEncoderTick, Placeholder.frontRightPosition()*Constants.distancePerEncoderTick);
+        pose = odometry.update(new Rotation2d(Paligator.m_gyro.getAngle()*0.0174533+backwardsFactor), Paligator.frontLeftPosition()*Constants.distancePerEncoderTick, Paligator.frontRightPosition()*Constants.distancePerEncoderTick);
         SmartDashboard.putNumber("forward command", pose.getX());
         targetVelocity = Math.min((distance-pose.getX())*2, Constants.DRIVETRAIN_MAX_VELOCITY);
 
@@ -62,14 +62,14 @@ public class GoMetersEncoder extends CommandBase {
         output = Math.max(Math.min(targetVelocity, output+maxChange), output-maxChange);
 
 
-        leftSpeed = - (2.5 * output +  0.2 * (output - Placeholder.getLeftVelocity()*Constants.distancePerEncoderTick))*backwards;
-        rightSpeed = 2.5 * output +  0.2 * (output - Placeholder.getRightVelocity()*Constants.distancePerEncoderTick)*backwards;
+        leftSpeed = - (2.5 * output +  0.2 * (output - Paligator.getLeftVelocity()*Constants.distancePerEncoderTick))*backwards;
+        rightSpeed = 2.5 * output +  0.2 * (output - Paligator.getRightVelocity()*Constants.distancePerEncoderTick)*backwards;
         
         // maybe not needed
         leftSpeed += Math.signum(leftSpeed)*0.65;
         rightSpeed += Math.signum(rightSpeed)*0.6;
 
-        Placeholder.setVoltages(Math.max(-12, Math.min(12, leftSpeed)), Math.max(-12, Math.min(12, rightSpeed)));
+        Paligator.setVoltages(Math.max(-12, Math.min(12, leftSpeed)), Math.max(-12, Math.min(12, rightSpeed)));
         
     }
 
@@ -80,6 +80,6 @@ public class GoMetersEncoder extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        Placeholder.setVoltages(0, 0);
+        Paligator.setVoltages(0, 0);
     }
 }

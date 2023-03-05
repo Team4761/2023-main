@@ -3,9 +3,8 @@ package frc.robot.Auto.tagAuto.moveToPointCommands;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Vision.visionVarsAndMethods;
-import frc.robot.main.Robot;
 
-import static frc.robot.impl.placeholder.Placeholder.angular_PIDcontroller;
+import static frc.robot.impl.Paligator.Paligator.angular_PIDcontroller;
 
 
 public class faceGoalPoseAprilTag extends CommandBase {
