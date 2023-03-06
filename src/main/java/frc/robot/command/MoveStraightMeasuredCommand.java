@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.drive.RobotDriveBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.impl.placeholder.Placeholder;
+import frc.robot.impl.Paligator.Paligator;
 import frc.robot.main.Constants;
 import frc.robot.main.Robot;
 
@@ -31,8 +31,8 @@ public class MoveStraightMeasuredCommand extends CommandBase {
         goalSpeed = MathUtil.applyDeadband(xSpeed, RobotDriveBase.kDefaultDeadband);
         SmartDashboard.putNumber("GoalSpeed", goalSpeed);
         this.meters = meters;
-        Placeholder.m_gyro.reset();
-        startAngle = Placeholder.m_gyro.getAngle();
+        Paligator.m_gyro.reset();
+        startAngle = Paligator.m_gyro.getAngle();
         drivetrainGearRatio = SmartDashboard.getNumber("Drivetrain Gear Ratio", 7.3);
     }
 
@@ -54,8 +54,8 @@ public class MoveStraightMeasuredCommand extends CommandBase {
         // TODO: adjustments for driving straight
         System.out.println("Speed left=" + speeds.left + " speed right=" + speeds.right);
 
-        Placeholder.m_leftMotors.set(speeds.left * RobotDriveBase.kDefaultMaxOutput);
-        Placeholder.m_rightMotors.set(speeds.right * RobotDriveBase.kDefaultMaxOutput);
+        Paligator.m_leftMotors.set(speeds.left * RobotDriveBase.kDefaultMaxOutput);
+        Paligator.m_rightMotors.set(speeds.right * RobotDriveBase.kDefaultMaxOutput);
     }
 
     int count = 0;
@@ -64,7 +64,6 @@ public class MoveStraightMeasuredCommand extends CommandBase {
         Distances delta = getDelta();
         var distance = Math.abs(ticksToMeters(delta.average()));
         boolean finished = distance > this.meters;
-        SmartDashboard.putBoolean("Finished", finished);
         if (finished) {
             System.out.println(count + " Finished after " + distance + " meters " + Robot.impl.getSensorReadings());
         }

@@ -2,6 +2,7 @@ package frc.robot.Auto.command;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Vision.visionVarsAndMethods;
@@ -9,6 +10,7 @@ import frc.robot.command.MoveStraightMeasuredCommand;
 
 import java.util.Arrays;
 import java.util.Comparator;
+import frc.robot.command.MoveStraightMeasuredCommand;
 
 public class MainAutoCommand extends SequentialCommandGroup {
     public static final String POS_1 = "1";

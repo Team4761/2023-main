@@ -26,28 +26,24 @@ public class XboxControl extends CommandXboxController {
     @Override
     public double getLeftX() {
         double left = super.getLeftX() * (inverted ? -1 : 1);
-        SmartDashboard.putNumber("CONTROLLER[02] Left Axis X", left);
         return applyDeadzone(left, 0.05);
     }
 
     @Override
     public double getRightX() {
         double right = super.getRightX() ;
-        SmartDashboard.putNumber("CONTROLLER[00] Right Axis X", right);
         return applyDeadzone(right,0.05);
     }
 
     @Override
     public double getLeftY() {
         double left = super.getLeftY() * (inverted ? -1 : 1);
-        SmartDashboard.putNumber("CONTROLLER[03] Left Axis Y", left);
         return applyDeadzone(left,0.05);
     }
 
     @Override
     public double getRightY() {
         double right = super.getRightY() * (inverted ? -1 : 1);
-        SmartDashboard.putNumber("CONTROLLER[01] Right Axis Y", right);
         return applyDeadzone(right,0.05);
     }
 }

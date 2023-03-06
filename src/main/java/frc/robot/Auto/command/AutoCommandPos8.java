@@ -8,7 +8,7 @@ import frc.robot.main.Robot;
 
 import static frc.robot.Auto.command.AutoCommandPos1.PAST_ITEM;
 
-public class AutoCommandPos8 extends SequentialCommandGroup implements StartPoseProvider  {
+public class AutoCommandPos8 extends SequentialCommandGroup implements StartPoseProvider {
     public AutoCommandPos8(){
         var startPose = getStartPose();
         var item = Field.ItemInlineWithZone8;

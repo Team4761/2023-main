@@ -1,4 +1,4 @@
-package frc.robot.impl.placeholder;
+package frc.robot.impl.Paligator;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import edu.wpi.first.math.controller.PIDController;
@@ -10,13 +10,11 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import frc.robot.command.Distances;
 import frc.robot.impl.RobotImpl;
 import frc.robot.main.Constants;
 
-public class Placeholder extends RobotImpl {
+public class Paligator extends RobotImpl {
     // Drivetrain motors. The Talons already have encoders inside them
     public static WPI_TalonFX front_left = new WPI_TalonFX(8);
     public static WPI_TalonFX front_right = new WPI_TalonFX(0);
@@ -64,7 +62,7 @@ public class Placeholder extends RobotImpl {
 
     public static boolean doLogging = false;
 
-    public Placeholder() {
+    public Paligator() {
 
         //config of the encoders
 
@@ -174,9 +172,9 @@ public class Placeholder extends RobotImpl {
         final double rightFeedforward = m_feedFoward.calculate(speeds.rightMetersPerSecond);
 
         final double leftOutput =
-                left_PIDController.calculate(nativeUnitsToDistanceMeters(Placeholder.averageMotorGroupVelocity(front_left, back_left)), 1);
+                left_PIDController.calculate(nativeUnitsToDistanceMeters(Paligator.averageMotorGroupVelocity(front_left, back_left)), 1);
         final double rightOutput =
-                right_PIDController.calculate(nativeUnitsToDistanceMeters(Placeholder.averageMotorGroupVelocity(front_right, back_right)), 1);
+                right_PIDController.calculate(nativeUnitsToDistanceMeters(Paligator.averageMotorGroupVelocity(front_right, back_right)), 1);
 
         System.out.println("Right Voltage: " + (rightOutput + rightFeedforward));
         System.out.println("Left Voltage: " + (leftFeedforward + leftOutput));
