@@ -38,6 +38,8 @@ import frc.robot.leds.UpdateLED;
  */
 public class Robot extends TimedRobot
 {
+  boolean win = true;
+
   // Robot Selection
   private static final String TERRY = "Terry";
   private static final String WEST_COAST = "West Coast";
