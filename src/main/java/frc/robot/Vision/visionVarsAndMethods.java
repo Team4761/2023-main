@@ -8,7 +8,7 @@ import edu.wpi.first.math.geometry.*;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.field.Field;
-import frc.robot.impl.placeholder.Placeholder;
+import frc.robot.impl.Paligator.Paligator;
 import org.photonvision.PhotonCamera;
 import org.photonvision.RobotPoseEstimator;
 import org.photonvision.RobotPoseEstimator.PoseStrategy;
@@ -56,9 +56,9 @@ public class visionVarsAndMethods {
     static Transform3d cDriveToRobot =
         new Transform3d(
             new Translation3d(
-                Units.inchesToMeters(25 - Placeholder.ROBOT_LENGTH_INCHES / 2),
-                Units.inchesToMeters(-(Placeholder.ROBOT_WIDTH_INCHES / 2 - 5)),
-                Units.inchesToMeters(10 - Placeholder.ROBOT_HEIGHT_INCHES / 2)),
+                Units.inchesToMeters(25 - Paligator.ROBOT_LENGTH_INCHES / 2),
+                Units.inchesToMeters(-(Paligator.ROBOT_WIDTH_INCHES / 2 - 5)),
+                Units.inchesToMeters(10 - Paligator.ROBOT_HEIGHT_INCHES / 2)),
             new Rotation3d(0,0,0)
         );
     static Transform3d ctagsLeftToRobot = new Transform3d(new Translation3d(0,1,1), new Rotation3d(0,0,90));

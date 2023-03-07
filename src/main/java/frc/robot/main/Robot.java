@@ -14,21 +14,15 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Auto.command.MainAutoCommand;
 import frc.robot.Drivetrain.DrivetrainSubsystem;
 import frc.robot.Vision.getPoseData;
 
-import frc.robot.Auto.EncoderAuto.GoMetersEncoder;
-import frc.robot.Auto.PurePursuit.PathFollower;
-import frc.robot.Auto.PurePursuit.PathoGen;
-
 import frc.robot.arm.ArmSubsystem;
 import frc.robot.leds.LEDSubsystem;
 import frc.robot.command.*;
-import frc.robot.controller.XboxControl;
 import frc.robot.impl.RobotImpl;
-import frc.robot.impl.placeholder.Placeholder;
+import frc.robot.impl.Paligator.Paligator;
 import frc.robot.impl.terry.Terry;
 import frc.robot.impl.westcoast.WestCoast;
 import frc.robot.intake.IntakeSubsystem;
@@ -48,14 +42,14 @@ public class Robot extends TimedRobot
   private static final String PLACEHOLDER= "Placeholder Name";
   long time = 0;
   private final SendableChooser<String> chooser = new SendableChooser<>();
-  public static RobotImpl impl = new Placeholder();
+  public static RobotImpl impl = new Paligator();
   public final CommandScheduler commandScheduler = CommandScheduler.getInstance();
   private final UpdateLED updateLED = new UpdateLED();
   // Subsystems
   public static DrivetrainSubsystem driveTrain = DrivetrainSubsystem.getInstance();
-  private final DriveController driveController = new DriveController(2);
+  private final DriveController driveController = new DriveController(1);
   public static ArmSubsystem arms = ArmSubsystem.getInstance();
-  private final ArmControl armControl = new ArmControl(4);
+  private final ArmControl armControl = new ArmControl(0);
   public static IntakeSubsystem intake = IntakeSubsystem.getInstance();
   public static LEDSubsystem leds = LEDSubsystem.getInstance();
 
@@ -71,14 +65,19 @@ public class Robot extends TimedRobot
   @Override
   public void robotInit()
   {
-    chooser.setDefaultOption("Terry", TERRY);
+    chooser.setDefaultOption("Terry", PLACEHOLDER);
     chooser.addOption("West Coast", WEST_COAST);
     chooser.addOption("Place Holder Name",PLACEHOLDER);
     SmartDashboard.putData("Robot Choices", chooser);
 
-    Placeholder.zeroEncoders();
+    Paligator.zeroEncoders();
 
-    odometry = new DifferentialDriveOdometry(Placeholder.m_gyro.getRotation2d(), Placeholder.frontLeftPosition()*Constants.distancePerEncoderTick, Placeholder.frontRightPosition()*Constants.distancePerEncoderTick, new Pose2d(0, 0, new Rotation2d()));
+    odometry = new DifferentialDriveOdometry(
+          Paligator.m_gyro.getRotation2d(),
+          Paligator.frontLeftPosition()*Constants.distancePerEncoderTick,
+          Paligator.frontRightPosition()*Constants.distancePerEncoderTick,
+          new Pose2d(0, 0, new Rotation2d())
+    );
     pose = odometry.getPoseMeters();
   }
 
@@ -94,19 +93,19 @@ public class Robot extends TimedRobot
     SmartDashboard.putNumber("odometry x", pose.getX());
     SmartDashboard.putNumber("odometry y", pose.getY());
     
-    SmartDashboard.putNumber("gyro", Placeholder.m_gyro.getAngle());
-    pose = odometry.update(Placeholder.m_gyro.getRotation2d(), Placeholder.frontLeftPosition()*Constants.distancePerEncoderTick, Placeholder.frontRightPosition()*Constants.distancePerEncoderTick);
+    SmartDashboard.putNumber("gyro", Paligator.m_gyro.getAngle());
+    pose = odometry.update(
+          Paligator.m_gyro.getRotation2d(),
+          Paligator.frontLeftPosition()*Constants.distancePerEncoderTick,
+          Paligator.frontRightPosition()*Constants.distancePerEncoderTick
+    );
     initFromSelector();
   }
 
   @Override
   public void autonomousInit()
   {
-    //commandScheduler.schedule(new MainAutoCommand(getAutoSelector()));
-    commandScheduler.schedule( new SequentialCommandGroup(
-      new OutTakeCommand(IntakeSubsystem.getInstance(), 2),
-      new GoMetersEncoder(-2)
-    ));
+    commandScheduler.schedule(new MainAutoCommand(getAutoSelector()));
     timer.start();
   }
 
@@ -137,7 +136,7 @@ public class Robot extends TimedRobot
   /** This method is called once when the robot is disabled. */
   @Override
   public void disabledInit() {
-    Placeholder.setVoltages(0, 0);
+    Paligator.setVoltages(0, 0);
   }
 
   /** This method is called periodically when disabled. */
@@ -156,15 +155,6 @@ public class Robot extends TimedRobot
   @Override
   public void testPeriodic() {}
 
-  /**
-   * This shows how to select between different modes using the dashboard. The sendable chooser code
-   * works with the Java SmartDashboard. If you prefer the LabVIEW Dashboard, remove all of the chooser
-   * code and uncomment the getString line to get the auto name from the text box below the Gyro
-   *
-   * <p>You can add additional  modes by adding additional comparisons to the switch structure
-   * below with additional strings. If using the SendableChooser make sure to add them to the
-   * chooser code above as well.
-   */
   private void initFromSelector()
   {
     if (impl == null) {
@@ -180,7 +170,7 @@ public class Robot extends TimedRobot
           break;
 
         case PLACEHOLDER:
-          impl = new Placeholder();
+          impl = new Paligator();
           break;
 
         default:

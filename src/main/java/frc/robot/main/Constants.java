@@ -37,7 +37,7 @@ public class Constants {
 
     // Arm Constants
     static final public double ARM_LENGTH_BOTTOM = 22.5;         // Bottom Arm?  //now 22.5 was 25
-    static final public double ARM_LENGTH_TOP = 28.5;            // Top Arm?     //now 28.5 was 30
+    static final public double ARM_LENGTH_TOP = 39.0;            // Top Arm?     //now 28.5 was 30
     static public double ARM_P_TOP = 0.4;                        // PID control for arms
     static public double ARM_I_TOP = 0.0;                        // PID control for arms
     static public double ARM_D_TOP = 0.1;                        // PID control for arms
@@ -52,8 +52,8 @@ public class Constants {
     public static final double JOINT_2_MIN = -200.5;
     public static final double JOINT_1_MAX = 100;
     public static final double JOINT_1_MIN = -100;
-    public static final double KINEMATICS_OFFSET_TOP = 0.0;
-    public static final double KINEMATICS_OFFSET_BOTTOM = 0.0;
+    public static final double KINEMATICS_OFFSET_TOP = Math.toRadians(15);
+    public static final double KINEMATICS_OFFSET_BOTTOM = Math.toRadians(15);
     public static final double CONTROLLER_DEADZONE = 0.05;
 
     //PID constants for robot.

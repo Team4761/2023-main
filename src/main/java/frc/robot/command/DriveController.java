@@ -7,11 +7,10 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Drivetrain.DrivetrainSubsystem;
 import frc.robot.controller.XboxControl;
-import frc.robot.impl.placeholder.Placeholder;
+import frc.robot.impl.Paligator.Paligator;
 import frc.robot.intake.IntakeSubsystem;
 import frc.robot.leds.LEDSubsystem;
 import frc.robot.main.Constants;
-import frc.robot.main.Robot;
 
 public class DriveController extends CommandBase {
     private XboxControl xbox;
@@ -40,15 +39,20 @@ public class DriveController extends CommandBase {
         IntakeSubsystem intakeSubsystem = IntakeSubsystem.getInstance();
         xbox.leftBumper().whileTrue(Commands.run(this::inTake, intakeSubsystem));
         xbox.rightBumper().whileTrue(Commands.run(this::outTake, intakeSubsystem));
+        xbox.leftBumper().whileFalse(Commands.run(this::disableIntake, intakeSubsystem));
+        xbox.rightBumper().whileFalse(Commands.run(this::disableIntake, intakeSubsystem));
         //xbox.leftBumper().onTrue(Commands.runOnce(this::onLeftBumper, drivetrainSubsystem));
         //xbox.rightBumper().onTrue(Commands.runOnce(this::onRightBumper, drivetrainSubsystem));
     }
 
     private void inTake() {
-        IntakeSubsystem.getInstance().setSpeed(-0.85);
+        IntakeSubsystem.getInstance().setSpeed(-0.5);
     }
     private void outTake() {
-        IntakeSubsystem.getInstance().setSpeed(0.85);
+        IntakeSubsystem.getInstance().setSpeed(0.5);
+    }
+    private void disableIntake() {
+        IntakeSubsystem.getInstance().setSpeed(0.0);
     }
 
     private void onPressA() {
@@ -58,11 +62,9 @@ public class DriveController extends CommandBase {
     }
 
     private void onPressX() {
-
     }
 
     private void onPressY() {
-
     }
 
     private void onLeftTrigger() {
@@ -92,7 +94,7 @@ public class DriveController extends CommandBase {
     }
 
     private void arcadeDrive() {
-        DifferentialDrive.WheelSpeeds wheelSpeeds = arcadeDriveIK(xbox.getLeftY(), (0-xbox.getRightX())*0.5);
+        DifferentialDrive.WheelSpeeds wheelSpeeds = arcadeDriveIK(xbox.getLeftY(), (0-xbox.getRightX())*0.8);
 
         double maxChange = Math.abs((timer.get()-lastTime) * Constants.DRIVETRAIN_MAX_ACCELERATION * 2);
         outputL = MathUtil.clamp(wheelSpeeds.left*1.5, outputL-maxChange, outputL+maxChange);
@@ -100,7 +102,7 @@ public class DriveController extends CommandBase {
 
         lastTime = timer.get();
 
-        Placeholder.setVoltages(-outputL*4, outputR*4);
+        Paligator.setVoltages(-outputL*5, outputR*5);
     }
 
     @Override
@@ -112,6 +114,7 @@ public class DriveController extends CommandBase {
         xSpeed = MathUtil.clamp(MathUtil.applyDeadband(xSpeed, 0.1), -1.0, 1.0);
         zRotation = MathUtil.clamp(MathUtil.applyDeadband(zRotation, 0.1), -1.0, 1.0);
 
+        zRotation = Math.copySign(zRotation * zRotation, zRotation);
         // Square the inputs (while preserving the sign) to increase fine control
         // while permitting full power.
         /*if (squareInputs) {

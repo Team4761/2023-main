@@ -1,8 +1,10 @@
 package frc.robot.command;
 
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Commands;
+import frc.robot.Drivetrain.DrivetrainSubsystem;
 import frc.robot.arm.ArmMath;
 import frc.robot.arm.ArmSubsystem;
 import frc.robot.controller.XboxControl;
@@ -36,13 +38,13 @@ public class ArmControl extends CommandBase {
     private void onPressB() {
         //movePID(SmartDashboard.getNumber("fupper arm angle",0), SmartDashboard.getNumber("flower arm angle", 0));
         //Robot.arms.movePID();
-        Robot.arms.moveToSetRotation(Constants.INTAKE_POSITION);
+        //Robot.arms.moveToSetRotation(Constants.INTAKE_POSITION);
     }
 
     private void onPressA() {
         //Robot.arms.enablePID();
         //Robot.arms.movePID();
-        Robot.arms.moveToSetRotation(Constants.MID_RUNG_POSITION);
+        //Robot.arms.moveToSetRotation(Constants.MID_RUNG_POSITION);
     }
 
     private void onPressX() {
@@ -58,11 +60,11 @@ public class ArmControl extends CommandBase {
                 SmartDashboard.getNumber("farm 2 theta calc", 0)
         ).getY());
 */
-        Robot.arms.moveToSetRotation(Constants.MID_RUNG_POSITION);
+        //Robot.arms.moveToSetRotation(Constants.MID_RUNG_POSITION);
     }
     private void onPressY() {
         //movePID(0.3,0.3);
-        Robot.arms.moveToSetRotation(Constants.TOP_RUNG_POSITION);
+        //Robot.arms.moveToSetRotation(Constants.TOP_RUNG_POSITION);
     }
 
     @Override
@@ -71,16 +73,48 @@ public class ArmControl extends CommandBase {
         //Robot.arms.movePID();
         //Robot.arms.setBottomL(xbox.getRightY()/2);
         //Robot.arms.setBottomR(xbox.getLeftY()/2);
-        //Robot.arms.setBottom(xbox.getRightY()*0.2);
-        //Robot.arms.setTop(xbox.getLeftY()*0.2);
+        manualControl();
         
         // Emergency Stop!
 
 
         //xbox.getController().x().onTrue(Commands.runOnce(() -> { zeroEncoders(); }));
         // Debugging purposes only
+        xbox.leftBumper().whileTrue(Commands.run(this::inTake, DrivetrainSubsystem.getInstance()));
+        xbox.rightBumper().whileTrue(Commands.run(this::outTake, DrivetrainSubsystem.getInstance()));
+        
+        xbox.leftBumper().whileFalse(Commands.run(this::disableIntake, DrivetrainSubsystem.getInstance()));
+        xbox.rightBumper().whileFalse(Commands.run(this::disableIntake, DrivetrainSubsystem.getInstance()));
         Robot.arms.debug();
 
+    }
+
+    public void manualControl() {
+        Translation2d curPoint = (armMath.getPoint(ArmSubsystem.getInstance().getTopRotation() + xbox.getRightY()*0.05, ArmSubsystem.getInstance().getBottomRotation() + xbox.getLeftY()*0.05));
+        SmartDashboard.putNumber("ARMS: TestPointX", curPoint.getX());
+        SmartDashboard.putNumber("ARMS: TestPointY", curPoint.getY());
+        System.out.println(curPoint.getX() + " | " + curPoint.getY());
+        
+        //if (armMath.inBounds(armMath.getPoint(ArmSubsystem.getInstance().getTopRotation() + xbox.getRightY()*0.05, ArmSubsystem.getInstance().getBottomRotation() + xbox.getLeftY()*0.05))) {
+            Robot.arms.setTop(xbox.getLeftY()*0.2);
+            Robot.arms.setBottom(xbox.getRightY()*0.15);
+        //}
+        //else {
+        //    Robot.arms.setTop(0.0);
+        //    Robot.arms.setBottom(0.0);
+        //}
+        
+        
+    }
+
+    private void inTake() {
+        IntakeSubsystem.getInstance().setSpeed(-0.5);
+    }
+    private void outTake() {
+        IntakeSubsystem.getInstance().setSpeed(0.5);
+    }
+    private void disableIntake() {
+        IntakeSubsystem.getInstance().setSpeed(0.0);
     }
 
     public void movePID(double setTopRotation, double setBottomRotation) {

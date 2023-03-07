@@ -18,9 +18,7 @@ public class AutoCommandPos2 extends SequentialCommandGroup {
         
         // from edge of charge station to center is around 104.7 cm accounting for angle
         addCommands(
-            new ScoreDirectlyInFront(),
             new MoveToPointCommand(goalPosition)
         );
-
     }
 }
