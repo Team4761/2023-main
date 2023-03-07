@@ -94,7 +94,7 @@ public class DriveController extends CommandBase {
     }
 
     private void arcadeDrive() {
-        DifferentialDrive.WheelSpeeds wheelSpeeds = arcadeDriveIK(xbox.getLeftY(), (0-xbox.getRightX())*0.8);
+        DifferentialDrive.WheelSpeeds wheelSpeeds = arcadeDriveIK(xbox.getLeftY(), (0-xbox.getRightX())*Constants.DRIVETRAIN_ROTATION_SPEED);
 
         double maxChange = Math.abs((timer.get()-lastTime) * Constants.DRIVETRAIN_MAX_ACCELERATION * 2);
         outputL = MathUtil.clamp(wheelSpeeds.left*1.5, outputL-maxChange, outputL+maxChange);
@@ -102,7 +102,7 @@ public class DriveController extends CommandBase {
 
         lastTime = timer.get();
 
-        Paligator.setVoltages(-outputL*5, outputR*5);
+        Paligator.setVoltages(-outputL*Constants.DRIVETRAIN_SPEED, outputR*Constants.DRIVETRAIN_SPEED);
     }
 
     @Override

@@ -12,7 +12,8 @@ public class Constants {
     //Ports are for new arm old ports on side or the same
     public static final int ARM_MOTOR_BOTTOM_LEFT_PORT = 3;     // CAN, initialized port //same ports
     public static final int ARM_MOTOR_BOTTOM_RIGHT_PORT = 2;    // CAN, initialized port //42 for new arm, 2 for old
-    public static final int ARM_MOTOR_TOP_PORT = 1;             // CAN, initialized port //same ports
+    public static final int ARM_MOTOR_TOP_LEFT_PORT = 1;        // CAN, initialized port //same ports
+    public static final int ARM_MOTOR_TOP_RIGHT_PORT = 5;        // CAN, initialized port //same ports
     public static final int ARM_MOTOR_INTAKE_PORT = 4;          // CAN, initialized port //only for new arm
     public static final double ROBOT_LENGTH = 27;
     public static final double ROBOT_WIDTH = 24;
@@ -21,6 +22,8 @@ public class Constants {
     // Drivetrain constants.
     public static final double drivetrainGearRatio = 8.0;
     public static final double wheelRadiusInches = 2.0;
+    public static double DRIVETRAIN_SPEED = 5.0;
+    public static double DRIVETRAIN_ROTATION_SPEED = 0.8;
     //public static final double wheelCircumference = wheelRadiusInches * 2 * Math.PI;
     public static final double wheelRadius = 0.0508; //meters
     public static final double wheelCircumference = wheelRadius * 2 * Math.PI;
