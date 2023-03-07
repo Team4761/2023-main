@@ -97,9 +97,9 @@ public class Field {
     private static final Translation2d START_2 = mirror(START_7);
     private static final Translation2d START_3 = mirror(START_6);
 
-    public static final Pose2d STARTING_POSE_8 = new Pose2d(START_8, new Rotation2d(2.0 * Math.PI));
-    public static final Pose2d STARTING_POSE_7 = new Pose2d(START_7, new Rotation2d(2.0 * Math.PI));
-    public static final Pose2d STARTING_POSE_6 = new Pose2d(START_6, new Rotation2d(2.0 * Math.PI));
+    public static final Pose2d STARTING_POSE_8 = new Pose2d(START_8, new Rotation2d(Math.PI)); //these were Math.PI*2, assuming they were meant to be Math.PI
+    public static final Pose2d STARTING_POSE_7 = new Pose2d(START_7, new Rotation2d(Math.PI));
+    public static final Pose2d STARTING_POSE_6 = new Pose2d(START_6, new Rotation2d(Math.PI));
     public static final Pose2d STARTING_POSE_1 = new Pose2d(START_1, new Rotation2d(0.0));
     public static final Pose2d STARTING_POSE_2 = new Pose2d(START_2, new Rotation2d(0.0));
     public static final Pose2d STARTING_POSE_3 = new Pose2d(START_3, new Rotation2d(0.0));

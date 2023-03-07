@@ -15,11 +15,10 @@ public class AutoCommandPos2 extends SequentialCommandGroup {
                 plus(new Translation2d(Constants.ROBOT_LENGTH / 2, 0));
 
         Robot.impl.setPose(startPose);
-
+        
+        // from edge of charge station to center is around 104.7 cm accounting for angle
         addCommands(
-            new ScoreDirectlyInFront(),
             new MoveToPointCommand(goalPosition)
         );
-
     }
 }

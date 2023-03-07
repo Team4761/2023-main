@@ -14,6 +14,7 @@ public class InTakeCommand extends CommandBase {
     }
     @Override
     public void initialize() {
+        timer.reset();
         timer.start();
     }
     @Override
@@ -27,5 +28,6 @@ public class InTakeCommand extends CommandBase {
     @Override
     public void end(boolean interrupted) {
         m_intake.setSpeed(0);
+        this.cancel();
     }
 }

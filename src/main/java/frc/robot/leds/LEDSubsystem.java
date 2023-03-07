@@ -65,7 +65,6 @@
 
     public void setLEDs (int pattern) {
         m_led.setData(m_ledBuffers[pattern]);
-        SmartDashboard.putNumber("LEDS[03] Actual Pattern",pattern);
     }
 
     public void setLEDs (AddressableLEDBuffer bufferToUse) {

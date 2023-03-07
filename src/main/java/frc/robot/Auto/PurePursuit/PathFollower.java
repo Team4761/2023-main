@@ -93,7 +93,7 @@ public class PathFollower {
 
         // units are in meters
         velocities[0] = - (0.4 * velocities[0] + 0.002 * targetAccel +  0.03 * (velocities[0] - leftVel));
-        velocities[1] = 0.4 * velocities[1] + 0.002 * targetAccel +  0.03 * (velocities[1] - rightVel);
+        velocities[1] = 0.4 * velocities [1] + 0.002 * targetAccel +  0.03 * (velocities[1] - rightVel);
         
         velocities[0] += Math.signum(velocities[0])*0.6;
         velocities[1] += Math.signum(velocities[1])*0.6;

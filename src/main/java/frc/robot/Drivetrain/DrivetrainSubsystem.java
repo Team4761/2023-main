@@ -2,7 +2,7 @@ package frc.robot.Drivetrain;
 
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.impl.placeholder.Placeholder;
+import frc.robot.impl.Paligator.Paligator;
 import frc.robot.main.Robot;
 
 public class DrivetrainSubsystem extends SubsystemBase {
@@ -18,7 +18,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
      */
     private final static DrivetrainSubsystem INSTANCE = new DrivetrainSubsystem();
 
-    public final static Placeholder test = new Placeholder();
+    public final static Paligator test = new Paligator();
 
 
     /**

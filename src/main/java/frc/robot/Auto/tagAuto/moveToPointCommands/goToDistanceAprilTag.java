@@ -4,7 +4,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Vision.visionVarsAndMethods;
 
-import static frc.robot.impl.placeholder.Placeholder.linear_PIDcontroller;
+import static frc.robot.impl.Paligator.Paligator.linear_PIDcontroller;
 
 
 public class goToDistanceAprilTag extends CommandBase {
