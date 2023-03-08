@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.impl.Paligator.Paligator;
 import frc.robot.main.Constants;
-
+import frc.robot.main.Robot;
 
 
 public class GoMetersEncoder extends CommandBase {
@@ -69,7 +69,7 @@ public class GoMetersEncoder extends CommandBase {
         leftSpeed += Math.signum(leftSpeed)*0.65;
         rightSpeed += Math.signum(rightSpeed)*0.6;
 
-        Paligator.setVoltages(Math.max(-12, Math.min(12, leftSpeed)), Math.max(-12, Math.min(12, rightSpeed)));
+        Robot.impl.setVoltages(Math.max(-12, Math.min(12, leftSpeed)), Math.max(-12, Math.min(12, rightSpeed)));
         
     }
 
@@ -80,6 +80,6 @@ public class GoMetersEncoder extends CommandBase {
 
     @Override
     public void end(boolean interrupted) {
-        Paligator.setVoltages(0, 0);
+        Robot.impl.setVoltages(0, 0);
     }
 }

@@ -144,7 +144,7 @@ public class Robot extends TimedRobot
   /** This method is called once when the robot is disabled. */
   @Override
   public void disabledInit() {
-    Paligator.setVoltages(0, 0);
+    Robot.impl.setVoltages(0, 0);
   }
 
   /** This method is called periodically when disabled. */

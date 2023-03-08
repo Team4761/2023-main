@@ -1,9 +1,11 @@
 package frc.robot.impl.terry;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import frc.robot.impl.RobotImpl;
+import frc.robot.main.Constants;
 
 public class Terry extends RobotImpl {
     // Drivetrain motors. The Talons already have encoders inside them
@@ -36,6 +38,26 @@ public class Terry extends RobotImpl {
 //        double ratio = 0.544;
 //        return degrees / 90 * speed * ratio;
         return 1.0;
+    }
+
+    @Override
+    public void setVoltages(double left, double right) {
+
+    }
+
+    public double getTrackWidth() {
+        return Constants.trackWidth;
+    }
+
+    @Override
+    public DifferentialDriveWheelSpeeds getWheelSpeeds() {
+//        public DifferentialDriveWheelSpeeds getWheelSpeeds() {
+//            return new DifferentialDriveWheelSpeeds(
+//                front_left.getSensorCollection().getIntegratedSensorVelocity(),
+//                front_right.getSensorCollection().getIntegratedSensorVelocity()
+//            );
+//        }
+        return new DifferentialDriveWheelSpeeds(0, 0);
     }
 
     @Override

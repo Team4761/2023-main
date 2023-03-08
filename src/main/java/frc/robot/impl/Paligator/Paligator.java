@@ -8,7 +8,6 @@ import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import frc.robot.command.Distances;
 import frc.robot.impl.RobotImpl;
@@ -151,13 +150,6 @@ public class Paligator extends RobotImpl {
         return front_right.getSensorCollection().getIntegratedSensorPosition();
     }
 
-    public static void setVoltages(double left, double right) {
-        front_left.setVoltage(left);
-        front_right.setVoltage(right);
-        back_left.setVoltage(left);
-        back_right.setVoltage(right);
-    }
-
     public void setSpeeds(DifferentialDriveWheelSpeeds speeds) {
         final double leftFeedforward = m_feedFoward.calculate(speeds.leftMetersPerSecond);
         final double rightFeedforward = m_feedFoward.calculate(speeds.rightMetersPerSecond);
@@ -172,6 +164,27 @@ public class Paligator extends RobotImpl {
 
         System.out.println("Right " + averageMotorGroupVelocity(front_right, back_right));
         System.out.println("Left " + averageMotorGroupVelocity(front_left, back_left));
+    }
+
+    @Override
+    public void setVoltages(double left, double right) {
+        front_left.setVoltage(left);
+        front_right.setVoltage(right);
+        back_left.setVoltage(left);
+        back_right.setVoltage(right);
+    }
+
+    @Override
+    public DifferentialDriveWheelSpeeds getWheelSpeeds() {
+        return new DifferentialDriveWheelSpeeds(
+            front_left.getSensorCollection().getIntegratedSensorVelocity(),
+            front_right.getSensorCollection().getIntegratedSensorVelocity()
+        );
+    }
+
+    @Override
+    public double getTrackWidth() {
+        return Constants.trackWidth;
     }
 
     public void drive(double xSpeed, double rot) {

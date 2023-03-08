@@ -11,6 +11,7 @@ import frc.robot.impl.Paligator.Paligator;
 import frc.robot.intake.IntakeSubsystem;
 import frc.robot.leds.LEDSubsystem;
 import frc.robot.main.Constants;
+import frc.robot.main.Robot;
 
 public class DriveController extends CommandBase {
     private XboxControl xbox;
@@ -101,7 +102,7 @@ public class DriveController extends CommandBase {
 
         lastTime = timer.get();
 
-        Paligator.setVoltages(-outputL*Constants.DRIVETRAIN_SPEED, outputR*Constants.DRIVETRAIN_SPEED);
+        Robot.impl.setVoltages(-outputL*Constants.DRIVETRAIN_SPEED, outputR*Constants.DRIVETRAIN_SPEED);
     }
 
     @Override
