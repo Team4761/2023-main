@@ -161,6 +161,12 @@ public class Paligator extends RobotImpl {
     }
 
     public static void setVoltages(double left, double right) {
+        if (front_left.getInverted()) {
+            left *= -1;
+        }
+        if (front_right.getInverted()){
+            right *= -1;
+        }
         front_left.setVoltage(left);
         front_right.setVoltage(right);
         back_left.setVoltage(left);
