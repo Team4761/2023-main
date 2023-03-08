@@ -9,7 +9,6 @@ public abstract class RobotImpl {
 
     private Pose2d pose;
 
-    public abstract DifferentialDrive getDrive();
     public abstract double calcTimeToMoveFeet(double feet, double speed);
     public abstract double calcTimeToRotate(double degrees, double speed);
 
