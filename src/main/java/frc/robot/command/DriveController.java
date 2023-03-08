@@ -83,7 +83,6 @@ public class DriveController extends CommandBase {
     private void onRightBumper() {
         LEDSubsystem.getInstance().setAllLEDs(31, 28, 189);
     }
-
     @Override
     public void execute() {
         if (isArcade) {
@@ -101,7 +100,7 @@ public class DriveController extends CommandBase {
         outputR = MathUtil.clamp(wheelSpeeds.right*1.5, outputR-maxChange, outputR+maxChange);
 
         lastTime = timer.get();
-
+        System.out.println("Wheel Voltages\n" + outputR + " " + outputL + "\n");
         Paligator.setVoltages(-outputL*5, outputR*5);
     }
 
@@ -111,8 +110,8 @@ public class DriveController extends CommandBase {
 
     // math from differentialDrive
     DifferentialDrive.WheelSpeeds arcadeDriveIK(double xSpeed, double zRotation) {
-        xSpeed = MathUtil.clamp(MathUtil.applyDeadband(xSpeed, 0.1), -1.0, 1.0);
-        zRotation = MathUtil.clamp(MathUtil.applyDeadband(zRotation, 0.1), -1.0, 1.0);
+        xSpeed = MathUtil.clamp(MathUtil.applyDeadband(xSpeed, Constants.CONTROLLER_DEADZONE), -1.0, 1.0);
+        zRotation = MathUtil.clamp(MathUtil.applyDeadband(zRotation, Constants.CONTROLLER_DEADZONE), -1.0, 1.0);
 
         zRotation = Math.copySign(zRotation * zRotation, zRotation);
         // Square the inputs (while preserving the sign) to increase fine control
