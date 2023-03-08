@@ -57,6 +57,8 @@ public class Constants {
     public static final double JOINT_1_MIN = -100;
     public static final double KINEMATICS_OFFSET_TOP = Math.toRadians(15);
     public static final double KINEMATICS_OFFSET_BOTTOM = Math.toRadians(15);
+    public static final double FLAT_ARM_TOP_OFFSET = 0.0;   // To tune
+    public static final double FLAT_ARM_BOTTOM_OFFSET = 0.0;   // To tune
     public static final double CONTROLLER_DEADZONE = 0.05;
     
     //Arm Feedforward
