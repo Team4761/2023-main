@@ -44,10 +44,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
     }
 
     public void arcadeDrive(double speed, double rotation){
-        Robot.impl.getDrive().arcadeDrive(speed, rotation);
+        // TODO
     }
     public void tankDrive(double rightSpeed, double leftSpeed){
-        Robot.impl.getDrive().tankDrive(rightSpeed, leftSpeed);
+        // TODO
     }
 }
 

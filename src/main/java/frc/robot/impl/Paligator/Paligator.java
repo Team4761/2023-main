@@ -45,13 +45,10 @@ public class Paligator extends RobotImpl {
     // Drivetrain
     public static final MotorControllerGroup m_leftMotors = new MotorControllerGroup(front_left, back_left);
     public static final MotorControllerGroup m_rightMotors = new MotorControllerGroup(front_right, back_right);
-    //    public static final MotorControllerGroup m_rightMotors = new MotorControllerGroup(front_right);
-    private static final DifferentialDrive m_drive = new DifferentialDrive(m_leftMotors, m_rightMotors);
 
     //PID controllers (for auto stuff, maybe drive)
     public static final PIDController linear_PIDcontroller = new PIDController(Constants.LINEAR_P, Constants.LINEAR_I, Constants.LINEAR_D);
     public static final PIDController angular_PIDcontroller = new PIDController(Constants.ANGULAR_P, Constants.ANGULAR_I, Constants.ANGULAR_D);
-
 
     private final DifferentialDriveKinematics m_kinematics =
             new DifferentialDriveKinematics(Constants.trackWidth);
@@ -77,7 +74,6 @@ public class Paligator extends RobotImpl {
 //        back_left_CANCoder.configAllSettings(CANCoderConfig);
 //        back_right_CANCoder.configAllSettings(CANCoderConfig);
 
-        getDrive().setExpiration(.3);
 //        m_rightMotors.setInverted(true);
         m_leftMotors.setInverted(true);
 
@@ -91,11 +87,6 @@ public class Paligator extends RobotImpl {
             back_left.getSensorCollection().getIntegratedSensorPosition(),
             back_right.getSensorCollection().getIntegratedSensorPosition()
         );
-    }
-
-    @Override
-    public DifferentialDrive getDrive() {
-        return m_drive;
     }
 
     @Override

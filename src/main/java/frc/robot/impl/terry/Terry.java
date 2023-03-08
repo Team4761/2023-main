@@ -24,12 +24,6 @@ public class Terry extends RobotImpl {
         //getDrive().setExpiration(.3);
         //m_rightMotors.setInverted(true);
     }
-    @Override
-    public DifferentialDrive getDrive() {
-        //return m_drive;
-        return new DifferentialDrive(null, null);
-    }
-
 
     @Override
     public double calcTimeToMoveFeet(double feet, double speed) {

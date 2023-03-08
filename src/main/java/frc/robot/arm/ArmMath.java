@@ -23,7 +23,10 @@ public class ArmMath {
             theta1 = Math.PI / 2 + thetaC;
         else
             theta1 =  Math.atan(-x / y) + thetaC + Math.PI / 2;
-        return (Math.PI - theta1) + Constants.KINEMATICS_OFFSET_BOTTOM;
+        int mod = 1;
+        if(y < 0)
+            mod = 2;
+        return (Math.PI * mod + Constants.KINEMATICS_OFFSET_BOTTOM) - theta1;
     }
     public double arm2Theta(double x, double y) {
         Translation2d point = new Translation2d(x, y);
@@ -32,7 +35,10 @@ public class ArmMath {
         x = point.getX();
         y = point.getY();
         double d = Math.sqrt(x * x + y * y);
-        return Math.acos((d * d - armLength1 * armLength1 - armLength2 * armLength2) / (-2 * armLength1 * armLength2)) + Constants.KINEMATICS_OFFSET_TOP;
+        int mod = 1;
+        if(y < 0)
+            mod = -1;
+        return Math.acos((d * d - armLength1 * armLength1 - armLength2 * armLength2) / (-2 * armLength1 * armLength2)) * mod + Constants.KINEMATICS_OFFSET_TOP;
     }
 
     //chatGPT did this lol. It works, returns both values
@@ -118,10 +124,8 @@ public class ArmMath {
 
     //gets point from two thetas of two arms
     public Translation2d getPoint(double theta1, double theta2) {
-        //if (theta1 < 0) { theta1 += Math.PI*2; }
-        //if (theta2 < 0) { theta2 += Math.PI*2; }
-        theta1 += Constants.KINEMATICS_OFFSET_BOTTOM;
-        //theta2 += Constants.KINEMATICS_OFFSET_TOP;
+        theta1 -= Constants.KINEMATICS_OFFSET_BOTTOM;
+        theta2 -= Constants.KINEMATICS_OFFSET_TOP;
         return new Translation2d(armLength1 * Math.cos(Math.PI - theta1) + armLength2 * Math.cos(theta2 - theta1), armLength1 * Math.sin(Math.PI - theta1) + armLength2 * Math.sin(theta2 - theta1));
     }
 

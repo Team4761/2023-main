@@ -11,12 +11,6 @@ public class WestCoast extends RobotImpl {
     public static DifferentialDrive m_drive = new DifferentialDrive(left,right);
 
     public WestCoast() {
-        getDrive().setExpiration(.3);
-    }
-
-    @Override
-    public DifferentialDrive getDrive() {
-        return m_drive;
     }
 
     @Override

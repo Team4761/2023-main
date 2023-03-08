@@ -1,6 +1,7 @@
 package frc.robot.main;
 
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.system.plant.DCMotor;
 
 public class Constants {
 
@@ -12,7 +13,8 @@ public class Constants {
     //Ports are for new arm old ports on side or the same
     public static final int ARM_MOTOR_BOTTOM_LEFT_PORT = 3;     // CAN, initialized port //same ports
     public static final int ARM_MOTOR_BOTTOM_RIGHT_PORT = 2;    // CAN, initialized port //42 for new arm, 2 for old
-    public static final int ARM_MOTOR_TOP_PORT = 1;             // CAN, initialized port //same ports
+    public static final int ARM_MOTOR_TOP_LEFT_PORT = 1;        // CAN, initialized port //same ports
+    public static final int ARM_MOTOR_TOP_RIGHT_PORT = 5;        // CAN, initialized port //same ports
     public static final int ARM_MOTOR_INTAKE_PORT = 4;          // CAN, initialized port //only for new arm
     public static final double ROBOT_LENGTH = 27;
     public static final double ROBOT_WIDTH = 24;
@@ -21,6 +23,8 @@ public class Constants {
     // Drivetrain constants.
     public static final double drivetrainGearRatio = 8.0;
     public static final double wheelRadiusInches = 2.0;
+    public static double DRIVETRAIN_SPEED = 5.0;
+    public static double DRIVETRAIN_ROTATION_SPEED = 0.8;
     //public static final double wheelCircumference = wheelRadiusInches * 2 * Math.PI;
     public static final double wheelRadius = 0.0508; //meters
     public static final double wheelCircumference = wheelRadius * 2 * Math.PI;
@@ -54,7 +58,21 @@ public class Constants {
     public static final double JOINT_1_MIN = -100;
     public static final double KINEMATICS_OFFSET_TOP = Math.toRadians(15);
     public static final double KINEMATICS_OFFSET_BOTTOM = Math.toRadians(15);
+    public static final double FLAT_ARM_TOP_OFFSET = 0.0;   // To tune
+    public static final double FLAT_ARM_BOTTOM_OFFSET = 0.0;   // To tune
     public static final double CONTROLLER_DEADZONE = 0.05;
+    
+    //Arm Feedforward
+    public static final double TOP_LENGTH = 1.016;//m
+    public static final double TOP_MASS = 5.08;//kg
+    public static final double TOP_MOI = 2.05;//kgm^2
+    public static final double TOP_CGRADIUS = 0.635;//m
+    public static final DCMotor TOP_MOTOR = DCMotor.getNEO(2).withReduction(45.45454545);
+    public static final double BOTTOM_LENGTH = 0.5715;//m
+    public static final double BOTTOM_MASS = 2.404;//kg
+    public static final double BOTTOM_MOI = 0.207;//kgm^2
+    public static final double BOTTOM_CGRADIUS = 0.1955;//m
+    public static final DCMotor BOTTOM_MOTOR = DCMotor.getNEO(2).withReduction(40);
 
     //PID constants for robot.
     public static final double LINEAR_P = 0.01;

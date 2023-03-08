@@ -4,7 +4,7 @@
   },
   "MainWindow": {
     "GLOBAL": {
-      "fps": "120",
+      "fps": "60",
       "height": "720",
       "maximized": "0",
       "style": "0",
@@ -15,6 +15,11 @@
     }
   },
   "Window": {
+    "###/FMSInfo": {
+      "Collapsed": "0",
+      "Pos": "60,60",
+      "Size": "169,167"
+    },
     "###/SmartDashboard/Robot Choices": {
       "Collapsed": "0",
       "Pos": "60,60",
@@ -23,7 +28,7 @@
     "###Addressable LEDs": {
       "Collapsed": "0",
       "Pos": "144,39",
-      "Size": "142,183"
+      "Size": "142,205"
     },
     "###FMS": {
       "Collapsed": "0",
@@ -37,8 +42,13 @@
     },
     "###NetworkTables": {
       "Collapsed": "0",
-      "Pos": "294,36",
+      "Pos": "288,39",
       "Size": "679,223"
+    },
+    "###NetworkTables Info": {
+      "Collapsed": "0",
+      "Pos": "250,130",
+      "Size": "750,145"
     },
     "###Other Devices": {
       "Collapsed": "0",
@@ -48,7 +58,7 @@
     "###System Joysticks": {
       "Collapsed": "0",
       "Pos": "5,350",
-      "Size": "217,218"
+      "Size": "192,218"
     },
     "###Timing": {
       "Collapsed": "0",

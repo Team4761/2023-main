@@ -13,13 +13,14 @@ public class ArmPIDSubsystem extends ProfiledPIDSubsystem {
     AbsoluteEncoder encoder;
     CANSparkMax motor;
     String motorType;
+    ArmSubsystem subsystem;
     // <https://www.reca.lc/arm> has a very useful calculator!!!
 
     //was commneted
     //ArmFeedforward feedforward = new ArmFeedforward(0.01, 0.45, 1.95, 0.02);
 
 
-    public ArmPIDSubsystem(AbsoluteEncoder e, CANSparkMax m, String type, double p, double i, double d) {
+    public ArmPIDSubsystem(AbsoluteEncoder e, CANSparkMax m, String type, double p, double i, double d, ArmSubsystem armSubsystem) {
         // Makes a new ProfiledPIDSubsystem with PID values of ARM_P, ARM_I, and ARM_D.
         // TrapezoidProfile makes it so that the motors know they can't go beyond ARM_MAX_ROTATION_SPEED and that they can accelerate up to ARM_MAX_ACCELERATION_SPEED
         // The last 0 defines a period of 0. This would only matter if we weren't using TimedRobot as our robot base.
@@ -31,6 +32,7 @@ public class ArmPIDSubsystem extends ProfiledPIDSubsystem {
         encoder = e;
         motor = m;
         motorType = type;
+        subsystem = armSubsystem;
         setGoal(e.getRotation());
     }
 
@@ -38,7 +40,11 @@ public class ArmPIDSubsystem extends ProfiledPIDSubsystem {
     @Override
     public void useOutput(double output, TrapezoidProfile.State setpoint) {
         System.out.println("Calculation: " + m_controller.getSetpoint().position + " | " + m_controller.getGoal().position);
-        double ff = 0.0; //feedforward.calculate(encoder.getVelocity(), encoder.getAcceleration());//0.0;
+        double ff = 0.0;
+        if(motorType.equalsIgnoreCase("top"))
+            ff = subsystem.calculateFeedforwards().get(1,0) / 12.0;
+        if(motorType.equalsIgnoreCase("bottom"))
+            ff = subsystem.calculateFeedforwards().get(0,0) / 12.0;
         System.out.println("CURRENT OUTPUT: " + output);
         System.out.println("ERROR: " + (ArmSubsystem.getInstance().getDesiredTopRotation()-ArmSubsystem.getInstance().getTopRotation()));
         if (motorType.equalsIgnoreCase("top"))

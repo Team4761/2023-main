@@ -3,12 +3,8 @@ package frc.robot.command;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.Auto.EncoderAuto.GoMetersEncoder;
-import frc.robot.Auto.EncoderAuto.TurnToGyro;
 import frc.robot.Drivetrain.DrivetrainSubsystem;
 import frc.robot.controller.XboxControl;
 import frc.robot.impl.Paligator.Paligator;
@@ -60,27 +56,15 @@ public class DriveController extends CommandBase {
     }
 
     private void onPressA() {
-        CommandScheduler.getInstance().schedule(
-            new GoMetersEncoder(SmartDashboard.getNumber("goDistance", 3.0))
-        );
     }
 
     private void onPressB() {
-        CommandScheduler.getInstance().schedule(
-            new GoMetersEncoder(SmartDashboard.getNumber("goDistance", -3.0))
-        );
     }
 
     private void onPressX() {
-        CommandScheduler.getInstance().schedule(
-            new TurnToGyro(SmartDashboard.getNumber("turn", 90.0))
-        );
     }
 
     private void onPressY() {
-        CommandScheduler.getInstance().schedule(
-            new TurnToGyro(SmartDashboard.getNumber("turn", -90.0))
-        );
     }
 
     private void onLeftTrigger() {
@@ -99,7 +83,6 @@ public class DriveController extends CommandBase {
     private void onRightBumper() {
         LEDSubsystem.getInstance().setAllLEDs(31, 28, 189);
     }
-
     @Override
     public void execute() {
         if (isArcade) {
@@ -110,7 +93,7 @@ public class DriveController extends CommandBase {
     }
 
     private void arcadeDrive() {
-        DifferentialDrive.WheelSpeeds wheelSpeeds = arcadeDriveIK(xbox.getLeftY(), (0-xbox.getRightX())*0.8);
+        DifferentialDrive.WheelSpeeds wheelSpeeds = arcadeDriveIK(xbox.getLeftY(), (0-xbox.getRightX())*Constants.DRIVETRAIN_ROTATION_SPEED);
 
         double maxChange = Math.abs((timer.get()-lastTime) * Constants.DRIVETRAIN_MAX_ACCELERATION * 2);
         outputL = MathUtil.clamp(wheelSpeeds.left*1.5, outputL-maxChange, outputL+maxChange);
@@ -118,7 +101,7 @@ public class DriveController extends CommandBase {
 
         lastTime = timer.get();
 
-        Paligator.setVoltages(-outputL*5, outputR*5);
+        Paligator.setVoltages(-outputL*Constants.DRIVETRAIN_SPEED, outputR*Constants.DRIVETRAIN_SPEED);
     }
 
     @Override
@@ -127,8 +110,8 @@ public class DriveController extends CommandBase {
 
     // math from differentialDrive
     DifferentialDrive.WheelSpeeds arcadeDriveIK(double xSpeed, double zRotation) {
-        xSpeed = MathUtil.clamp(MathUtil.applyDeadband(xSpeed, 0.1), -1.0, 1.0);
-        zRotation = MathUtil.clamp(MathUtil.applyDeadband(zRotation, 0.1), -1.0, 1.0);
+        xSpeed = MathUtil.clamp(MathUtil.applyDeadband(xSpeed, Constants.CONTROLLER_DEADZONE), -1.0, 1.0);
+        zRotation = MathUtil.clamp(MathUtil.applyDeadband(zRotation, Constants.CONTROLLER_DEADZONE), -1.0, 1.0);
 
         zRotation = Math.copySign(zRotation * zRotation, zRotation);
         // Square the inputs (while preserving the sign) to increase fine control

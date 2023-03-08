@@ -11,5 +11,18 @@
       "/FMSInfo": "FMSInfo",
       "/SmartDashboard/Robot Choices": "String Chooser"
     }
+  },
+  "NetworkTables": {
+    "Persistent Values": {
+      "open": false
+    },
+    "Retained Values": {
+      "open": false
+    },
+    "transitory": {
+      "Shuffleboard": {
+        "open": true
+      }
+    }
   }
 }

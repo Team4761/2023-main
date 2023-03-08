@@ -11,9 +11,11 @@ import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.RobocketsShuffleboard;
 import frc.robot.Auto.command.MainAutoCommand;
 import frc.robot.Drivetrain.DrivetrainSubsystem;
 import frc.robot.Vision.getPoseData;
@@ -36,6 +38,8 @@ import frc.robot.leds.UpdateLED;
  */
 public class Robot extends TimedRobot
 {
+  boolean win = true;
+
   // Robot Selection
   private static final String TERRY = "Terry";
   private static final String WEST_COAST = "West Coast";
@@ -52,6 +56,7 @@ public class Robot extends TimedRobot
   private final ArmControl armControl = new ArmControl(0);
   public static IntakeSubsystem intake = IntakeSubsystem.getInstance();
   public static LEDSubsystem leds = LEDSubsystem.getInstance();
+  public static RobocketsShuffleboard m_shuffleboard = new RobocketsShuffleboard();
 
   public static DifferentialDriveOdometry odometry;
   public static Pose2d pose;
@@ -131,6 +136,9 @@ public class Robot extends TimedRobot
   @Override
   public void teleopPeriodic() {
     commandScheduler.run();
+
+    m_shuffleboard.updateArms();
+    m_shuffleboard.updateDrive();
   }
 
   /** This method is called once when the robot is disabled. */
@@ -184,4 +192,5 @@ public class Robot extends TimedRobot
   private String getAutoSelector() {
     return SmartDashboard.getString("Auto", "2");
   }
+
 }
