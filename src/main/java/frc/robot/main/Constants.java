@@ -1,6 +1,7 @@
 package frc.robot.main;
 
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.system.plant.DCMotor;
 
 public class Constants {
 
