@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.main.Constants;
+import frc.robot.main.Robot;
 import edu.wpi.first.math.numbers.N2;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
@@ -28,6 +29,7 @@ public class ArmSubsystem extends SubsystemBase {
     CANSparkMax top_motor_right;
     public ArmPIDSubsystem bottom;
     public ArmPIDSubsystem top;
+    public boolean useFeedForward;
 
     ArmMath inverseKinematics;
     Translation2d pos;
@@ -39,8 +41,8 @@ public class ArmSubsystem extends SubsystemBase {
     // The WHITE cable is the signal wire.
     
     //JointConfig stuff
-    private JointConfig top_joint = new JointConfig(Constants.TOP_MASS, Constants.ARM_LENGTH_TOP, Constants.TOP_MOI, Constants.TOP_CGRADIUS, Constants.TOP_MOTOR, this);
-    private JointConfig bottom_joint = new JointConfig(Constants.BOTTOM_MASS, Constants.ARM_LENGTH_BOTTOM, Constants.BOTTOM_MOI, Constants.BOTTOM_CGRADIUS, Constants.BOTTOM_MOTOR, this);
+    private JointConfig top_joint = new JointConfig(Constants.TOP_MASS, Constants.ARM_LENGTH_TOP, Constants.TOP_MOI, Constants.TOP_CGRADIUS, Constants.TOP_MOTOR);
+    private JointConfig bottom_joint = new JointConfig(Constants.BOTTOM_MASS, Constants.ARM_LENGTH_BOTTOM, Constants.BOTTOM_MOI, Constants.BOTTOM_CGRADIUS, Constants.BOTTOM_MOTOR);
     private DJArmFeedforward djArmFeedforward = new DJArmFeedforward(bottom_joint, top_joint);
 
     private ArmSubsystem()
@@ -63,7 +65,6 @@ public class ArmSubsystem extends SubsystemBase {
 
         inverseKinematics = new ArmMath();
         pos = inverseKinematics.getPoint(getBottomRotation(), getTopRotation());
-
     }
 
     @Override

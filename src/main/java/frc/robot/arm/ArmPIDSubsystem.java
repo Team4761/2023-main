@@ -14,6 +14,7 @@ public class ArmPIDSubsystem extends ProfiledPIDSubsystem {
     CANSparkMax motor;
     String motorType;
     ArmSubsystem subsystem;
+    public double ff = 0.0;
     // <https://www.reca.lc/arm> has a very useful calculator!!!
 
     //was commneted
@@ -39,11 +40,11 @@ public class ArmPIDSubsystem extends ProfiledPIDSubsystem {
 
     @Override
     public void useOutput(double output, TrapezoidProfile.State setpoint) {
+        ff = 0.0;
         System.out.println("Calculation: " + m_controller.getSetpoint().position + " | " + m_controller.getGoal().position);
-        double ff = 0.0;
-        if(motorType.equalsIgnoreCase("top"))
+        if(motorType.equalsIgnoreCase("top") && ArmSubsystem.getInstance().useFeedForward)
             ff = subsystem.calculateFeedforwards().get(1,0) / 12.0;
-        if(motorType.equalsIgnoreCase("bottom"))
+        if(motorType.equalsIgnoreCase("bottom") & ArmSubsystem.getInstance().useFeedForward)
             ff = subsystem.calculateFeedforwards().get(0,0) / 12.0;
         System.out.println("CURRENT OUTPUT: " + output);
         System.out.println("ERROR: " + (ArmSubsystem.getInstance().getDesiredTopRotation()-ArmSubsystem.getInstance().getTopRotation()));
