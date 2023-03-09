@@ -18,9 +18,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
      */
     private final static DrivetrainSubsystem INSTANCE = new DrivetrainSubsystem();
 
-    public final static Paligator test = new Paligator();
-
-
     /**
      * Returns the Singleton instance of this DrivetrainSubsystem. This static method
      * should be used, rather than the constructor, to get the single instance
