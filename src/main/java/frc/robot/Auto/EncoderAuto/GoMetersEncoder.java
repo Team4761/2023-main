@@ -66,8 +66,8 @@ public class GoMetersEncoder extends CommandBase {
         rightSpeed = 2.5 * output +  0.2 * (output - Paligator.getRightVelocity()*Constants.distancePerEncoderTick)*backwards;
         
         // maybe not needed
-        leftSpeed += Math.signum(leftSpeed)*0.65;
-        rightSpeed += Math.signum(rightSpeed)*0.6;
+        //leftSpeed += Math.signum(leftSpeed)*0.65;
+        //rightSpeed += Math.signum(rightSpeed)*0.6;
 
         Paligator.setVoltages(Math.max(-12, Math.min(12, leftSpeed)), Math.max(-12, Math.min(12, rightSpeed)));
         
