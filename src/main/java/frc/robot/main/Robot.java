@@ -124,11 +124,11 @@ public class Robot extends TimedRobot
   /** This method is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
-    leds.enableLEDs();
+    //leds.enableLEDs();
 
-    commandScheduler.schedule(new getPoseData());
-    commandScheduler.schedule(armControl.repeatedly());
-    commandScheduler.schedule(updateLED.repeatedly());
+    //commandScheduler.schedule(new getPoseData());
+    //commandScheduler.schedule(armControl.repeatedly());
+    //commandScheduler.schedule(updateLED.repeatedly());
     commandScheduler.schedule(driveController.repeatedly());
   }
 
@@ -137,7 +137,7 @@ public class Robot extends TimedRobot
   public void teleopPeriodic() {
     commandScheduler.run();
 
-    m_shuffleboard.updateArms();
+    //m_shuffleboard.updateArms();
     m_shuffleboard.updateDrive();
   }
 

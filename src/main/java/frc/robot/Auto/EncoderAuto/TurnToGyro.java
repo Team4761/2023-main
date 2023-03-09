@@ -41,7 +41,7 @@ public class TurnToGyro extends CommandBase {
         // we love stack overflow
         double diff = (setAngle - Paligator.m_gyro.getAngle()%360 + 180 ) % 360 - 180;
 
-        targetVelocity = Math.max(Math.min(diff/360*Constants.trackWidth/Constants.wheelRadius, Constants.DRIVETRAIN_MAX_VELOCITY), -Constants.DRIVETRAIN_MAX_VELOCITY);
+        targetVelocity = Math.max(Math.min(diff/360*Constants.trackWidth*3*Math.PI, Constants.DRIVETRAIN_MAX_VELOCITY), -Constants.DRIVETRAIN_MAX_VELOCITY);
 
         output = Math.max(Math.min(targetVelocity, output+maxChange), output-maxChange);
 
@@ -50,8 +50,8 @@ public class TurnToGyro extends CommandBase {
         rightSpeed = - (2.5 * output +  0.2 * (output - Paligator.getRightVelocity()*Constants.distancePerEncoderTick));
         
         // maybe not needed
-        //leftSpeed += Math.signum(leftSpeed)*0.65;
-        //rightSpeed += Math.signum(rightSpeed)*0.6;
+        leftSpeed += Math.signum(leftSpeed)*0.9;
+        rightSpeed += Math.signum(rightSpeed)*0.9;
 
         Paligator.setVoltages(Math.max(-12, Math.min(12, leftSpeed)), Math.max(-12, Math.min(12, rightSpeed)));
         
@@ -59,11 +59,13 @@ public class TurnToGyro extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return Math.abs(targetVelocity)<=0.1;
+
+        return Math.abs(targetVelocity)<=0.05;// && Paligator.getLeftVelocity()<;
     }
 
     @Override
     public void end(boolean interrupted) {
+        System.out.println("done");
         Paligator.setVoltages(0, 0);
     }
 }
