@@ -39,8 +39,8 @@ public class ArmSubsystem extends SubsystemBase {
     // The WHITE cable is the signal wire.
     
     //JointConfig stuff
-    private JointConfig top_joint = new JointConfig(Constants.TOP_MASS, Constants.ARM_LENGTH_TOP, Constants.TOP_MOI, Constants.TOP_CGRADIUS, Constants.TOP_MOTOR, this);
-    private JointConfig bottom_joint = new JointConfig(Constants.BOTTOM_MASS, Constants.ARM_LENGTH_BOTTOM, Constants.BOTTOM_MOI, Constants.BOTTOM_CGRADIUS, Constants.BOTTOM_MOTOR, this);
+    private JointConfig top_joint = new JointConfig(Constants.TOP_MASS, Constants.ARM_LENGTH_TOP, Constants.TOP_MOI, Constants.TOP_CGRADIUS, Constants.TOP_MOTOR);
+    private JointConfig bottom_joint = new JointConfig(Constants.BOTTOM_MASS, Constants.ARM_LENGTH_BOTTOM, Constants.BOTTOM_MOI, Constants.BOTTOM_CGRADIUS, Constants.BOTTOM_MOTOR);
     private DJArmFeedforward djArmFeedforward = new DJArmFeedforward(bottom_joint, top_joint);
 
     private ArmSubsystem()
