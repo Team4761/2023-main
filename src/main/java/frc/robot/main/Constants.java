@@ -1,6 +1,7 @@
 package frc.robot.main;
 
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.system.plant.DCMotor;
 
 public class Constants {
 
@@ -57,7 +58,21 @@ public class Constants {
     public static final double JOINT_1_MIN = -100;
     public static final double KINEMATICS_OFFSET_TOP = Math.toRadians(15);
     public static final double KINEMATICS_OFFSET_BOTTOM = Math.toRadians(15);
+    public static final double FLAT_ARM_TOP_OFFSET = 0.0;   // To tune
+    public static final double FLAT_ARM_BOTTOM_OFFSET = 0.0;   // To tune
     public static final double CONTROLLER_DEADZONE = 0.05;
+    
+    //Arm Feedforward
+    public static final double TOP_LENGTH = 1.016;//m
+    public static final double TOP_MASS = 5.08;//kg
+    public static final double TOP_MOI = 2.05;//kgm^2
+    public static final double TOP_CGRADIUS = 0.635;//m
+    public static final DCMotor TOP_MOTOR = DCMotor.getNEO(2).withReduction(45.45454545);
+    public static final double BOTTOM_LENGTH = 0.5715;//m
+    public static final double BOTTOM_MASS = 2.404;//kg
+    public static final double BOTTOM_MOI = 0.207;//kgm^2
+    public static final double BOTTOM_CGRADIUS = 0.1955;//m
+    public static final DCMotor BOTTOM_MOTOR = DCMotor.getNEO(2).withReduction(40);
 
     //PID constants for robot.
     public static final double LINEAR_P = 0.01;

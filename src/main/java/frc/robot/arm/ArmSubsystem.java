@@ -13,6 +13,9 @@ import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.main.Constants;
+import edu.wpi.first.math.numbers.N2;
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.Vector;
 
 public class ArmSubsystem extends SubsystemBase {
     private final static ArmSubsystem INSTANCE = new ArmSubsystem();
@@ -34,6 +37,11 @@ public class ArmSubsystem extends SubsystemBase {
     private boolean goingToSetPosition = false;
     // CONNECT USING the white, red, and black cable.
     // The WHITE cable is the signal wire.
+    
+    //JointConfig stuff
+    private JointConfig top_joint = new JointConfig(Constants.TOP_MASS, Constants.ARM_LENGTH_TOP, Constants.TOP_MOI, Constants.TOP_CGRADIUS, Constants.TOP_MOTOR, this);
+    private JointConfig bottom_joint = new JointConfig(Constants.BOTTOM_MASS, Constants.ARM_LENGTH_BOTTOM, Constants.BOTTOM_MOI, Constants.BOTTOM_CGRADIUS, Constants.BOTTOM_MOTOR, this);
+    private DJArmFeedforward djArmFeedforward = new DJArmFeedforward(bottom_joint, top_joint);
 
     private ArmSubsystem()
     {
@@ -91,6 +99,15 @@ public class ArmSubsystem extends SubsystemBase {
             setDesiredTopRotation(inverseKinematics.arm2Theta(pos.getX(),pos.getY()));
         }
     }
+    //FEEDFORWARD IMPL //Needs to be based off 0,0 as straight extensions (intial arm math)
+    public Vector<N2> calculateFeedforwards() {
+        double inputUpper = -desiredTopRotation + Math.toRadians(Constants.FLAT_ARM_TOP_OFFSET);
+        double inputLower = desiredBottomRotation + Math.toRadians(Constants.FLAT_ARM_BOTTOM_OFFSET);
+        Vector<N2> angles = VecBuilder.fill(inputLower, inputUpper);
+
+        Vector<N2> vectorFF = djArmFeedforward.feedforward(angles);
+        return vectorFF;
+    }//check with alistair to implement this into pid and check subsystem class linked
     public void updatePos(Translation2d delta) {
         if (delta.getX() > Constants.CONTROLLER_DEADZONE || delta.getX() < 0-Constants.CONTROLLER_DEADZONE || delta.getY() > Constants.CONTROLLER_DEADZONE || delta.getY() < 0-Constants.CONTROLLER_DEADZONE) {
             if (goingToSetPosition) {
