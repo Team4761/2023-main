@@ -13,11 +13,13 @@ import frc.robot.main.Constants;
 import frc.robot.main.Robot;
 
 public class ArmControl extends CommandBase {
-    protected XboxControl xbox;
+    public XboxControl xbox;
+    public int port;
     ArmMath armMath = new ArmMath();
 
     public ArmControl(int port) {
         xbox = new XboxControl(port);
+        this.port = port;
 
         ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
         xbox.b().onTrue(Commands.runOnce(this::onPressB, armSubsystem));
@@ -147,5 +149,11 @@ public class ArmControl extends CommandBase {
 
     public void zeroEncoders() {
         Robot.arms.zeroEncoders();
+    }
+
+    public void reinitController(int port) {
+        xbox = new XboxControl(port);
+        this.port = port;
+        System.out.println("Changed Controller Port To " + port);
     }
 }
