@@ -42,7 +42,7 @@ public class TurnToGyro extends CommandBase {
         output = Math.max(Math.min(targetVelocity, output+maxChange), output-maxChange);
 
 
-        leftSpeed =  (2.5 * output +  0.2 * (output - Paligator.getLeftVelocity()*Constants.distancePerEncoderTick));
+        leftSpeed = (2.5 * output +  0.2 * (output - Paligator.getLeftVelocity()*Constants.distancePerEncoderTick));
         rightSpeed = - (2.5 * output +  0.2 * (output - Paligator.getRightVelocity()*Constants.distancePerEncoderTick));
         
         // maybe not needed
