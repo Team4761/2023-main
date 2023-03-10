@@ -28,12 +28,19 @@ public class ArmControl extends CommandBase {
         xbox.a().onTrue(Commands.runOnce(this::onPressA, armSubsystem));
         
 
-        SmartDashboard.putNumber("fupper arm angle", 0);
-        SmartDashboard.putNumber("flower arm angle", 0);
-        SmartDashboard.putNumber("farm x togo", 0);
-        SmartDashboard.putNumber("farm y togo", 0);
-        SmartDashboard.putNumber("farm 1 theta calc", 0);
-        SmartDashboard.putNumber("farm 2 theta calc", 0);
+        //SmartDashboard.putNumber("fupper arm angle", 0);
+        //SmartDashboard.putNumber("flower arm angle", 0);
+        //SmartDashboard.putNumber("farm x togo", 0);
+        //SmartDashboard.putNumber("farm y togo", 0);
+        //SmartDashboard.putNumber("farm 1 theta calc", 0);
+        //SmartDashboard.putNumber("farm 2 theta calc", 0);
+        
+        
+        xbox.leftBumper().whileTrue(Commands.run(this::inTake, DrivetrainSubsystem.getInstance()));
+        xbox.rightBumper().whileTrue(Commands.run(this::outTake, DrivetrainSubsystem.getInstance()));
+        
+        xbox.leftBumper().whileFalse(Commands.run(this::disableIntake, DrivetrainSubsystem.getInstance()));
+        xbox.rightBumper().whileFalse(Commands.run(this::disableIntake, DrivetrainSubsystem.getInstance()));
     }
 
     //current range of motion is 0.8 to -2.5 use smart dashboard to set rotation angle.
@@ -82,11 +89,6 @@ public class ArmControl extends CommandBase {
 
         //xbox.getController().x().onTrue(Commands.runOnce(() -> { zeroEncoders(); }));
         // Debugging purposes only
-        xbox.leftBumper().whileTrue(Commands.run(this::inTake, DrivetrainSubsystem.getInstance()));
-        xbox.rightBumper().whileTrue(Commands.run(this::outTake, DrivetrainSubsystem.getInstance()));
-        
-        xbox.leftBumper().whileFalse(Commands.run(this::disableIntake, DrivetrainSubsystem.getInstance()));
-        xbox.rightBumper().whileFalse(Commands.run(this::disableIntake, DrivetrainSubsystem.getInstance()));
         Robot.arms.debug();
 
     }
