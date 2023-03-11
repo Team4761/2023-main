@@ -49,9 +49,9 @@ public class ArmPIDSubsystem extends ProfiledPIDSubsystem {
         System.out.println("CURRENT OUTPUT: " + output);
         System.out.println("ERROR: " + (ArmSubsystem.getInstance().getDesiredTopRotation()-ArmSubsystem.getInstance().getTopRotation()));
         if (motorType.equalsIgnoreCase("top"))
-            ArmSubsystem.getInstance().setTop(output + ff);
+            ArmSubsystem.getInstance().setTop(-(output + ff));
         if (motorType.equalsIgnoreCase("bottom"))
-            ArmSubsystem.getInstance().setBottom(output + ff);
+            ArmSubsystem.getInstance().setBottom(-(output + ff));
             System.out.println(motorType + " | " + getController().getP() + " , " + getController().getI() + " , " + getController().getD());
     }
 

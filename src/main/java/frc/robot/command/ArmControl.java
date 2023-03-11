@@ -44,35 +44,24 @@ public class ArmControl extends CommandBase {
     }
 
     //current range of motion is 0.8 to -2.5 use smart dashboard to set rotation angle.
-    private void onPressB() {
-        movePID(SmartDashboard.getNumber("fupper arm angle",0), SmartDashboard.getNumber("flower arm angle", 0));
+    private void onPressA() {
+        Robot.arms.enablePID();
         Robot.arms.movePID();
         Robot.arms.moveToSetRotation(Constants.INTAKE_POSITION);
     }
 
-    private void onPressA() {
+    private void onPressB() {
         Robot.arms.enablePID();
         Robot.arms.movePID();
         Robot.arms.moveToSetRotation(Constants.MID_RUNG_POSITION);
     }
 
     private void onPressX() {
-        //Robot.arms.disablePID();
-/* 
-        SmartDashboard.putNumber("farm x togo", armMath.getPoint(
-                SmartDashboard.getNumber("farm 1 theta calc",0),
-                SmartDashboard.getNumber("farm 2 theta calc", 0)
-        ).getX());
-
-        SmartDashboard.putNumber("farm y togo", armMath.getPoint(
-                SmartDashboard.getNumber("farm 1 theta calc",0),
-                SmartDashboard.getNumber("farm 2 theta calc", 0)
-        ).getY());
-*/
-        //Robot.arms.moveToSetRotation(Constants.MID_RUNG_POSITION);
+        Robot.arms.enablePID();
+        Robot.arms.movePID();
+        Robot.arms.moveToSetRotation(Constants.SHELF_POSITION);
     }
     private void onPressY() {
-       // movePID(0.3,0.3);
         Robot.arms.enablePID();
         Robot.arms.movePID();
         Robot.arms.moveToSetRotation(Constants.TOP_RUNG_POSITION);
