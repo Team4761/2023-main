@@ -86,5 +86,6 @@ public class ArmPIDSubsystem extends ProfiledPIDSubsystem {
             useOutput(m_controller.calculate(getMeasurement()) /*+ feedforward.calculate(encoder.getRotation(), encoder.getVelocity(), encoder.getAcceleration())*/, m_controller.getSetpoint());
         }
         encoder.updateEncoder();
+
     }
 }

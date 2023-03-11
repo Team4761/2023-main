@@ -26,6 +26,7 @@ public class ArmControl extends CommandBase {
         xbox.y().onTrue(Commands.runOnce(this::onPressY, armSubsystem));
         xbox.x().onTrue(Commands.runOnce(this::onPressX, armSubsystem));
         xbox.a().onTrue(Commands.runOnce(this::onPressA, armSubsystem));
+
         
 
         //SmartDashboard.putNumber("fupper arm angle", 0);
@@ -36,7 +37,7 @@ public class ArmControl extends CommandBase {
         //SmartDashboard.putNumber("farm 2 theta calc", 0);
         
         
-        xbox.leftBumper().whileTrue(Commands.run(this::inTake, DrivetrainSubsystem.getInstance()));
+        xbox.leftBumper().whileTrue(Commands.run(this::onPressLeftBumper, DrivetrainSubsystem.getInstance()));
         xbox.rightBumper().whileTrue(Commands.run(this::outTake, DrivetrainSubsystem.getInstance()));
         
         xbox.leftBumper().whileFalse(Commands.run(this::disableIntake, DrivetrainSubsystem.getInstance()));
@@ -65,6 +66,12 @@ public class ArmControl extends CommandBase {
         Robot.arms.enablePID();
         Robot.arms.movePID();
         Robot.arms.moveToSetRotation(Constants.TOP_RUNG_POSITION);
+    }
+
+    private void onPressLeftBumper(){
+        Robot.arms.enablePID();
+        Robot.arms.movePID();
+        Robot.arms.moveToSetRotation(Constants.NEUTRAL_POSITION);
     }
 
     @Override
