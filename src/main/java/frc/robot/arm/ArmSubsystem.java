@@ -1,22 +1,13 @@
 package frc.robot.arm;
 
-import java.util.Map;
-
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
-
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.main.Constants;
-import frc.robot.main.Robot;
-import edu.wpi.first.math.numbers.N2;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.numbers.N2;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.main.Constants;
 
 public class ArmSubsystem extends SubsystemBase {
     private final static ArmSubsystem INSTANCE = new ArmSubsystem();
@@ -135,8 +126,10 @@ public class ArmSubsystem extends SubsystemBase {
     }
     // Bottom Motor Control
     public void setBottom(double speed) {
-        bottom_left.set(speed);
+        bottom_left.set(-speed);
         bottom_right.set(speed);
+//        bottom_left.set(bottom_left.getInverted() ? -speed : speed);
+//        bottom_right.set(bottom_right.getInverted() ? -speed : speed);
     }
     public void setBottomL(double speed) {
         bottom_left.set(speed);
@@ -150,7 +143,7 @@ public class ArmSubsystem extends SubsystemBase {
     }
     // Top Motor Control
     public void setTop(double speed) {
-        top_motor_left.set(speed);
+        top_motor_left.set(-speed);
         top_motor_right.set(speed);
     }
     public void stopTop() {
@@ -297,8 +290,8 @@ public class ArmSubsystem extends SubsystemBase {
         //bottom_right_speed.setDouble(bottom_right.get());
 
         if (nextTime < System.currentTimeMillis()) {
-            System.out.println("[TOP] P) " + Constants.ARM_P_TOP + "  I) " + Constants.ARM_I_TOP + "  D) " + Constants.ARM_D_TOP);
-            System.out.println("[BOTTOM] P) " + Constants.ARM_P_BOTTOM + "  I) " + Constants.ARM_I_BOTTOM + "  D) " + Constants.ARM_D_BOTTOM);
+//            System.out.println("[TOP] P) " + Constants.ARM_P_TOP + "  I) " + Constants.ARM_I_TOP + "  D) " + Constants.ARM_D_TOP);
+//            System.out.println("[BOTTOM] P) " + Constants.ARM_P_BOTTOM + "  I) " + Constants.ARM_I_BOTTOM + "  D) " + Constants.ARM_D_BOTTOM);
             nextTime = System.currentTimeMillis() + 1000;
         }
     }
