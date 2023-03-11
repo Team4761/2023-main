@@ -127,7 +127,7 @@ public class Robot extends TimedRobot
     //leds.enableLEDs();
 
     //commandScheduler.schedule(new getPoseData());
-    //commandScheduler.schedule(armControl.repeatedly());
+    commandScheduler.schedule(armControl.repeatedly());
     //commandScheduler.schedule(updateLED.repeatedly());
     commandScheduler.schedule(driveController.repeatedly());
   }
@@ -137,7 +137,7 @@ public class Robot extends TimedRobot
   public void teleopPeriodic() {
     commandScheduler.run();
 
-    //m_shuffleboard.updateArms();
+    m_shuffleboard.updateArms();
     m_shuffleboard.updateDrive();
   }
 

@@ -45,8 +45,7 @@ public class ArmSubsystem extends SubsystemBase {
         top_motor_left = new CANSparkMax(Constants.ARM_MOTOR_TOP_LEFT_PORT, CANSparkMaxLowLevel.MotorType.kBrushless);
         top_motor_right = new CANSparkMax(Constants.ARM_MOTOR_TOP_RIGHT_PORT, CANSparkMaxLowLevel.MotorType.kBrushless);
 
-        bottom_left.setInverted(true);
-        top_motor_left.setInverted(true);
+
         //bottom_right.setInverted(true);
         //top_motor_right.setInverted(true);
 
@@ -63,6 +62,8 @@ public class ArmSubsystem extends SubsystemBase {
         super.register();
         top.enable();
         bottom.enable();
+       // bottom_left.setInverted(true);
+       // top_motor_left.setInverted(true);
     }
 
     @SuppressWarnings("WeakerAccess")
@@ -126,8 +127,8 @@ public class ArmSubsystem extends SubsystemBase {
     }
     // Bottom Motor Control
     public void setBottom(double speed) {
-        bottom_left.set(-speed);
-        bottom_right.set(speed);
+        bottom_left.set(speed);
+        bottom_right.set(-speed);
 //        bottom_left.set(bottom_left.getInverted() ? -speed : speed);
 //        bottom_right.set(bottom_right.getInverted() ? -speed : speed);
     }
@@ -143,8 +144,8 @@ public class ArmSubsystem extends SubsystemBase {
     }
     // Top Motor Control
     public void setTop(double speed) {
-        top_motor_left.set(-speed);
-        top_motor_right.set(speed);
+        top_motor_left.set(speed);
+        top_motor_right.set(-speed);
     }
     public void stopTop() {
         top_motor_left.stopMotor();

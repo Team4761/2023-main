@@ -45,15 +45,15 @@ public class ArmControl extends CommandBase {
 
     //current range of motion is 0.8 to -2.5 use smart dashboard to set rotation angle.
     private void onPressB() {
-        //movePID(SmartDashboard.getNumber("fupper arm angle",0), SmartDashboard.getNumber("flower arm angle", 0));
-        //Robot.arms.movePID();
-        //Robot.arms.moveToSetRotation(Constants.INTAKE_POSITION);
+        movePID(SmartDashboard.getNumber("fupper arm angle",0), SmartDashboard.getNumber("flower arm angle", 0));
+        Robot.arms.movePID();
+        Robot.arms.moveToSetRotation(Constants.INTAKE_POSITION);
     }
 
     private void onPressA() {
-        //Robot.arms.enablePID();
-        //Robot.arms.movePID();
-        //Robot.arms.moveToSetRotation(Constants.MID_RUNG_POSITION);
+        Robot.arms.enablePID();
+        Robot.arms.movePID();
+        Robot.arms.moveToSetRotation(Constants.MID_RUNG_POSITION);
     }
 
     private void onPressX() {
@@ -72,8 +72,10 @@ public class ArmControl extends CommandBase {
         //Robot.arms.moveToSetRotation(Constants.MID_RUNG_POSITION);
     }
     private void onPressY() {
-        //movePID(0.3,0.3);
-        //Robot.arms.moveToSetRotation(Constants.TOP_RUNG_POSITION);
+       // movePID(0.3,0.3);
+        Robot.arms.enablePID();
+        Robot.arms.movePID();
+        Robot.arms.moveToSetRotation(Constants.TOP_RUNG_POSITION);
     }
 
     @Override
@@ -82,7 +84,7 @@ public class ArmControl extends CommandBase {
         //Robot.arms.movePID();
         //Robot.arms.setBottomL(xbox.getRightY()/2);
         //Robot.arms.setBottomR(xbox.getLeftY()/2);
-        manualControl();
+      // manualControl();
         
         // Emergency Stop!
 
