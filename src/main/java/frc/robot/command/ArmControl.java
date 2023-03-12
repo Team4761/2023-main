@@ -1,7 +1,6 @@
 package frc.robot.command;
 
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Drivetrain.DrivetrainSubsystem;
@@ -85,16 +84,10 @@ public class ArmControl extends CommandBase {
         if (!Robot.arms.isPidEnabled()) {
             manualControl();
         }
-
         Robot.arms.debug();
     }
 
     public void manualControl() {
-        Translation2d curPoint = (armMath.getPoint(ArmSubsystem.getInstance().getTopRotation() + xbox.getRightY()*0.05, ArmSubsystem.getInstance().getBottomRotation() + xbox.getLeftY()*0.05));
-        SmartDashboard.putNumber("ARMS: TestPointX", curPoint.getX());
-        SmartDashboard.putNumber("ARMS: TestPointY", curPoint.getY());
-        System.out.println(curPoint.getX() + " | " + curPoint.getY());
-
         boolean armBoundsChecker = Robot.m_shuffleboard.armsBoundChecker();
         if (!armBoundsChecker ||
             armMath.inBounds(
