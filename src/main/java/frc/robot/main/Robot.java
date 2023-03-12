@@ -189,8 +189,8 @@ public class Robot extends TimedRobot
     }
   }
 
-  private String getAutoSelector() {
-    return SmartDashboard.getString("Auto", "2");
+  private int getAutoSelector() {
+    return m_shuffleboard.getStartPos();
   }
 
 }

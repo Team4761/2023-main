@@ -3,11 +3,8 @@ package frc.robot;
 import java.util.Map;
 
 import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.shuffleboard.*;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.arm.ArmSubsystem;
 import frc.robot.main.Constants;
 import frc.robot.main.Robot;
@@ -154,16 +151,21 @@ public class RobocketsShuffleboard {
 
 
     GenericEntry alliance;
-    GenericEntry startingPos;
+    SendableChooser<Integer> startingPos;
     public void initAuto() {
         ShuffleboardLayout settings = auto_tab.getLayout("Settings",BuiltInLayouts.kList).withSize(2, 6);
 
         alliance = settings.add("Alliance", false).withWidget(BuiltInWidgets.kToggleSwitch).withProperties(Map.of("min", 0, "max", 1)).getEntry();
-        startingPos = settings.add("Starting Position (0 is left)", 0)
-            .withWidget(BuiltInWidgets.kComboBoxChooser).withProperties(
-                Map.of("1", "1", "2", "2", "3", "3", "6", "6", "7", "7", "8", "8")).getEntry();
-    }
 
+        startingPos = new SendableChooser<>();
+        for (int i = 1; i <= 3; ++i) {
+            startingPos.addOption(Integer.toString(i), i);
+        }
+        for (int i = 6; i <= 8; ++i) {
+            startingPos.addOption(Integer.toString(i), i);
+        }
+        settings.add("Starting Position (1 is red, 6 is blue)", startingPos);
+    }
 
 
 
@@ -172,7 +174,7 @@ public class RobocketsShuffleboard {
     public boolean usingManualDrive() { return manualControlDrive.getBoolean(true); }
     public boolean armsBoundChecker() { return armsBoundsChecker.getBoolean(true); }
     public boolean getAlliance() { return alliance.getBoolean(true); }
-    public int getStartPos() { return (int)startingPos.getDouble(0); }
+    public int getStartPos() { return startingPos.getSelected(); }
     public double getManualTopArmSpeed() { return manual_top_arm_speed.getDouble(.2); }
     public double getManualBottomArmSpeed() { return manual_bottom_arm_speed.getDouble(.15); }
 }

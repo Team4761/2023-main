@@ -72,10 +72,6 @@ public class ArmControl extends CommandBase {
         Robot.arms.moveToSetRotation(midRungPosition);
     }
 
-    private void onPressTrigger() {
-        Robot.arms.disablePID();
-    }
-
     private void onPressDisablePidButton() {
         Robot.arms.disablePID();
     }
