@@ -169,6 +169,9 @@ public class ArmSubsystem extends SubsystemBase {
         top.disable();
         bottom.disable();
     }
+    public boolean isPidEnabled() {
+        return top.isEnabled();
+    }
 
     /* Getters */
     public double getBottomSpeed() {

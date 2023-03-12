@@ -47,6 +47,7 @@ public class RobocketsShuffleboard {
     GenericEntry top_right_speed;
     GenericEntry changingPIDEntry;
     GenericEntry manualControlArms;
+    GenericEntry armsBoundsChecker;
     GenericEntry feedforward_bottom;
     GenericEntry feedforward_top;
     GenericEntry useFeedForward;
@@ -83,6 +84,7 @@ public class RobocketsShuffleboard {
 
         changingPIDEntry = settings.add("Is Updating PID", true).withWidget(BuiltInWidgets.kToggleSwitch).getEntry();
         manualControlArms = settings.add("Using Manual Control", true).withWidget(BuiltInWidgets.kToggleSwitch).getEntry();
+        armsBoundsChecker = settings.add("Arms Bound Checker", true).withWidget(BuiltInWidgets.kToggleSwitch).getEntry();
         useFeedForward = settings.add("Using Feed Forward", false).withWidget(BuiltInWidgets.kToggleSwitch).getEntry();
         joystickPortArm = settings.add("Joystick Port", 0).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min", 0, "max", 10, "increment", 1)).getEntry();
     }
@@ -161,6 +163,7 @@ public class RobocketsShuffleboard {
     /* GETTERS */
     public boolean usingManualArms() { return manualControlArms.getBoolean(true); }
     public boolean usingManualDrive() { return manualControlDrive.getBoolean(true); }
+    public boolean armsBoundCheker() { return armsBoundsChecker.getBoolean(true); }
     public boolean getAlliance() { return alliance.getBoolean(true); }
     public int getStartPos() { return (int)startingPos.getDouble(0); }
 }
