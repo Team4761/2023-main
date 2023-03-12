@@ -8,7 +8,6 @@ import frc.robot.Drivetrain.DrivetrainSubsystem;
 import frc.robot.arm.ArmMath;
 import frc.robot.arm.ArmSubsystem;
 import frc.robot.controller.XboxControl;
-import frc.robot.intake.IntakeSubsystem;
 import frc.robot.main.Constants;
 import frc.robot.main.Robot;
 
@@ -36,7 +35,6 @@ public class ArmControl extends CommandBase {
         xbox.rightTrigger().onTrue(Commands.runOnce(this::onPressTrigger, armSubsystem));
     }
 
-    //current range of motion is 0.8 to -2.5 use smart dashboard to set rotation angle.
     private void onPressA() {
         moveToSetPoint(Constants.INTAKE_POSITION);
     }
