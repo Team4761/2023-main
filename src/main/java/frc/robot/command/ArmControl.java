@@ -1,7 +1,6 @@
 package frc.robot.command;
 
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Drivetrain.DrivetrainSubsystem;
@@ -27,14 +26,15 @@ public class ArmControl extends CommandBase {
         xbox.y().onTrue(Commands.runOnce(this::onPressY, armSubsystem));
 
         // For the Wii U button board, right stick is actually the start button
+        xbox.leftStick().onTrue(Commands.runOnce(this::onPressDisablePidButton, armSubsystem));
         xbox.rightStick().onTrue(Commands.runOnce(this::onPressDisablePidButton, armSubsystem));
 
-        xbox.leftBumper().onTrue(Commands.run(this::onPressLeftBumper, DrivetrainSubsystem.getInstance()));
+        xbox.leftBumper().onTrue(Commands.runOnce(this::onPressLeftBumper, DrivetrainSubsystem.getInstance()));
         xbox.rightBumper().whileTrue(Commands.run(this::onPressRightBumper, DrivetrainSubsystem.getInstance()));
-        xbox.rightBumper().onFalse(Commands.run(this::onPressRightBumperRelease, DrivetrainSubsystem.getInstance()));
+        xbox.rightBumper().onFalse(Commands.runOnce(this::onPressRightBumperRelease, DrivetrainSubsystem.getInstance()));
 
-        xbox.leftTrigger().onTrue(Commands.runOnce(this::onPressTrigger, armSubsystem));
-        xbox.rightTrigger().onTrue(Commands.runOnce(this::onPressTrigger, armSubsystem));
+//        xbox.leftTrigger().onTrue(Commands.runOnce(this::onPressTrigger, armSubsystem));
+//        xbox.rightTrigger().onTrue(Commands.runOnce(this::onPressTrigger, armSubsystem));
     }
 
     private void onPressA() {
@@ -72,10 +72,6 @@ public class ArmControl extends CommandBase {
         Robot.arms.moveToSetRotation(midRungPosition);
     }
 
-    private void onPressTrigger() {
-        Robot.arms.disablePID();
-    }
-
     private void onPressDisablePidButton() {
         Robot.arms.disablePID();
     }
@@ -85,16 +81,10 @@ public class ArmControl extends CommandBase {
         if (!Robot.arms.isPidEnabled()) {
             manualControl();
         }
-
         Robot.arms.debug();
     }
 
     public void manualControl() {
-        Translation2d curPoint = (armMath.getPoint(ArmSubsystem.getInstance().getTopRotation() + xbox.getRightY()*0.05, ArmSubsystem.getInstance().getBottomRotation() + xbox.getLeftY()*0.05));
-        SmartDashboard.putNumber("ARMS: TestPointX", curPoint.getX());
-        SmartDashboard.putNumber("ARMS: TestPointY", curPoint.getY());
-        System.out.println(curPoint.getX() + " | " + curPoint.getY());
-
         boolean armBoundsChecker = Robot.m_shuffleboard.armsBoundChecker();
         if (!armBoundsChecker ||
             armMath.inBounds(
