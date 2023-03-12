@@ -26,14 +26,15 @@ public class ArmControl extends CommandBase {
         xbox.y().onTrue(Commands.runOnce(this::onPressY, armSubsystem));
 
         // For the Wii U button board, right stick is actually the start button
+        xbox.leftStick().onTrue(Commands.runOnce(this::onPressDisablePidButton, armSubsystem));
         xbox.rightStick().onTrue(Commands.runOnce(this::onPressDisablePidButton, armSubsystem));
 
-        xbox.leftBumper().onTrue(Commands.run(this::onPressLeftBumper, DrivetrainSubsystem.getInstance()));
+        xbox.leftBumper().onTrue(Commands.runOnce(this::onPressLeftBumper, DrivetrainSubsystem.getInstance()));
         xbox.rightBumper().whileTrue(Commands.run(this::onPressRightBumper, DrivetrainSubsystem.getInstance()));
-        xbox.rightBumper().onFalse(Commands.run(this::onPressRightBumperRelease, DrivetrainSubsystem.getInstance()));
+        xbox.rightBumper().onFalse(Commands.runOnce(this::onPressRightBumperRelease, DrivetrainSubsystem.getInstance()));
 
-        xbox.leftTrigger().onTrue(Commands.runOnce(this::onPressTrigger, armSubsystem));
-        xbox.rightTrigger().onTrue(Commands.runOnce(this::onPressTrigger, armSubsystem));
+//        xbox.leftTrigger().onTrue(Commands.runOnce(this::onPressTrigger, armSubsystem));
+//        xbox.rightTrigger().onTrue(Commands.runOnce(this::onPressTrigger, armSubsystem));
     }
 
     private void onPressA() {
