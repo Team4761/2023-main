@@ -171,7 +171,8 @@ public class RobocketsShuffleboard {
         //         Map.of("1", "1", "2", "2", "3", "3", "6", "6", "7", "7", "8", "8")).getEntry();
 
         startingPos = new SendableChooser<>();
-        for (int i = 1; i <= 3; ++i) {
+        startingPos.setDefaultOption(Integer.toString(1), 1);
+        for (int i = 2; i <= 3; ++i) {
             startingPos.addOption(Integer.toString(i), i);
         }
         for (int i = 6; i <= 8; ++i) {
