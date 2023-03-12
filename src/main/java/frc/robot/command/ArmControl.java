@@ -91,8 +91,12 @@ public class ArmControl extends CommandBase {
                     ArmSubsystem.getInstance().getBottomRotation() + xbox.getLeftY()*0.05)
             )
         ) {
-            Robot.arms.setTop(xbox.getLeftY() * 0.2);
-            Robot.arms.setBottom(xbox.getRightY() * 0.15);
+            if (xbox.getLeftY() != 0) {
+                Robot.arms.setTop(getTopArmSpeed() * (xbox.getLeftY() > 0 ? 1 : -1));
+            }
+            if (xbox.getRightY() != 0) {
+                Robot.arms.setBottom(getBottomArmSpeed() * (xbox.getRightY() > 0 ? 1 : -1));
+            }
         }
     }
 
@@ -106,4 +110,11 @@ public class ArmControl extends CommandBase {
         this.port = port;
         System.out.println("Changed Controller Port To " + port);
     }
-}
+
+    private double getTopArmSpeed() {
+        return Robot.m_shuffleboard.getManualTopArmSpeed();
+    }
+
+    private double getBottomArmSpeed() {
+        return Robot.m_shuffleboard.getManualBottomArmSpeed();
+    }}

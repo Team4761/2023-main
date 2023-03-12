@@ -56,6 +56,9 @@ public class RobocketsShuffleboard {
     GenericEntry top_speed;
     GenericEntry bottom_rotation;
     GenericEntry bottom_speed;
+    GenericEntry manual_top_arm_speed;
+    GenericEntry manual_bottom_arm_speed;
+
     public void initArms() {
         arms_tab = Shuffleboard.getTab("Arms");
         ShuffleboardLayout PID_lower = arms_tab.getLayout("Bottom",BuiltInLayouts.kList).withSize(2, 6);
@@ -81,6 +84,9 @@ public class RobocketsShuffleboard {
         feedforward_top = PID_top.add("Feedforward", ArmSubsystem.getInstance().getTopPID().ff).getEntry();
         top_rotation = PID_top.add("Top Rotation", ArmSubsystem.getInstance().getDesiredTopRotation()).getEntry();
         top_speed = PID_top.add("Top Speed", ArmSubsystem.getInstance().getDesiredTopRotation()).getEntry();
+
+        manual_top_arm_speed = settings.add("Manual Top Speed", .2).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min", .1, "max", 1.0)).getEntry();
+        manual_bottom_arm_speed = settings.add("Manual Bottom Speed", .15).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min", .1, "max", 1.0)).getEntry();
 
         changingPIDEntry = settings.add("Is Updating PID", true).withWidget(BuiltInWidgets.kToggleSwitch).getEntry();
         manualControlArms = settings.add("Using Manual Control", true).withWidget(BuiltInWidgets.kToggleSwitch).getEntry();
@@ -166,4 +172,6 @@ public class RobocketsShuffleboard {
     public boolean armsBoundCheker() { return armsBoundsChecker.getBoolean(true); }
     public boolean getAlliance() { return alliance.getBoolean(true); }
     public int getStartPos() { return (int)startingPos.getDouble(0); }
+    public double getManualTopArmSpeed() { return manual_top_arm_speed.getDouble(.2); }
+    public double getManualBottomArmSpeed() { return manual_bottom_arm_speed.getDouble(.15); }
 }
