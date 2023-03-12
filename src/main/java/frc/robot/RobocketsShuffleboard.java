@@ -5,7 +5,6 @@ import java.util.Map;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInLayouts;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.shuffleboard.LayoutType;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardLayout;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -169,7 +168,7 @@ public class RobocketsShuffleboard {
     /* GETTERS */
     public boolean usingManualArms() { return manualControlArms.getBoolean(true); }
     public boolean usingManualDrive() { return manualControlDrive.getBoolean(true); }
-    public boolean armsBoundCheker() { return armsBoundsChecker.getBoolean(true); }
+    public boolean armsBoundChecker() { return armsBoundsChecker.getBoolean(true); }
     public boolean getAlliance() { return alliance.getBoolean(true); }
     public int getStartPos() { return (int)startingPos.getDouble(0); }
     public double getManualTopArmSpeed() { return manual_top_arm_speed.getDouble(.2); }

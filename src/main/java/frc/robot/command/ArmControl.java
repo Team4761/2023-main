@@ -83,7 +83,7 @@ public class ArmControl extends CommandBase {
         SmartDashboard.putNumber("ARMS: TestPointY", curPoint.getY());
         System.out.println(curPoint.getX() + " | " + curPoint.getY());
 
-        boolean armBoundsChecker = Robot.m_shuffleboard.armsBoundCheker();
+        boolean armBoundsChecker = Robot.m_shuffleboard.armsBoundChecker();
         if (!armBoundsChecker ||
             armMath.inBounds(
                 armMath.getPoint(
