@@ -159,7 +159,9 @@ public class RobocketsShuffleboard {
         ShuffleboardLayout settings = auto_tab.getLayout("Settings",BuiltInLayouts.kList).withSize(2, 6);
 
         alliance = settings.add("Alliance", false).withWidget(BuiltInWidgets.kToggleSwitch).withProperties(Map.of("min", 0, "max", 1)).getEntry();
-        startingPos = settings.add("Starting Position (0 is left)", 0).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min", 0, "max", 2)).getEntry();
+        startingPos = settings.add("Starting Position (0 is left)", 0)
+            .withWidget(BuiltInWidgets.kComboBoxChooser).withProperties(
+                Map.of("1", "1", "2", "2", "3", "3", "6", "6", "7", "7", "8", "8")).getEntry();
     }
 
 
