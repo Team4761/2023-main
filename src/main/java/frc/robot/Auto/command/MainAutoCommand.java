@@ -3,7 +3,9 @@ package frc.robot.Auto.command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.command.ArmMoveToSetpointCommand;
 import frc.robot.command.MoveStraightMeasuredCommand;
+import frc.robot.main.Constants;
 
 public class MainAutoCommand extends SequentialCommandGroup {
     public static final String POS_1 = "1";
@@ -16,7 +18,8 @@ public class MainAutoCommand extends SequentialCommandGroup {
     public MainAutoCommand(String autoSelector){
         addCommands(
             new ScoreDirectlyInFront(),
-            getCommand(autoSelector)
+            getCommand(autoSelector),
+            new ArmMoveToSetpointCommand(Constants.NEUTRAL_POSITION)
         );
     }
 

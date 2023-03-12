@@ -1,6 +1,7 @@
 package frc.robot.Auto.command;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Auto.EncoderAuto.TurnToGyro;
 import frc.robot.field.Field;
 import frc.robot.main.Robot;
 
@@ -15,8 +16,8 @@ public class AutoCommandPos1 extends SequentialCommandGroup {
         Robot.impl.setPose(startPose);
 
         addCommands(
-            new MoveToPointCommand(item.getX() + PAST_ITEM, startPose.getY())
-//            new TurnCommand(-180),
+            new MoveToPointCommand(item.getX() + PAST_ITEM, startPose.getY()),
+            new TurnToGyro(-180)
         );
     }
 }

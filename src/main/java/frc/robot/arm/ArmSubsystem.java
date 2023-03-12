@@ -125,6 +125,11 @@ public class ArmSubsystem extends SubsystemBase {
         enablePID();
         movePID();
     }
+
+    public boolean isAtSetpoint() {
+        return getBottomPID().isAtSetpoint() && getTopPID().isAtSetpoint();
+    }
+
     // Bottom Motor Control
     public void setBottom(double speed) {
         bottom_left.set(-speed);
