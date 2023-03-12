@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.command.MoveArmAngles;
 import frc.robot.command.MoveStraightMeasuredCommand;
 import frc.robot.main.Constants;
+import frc.robot.main.Robot;
 
 public class MainAutoCommand extends SequentialCommandGroup {
     public static final int POS_1 = 1;
@@ -19,7 +20,7 @@ public class MainAutoCommand extends SequentialCommandGroup {
         addCommands(
             new ScoreDirectlyInFront(),
             getCommand(autoSelector),
-            new MoveArmAngles(Constants.NEUTRAL_POSITION)
+            new MoveArmAngles(Constants.INTAKE_POSITION)
         );
     }
 
@@ -37,7 +38,8 @@ public class MainAutoCommand extends SequentialCommandGroup {
             }
         }
         // The goal of this is to achieve mobility ... just haul backward 4.0 meters and stay put
-        return new MoveStraightMeasuredCommand(-1.0,4.0);
+        var topSpeed = Robot.m_shuffleboard.getAutoMaxSpeed();
+        return new MoveStraightMeasuredCommand(-topSpeed,4.0);
     }
 
     public boolean getAutoOnlyScoreMobility() {
