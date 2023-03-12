@@ -73,7 +73,7 @@ public class ArmControl extends CommandBase {
     }
 
     private void onPressTrigger() {
-        ArmSubsystem.getInstance().zeroEncoders();
+        Robot.arms.disablePID();
     }
 
     private void onPressDisablePidButton() {
