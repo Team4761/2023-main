@@ -124,14 +124,16 @@ public class Robot extends TimedRobot
   /** This method is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
-    //leds.enableLEDs();
+    leds.enableLEDs();
 
     //commandScheduler.schedule(new getPoseData());
     commandScheduler.schedule(armControl.repeatedly());
-    //commandScheduler.schedule(updateLED.repeatedly());
+    commandScheduler.schedule(updateLED.repeatedly());
     commandScheduler.schedule(driveController.repeatedly());
   }
 
+  long nextTime = 0;
+  int curPattern = 0;
   /** This method is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
@@ -139,6 +141,7 @@ public class Robot extends TimedRobot
 
     m_shuffleboard.updateArms();
     m_shuffleboard.updateDrive();
+    //System.out.println(m_shuffleboard.useFeedForward);
   }
 
   /** This method is called once when the robot is disabled. */

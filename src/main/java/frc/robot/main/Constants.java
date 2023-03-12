@@ -7,7 +7,7 @@ public class Constants {
 
     // Ports & LEDs
     public static final int LED_PORT = 0;                       // RoboRIO, PWM port
-    public static final int LED_NUMBER = 30;                    // Number of LEDs
+    public static final int LED_NUMBER = 200;                    // Number of LEDs
     public static final int ARM_ENCODER_TOP_PORT = 9;           // RoboRIO, DIO port
     public static final int ARM_ENCODER_BOTTOM_PORT = 0;        // RoboRIO, DIO port
     //Ports are for new arm old ports on side or the same
@@ -58,8 +58,8 @@ public class Constants {
     public static final double JOINT_1_MIN = -100;
     public static final double KINEMATICS_OFFSET_TOP = Math.toRadians(15);
     public static final double KINEMATICS_OFFSET_BOTTOM = Math.toRadians(15);
-    public static final double FLAT_ARM_TOP_OFFSET = 0.0;   // To tune
-    public static final double FLAT_ARM_BOTTOM_OFFSET = 0.0;   // To tune
+    public static final double FLAT_ARM_TOP_OFFSET = 3.45;   // To tune
+    public static final double FLAT_ARM_BOTTOM_OFFSET = 3.4;   // To tune
     public static final double CONTROLLER_DEADZONE = 0.05;
     
     //Arm Feedforward

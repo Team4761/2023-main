@@ -7,6 +7,7 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
 import frc.robot.main.Constants;
+import frc.robot.main.Robot;
 
 public class ArmPIDSubsystem extends ProfiledPIDSubsystem {
 
@@ -42,17 +43,26 @@ public class ArmPIDSubsystem extends ProfiledPIDSubsystem {
     public void useOutput(double output, TrapezoidProfile.State setpoint) {
         ff = 0.0;
         System.out.println("Calculation: " + m_controller.getSetpoint().position + " | " + m_controller.getGoal().position);
-        if(motorType.equalsIgnoreCase("top") && ArmSubsystem.getInstance().useFeedForward)
-            ff = subsystem.calculateFeedforwards().get(1,0) / 12.0;
-        if(motorType.equalsIgnoreCase("bottom") & ArmSubsystem.getInstance().useFeedForward)
-            ff = subsystem.calculateFeedforwards().get(0,0) / 12.0;
+
+        if (motorType.equalsIgnoreCase("top"))
+            Robot.m_shuffleboard.setTopFF(subsystem.calculateFeedforwards().get(1,0) / 12.0);
+        if (motorType.equalsIgnoreCase("bottom"))
+            Robot.m_shuffleboard.setBottomFF(subsystem.calculateFeedforwards().get(0,0) / 12.0);
+        // if(motorType.equalsIgnoreCase("top") && ArmSubsystem.getInstance().useFeedForward)
+        //     ff = subsystem.calculateFeedforwards().get(1,0) / 12.0;
+        // if(motorType.equalsIgnoreCase("bottom") & ArmSubsystem.getInstance().useFeedForward)
+        //     ff = subsystem.calculateFeedforwards().get(0,0) / 12.0;
+    
         System.out.println("CURRENT OUTPUT: " + output);
         System.out.println("ERROR: " + (ArmSubsystem.getInstance().getDesiredTopRotation()-ArmSubsystem.getInstance().getTopRotation()));
-        if (motorType.equalsIgnoreCase("top"))
+
+        if (motorType.equalsIgnoreCase("top")) {
             ArmSubsystem.getInstance().setTop(-(output + ff));
-        if (motorType.equalsIgnoreCase("bottom"))
+        }
+        if (motorType.equalsIgnoreCase("bottom")) {
             ArmSubsystem.getInstance().setBottom(-(output + ff));
-            System.out.println(motorType + " | " + getController().getP() + " , " + getController().getI() + " , " + getController().getD());
+        }
+        System.out.println(motorType + " | " + getController().getP() + " , " + getController().getI() + " , " + getController().getD());
     }
 
     @Override
