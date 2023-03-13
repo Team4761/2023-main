@@ -1,13 +1,14 @@
 package frc.robot.command;
 
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.arm.ArmSubsystem;
 import frc.robot.main.Robot;
 
 public class MoveArmAngles extends CommandBase {
-    public MoveArmAngles(double top, double bottom) {
-        ArmSubsystem.setDesiredBottomRotation(bottom);
-        ArmSubsystem.setDesiredTopRotation(top);
+    public MoveArmAngles(Translation2d pt) {
+        ArmSubsystem.setDesiredTopRotation(pt.getX());
+        ArmSubsystem.setDesiredBottomRotation(pt.getY());
     }
     @Override
     public void initialize() {

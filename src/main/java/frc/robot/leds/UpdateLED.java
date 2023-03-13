@@ -16,7 +16,7 @@ public class UpdateLED extends CommandBase {
             Robot.leds.setLEDs(curPattern);
             curPattern++;
             curPattern %= 4;
-            nextTime = System.currentTimeMillis() + 500;
+            nextTime = System.currentTimeMillis() + 10000;
         }
     }
 }
