@@ -13,7 +13,8 @@ import frc.robot.leds.LEDSubsystem;
 import frc.robot.main.Constants;
 
 public class DriveController extends CommandBase {
-    private XboxControl xbox;
+    public XboxControl xbox;
+    public int port;
     private boolean isArcade = true;
     DrivetrainSubsystem drivetrainSubsystem = DrivetrainSubsystem.getInstance();
     Timer timer = new Timer();
@@ -29,6 +30,7 @@ public class DriveController extends CommandBase {
 
     public DriveController(int port) {
         xbox = new XboxControl(port);
+        this.port = port;
         xbox.a().onTrue(Commands.runOnce(this::onPressA, drivetrainSubsystem));
         xbox.b().onTrue(Commands.runOnce(this::onPressB, drivetrainSubsystem));
         xbox.x().onTrue(Commands.runOnce(this::onPressX, drivetrainSubsystem));
@@ -136,5 +138,11 @@ public class DriveController extends CommandBase {
         rightSpeed /= saturatedInput;
 
         return new DifferentialDrive.WheelSpeeds(leftSpeed, rightSpeed);
+    }
+
+    public void reinitController(int port) {
+        xbox = new XboxControl(port);   
+        this.port = port;
+        System.out.println("Changed Controller Port To " + port);
     }
 }

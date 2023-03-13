@@ -29,6 +29,7 @@ public class MoveToPointCommand extends SequentialCommandGroup {
             Translation2d currentPos = Robot.impl.getPose().getTranslation();
             Translation2d delta = goalPostion.minus(currentPos);
 
+            // TODO: this only does one direction
             double topSpeed = SmartDashboard.getNumber("autoTopSpeed", .8);
             if (Math.abs(delta.getX()) > Math.abs(delta.getY())) {
                 int pointedAwayFromOrigin = currentPos.getAngle().getDegrees() < 45 ? 1 : -1;

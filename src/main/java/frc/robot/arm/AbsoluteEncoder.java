@@ -9,9 +9,6 @@ public class AbsoluteEncoder extends SubsystemBase {
     // CONNECT USING the white, red, and black cable.
     // The WHITE cable is the signal wire.
 
-    public AbsoluteEncoder() {
-        m_dutyCycleEncoder = new DutyCycleEncoder(0);   //Default port is 0
-    }
     AbsoluteEncoder(int dioPORT) {
         try {
             m_dutyCycleEncoder = new DutyCycleEncoder(dioPORT);     // Connects to a DIO port

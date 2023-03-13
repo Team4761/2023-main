@@ -1,21 +1,13 @@
 package frc.robot.arm;
 
-import java.util.Map;
-
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel;
-
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.main.Constants;
-import edu.wpi.first.math.numbers.N2;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.numbers.N2;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.main.Constants;
 
 public class ArmSubsystem extends SubsystemBase {
     private final static ArmSubsystem INSTANCE = new ArmSubsystem();
@@ -28,6 +20,7 @@ public class ArmSubsystem extends SubsystemBase {
     CANSparkMax top_motor_right;
     public ArmPIDSubsystem bottom;
     public ArmPIDSubsystem top;
+    public boolean useFeedForward;
 
     ArmMath inverseKinematics;
     Translation2d pos;
@@ -39,8 +32,8 @@ public class ArmSubsystem extends SubsystemBase {
     // The WHITE cable is the signal wire.
     
     //JointConfig stuff
-    private JointConfig top_joint = new JointConfig(Constants.TOP_MASS, Constants.ARM_LENGTH_TOP, Constants.TOP_MOI, Constants.TOP_CGRADIUS, Constants.TOP_MOTOR, this);
-    private JointConfig bottom_joint = new JointConfig(Constants.BOTTOM_MASS, Constants.ARM_LENGTH_BOTTOM, Constants.BOTTOM_MOI, Constants.BOTTOM_CGRADIUS, Constants.BOTTOM_MOTOR, this);
+    private JointConfig top_joint = new JointConfig(Constants.TOP_MASS, Constants.ARM_LENGTH_TOP, Constants.TOP_MOI, Constants.TOP_CGRADIUS, Constants.TOP_MOTOR);
+    private JointConfig bottom_joint = new JointConfig(Constants.BOTTOM_MASS, Constants.ARM_LENGTH_BOTTOM, Constants.BOTTOM_MOI, Constants.BOTTOM_CGRADIUS, Constants.BOTTOM_MOTOR);
     private DJArmFeedforward djArmFeedforward = new DJArmFeedforward(bottom_joint, top_joint);
 
     private ArmSubsystem()
@@ -52,18 +45,16 @@ public class ArmSubsystem extends SubsystemBase {
         top_motor_left = new CANSparkMax(Constants.ARM_MOTOR_TOP_LEFT_PORT, CANSparkMaxLowLevel.MotorType.kBrushless);
         top_motor_right = new CANSparkMax(Constants.ARM_MOTOR_TOP_RIGHT_PORT, CANSparkMaxLowLevel.MotorType.kBrushless);
 
-        bottom_left.setInverted(true);
-        top_motor_left.setInverted(true);
+
         //bottom_right.setInverted(true);
         //top_motor_right.setInverted(true);
 
         // Do find '//REMOVABLE' and replace all with nothing to activate bottom control
-        bottom = new ArmPIDSubsystem(bottomEncoder, bottom_left, "bottom", Constants.ARM_P_BOTTOM, Constants.ARM_I_BOTTOM, Constants.ARM_D_BOTTOM);
-        top = new ArmPIDSubsystem(topEncoder, top_motor_left, "top", Constants.ARM_P_TOP, Constants.ARM_I_TOP, Constants.ARM_D_TOP);
+        bottom = new ArmPIDSubsystem(bottomEncoder, bottom_left, "bottom", Constants.ARM_P_BOTTOM, Constants.ARM_I_BOTTOM, Constants.ARM_D_BOTTOM, this);
+        top = new ArmPIDSubsystem(topEncoder, top_motor_left, "top", Constants.ARM_P_TOP, Constants.ARM_I_TOP, Constants.ARM_D_TOP, this);
 
         inverseKinematics = new ArmMath();
         pos = inverseKinematics.getPoint(getBottomRotation(), getTopRotation());
-
     }
 
     @Override
@@ -71,6 +62,8 @@ public class ArmSubsystem extends SubsystemBase {
         super.register();
         top.enable();
         bottom.enable();
+       // bottom_left.setInverted(true);
+       // top_motor_left.setInverted(true);
     }
 
     @SuppressWarnings("WeakerAccess")
@@ -101,13 +94,14 @@ public class ArmSubsystem extends SubsystemBase {
     }
     //FEEDFORWARD IMPL //Needs to be based off 0,0 as straight extensions (intial arm math)
     public Vector<N2> calculateFeedforwards() {
-        double inputUpper = -desiredTopRotation + Math.toRadians(Constants.FLAT_ARM_TOP_OFFSET);
-        double inputLower = desiredBottomRotation + Math.toRadians(Constants.FLAT_ARM_BOTTOM_OFFSET);
+        double inputUpper = -desiredTopRotation + Math.toRadians(Constants.FLAT_ARM_TOP_OFFSET); // Angle is the outside, not inside angle.... WHYYYYY
+        double inputLower = -desiredBottomRotation + Math.toRadians(Constants.FLAT_ARM_BOTTOM_OFFSET);
         Vector<N2> angles = VecBuilder.fill(inputLower, inputUpper);
 
         Vector<N2> vectorFF = djArmFeedforward.feedforward(angles);
         return vectorFF;
     }//check with alistair to implement this into pid and check subsystem class linked
+
     public void updatePos(Translation2d delta) {
         if (delta.getX() > Constants.CONTROLLER_DEADZONE || delta.getX() < 0-Constants.CONTROLLER_DEADZONE || delta.getY() > Constants.CONTROLLER_DEADZONE || delta.getY() < 0-Constants.CONTROLLER_DEADZONE) {
             if (goingToSetPosition) {
@@ -132,10 +126,17 @@ public class ArmSubsystem extends SubsystemBase {
         enablePID();
         movePID();
     }
+
+    public boolean isAtSetpoint() {
+        return getBottomPID().isAtSetpoint() && getTopPID().isAtSetpoint();
+    }
+
     // Bottom Motor Control
     public void setBottom(double speed) {
-        bottom_left.set(speed);
+        bottom_left.set(-speed);
         bottom_right.set(speed);
+//        bottom_left.set(bottom_left.getInverted() ? -speed : speed);
+//        bottom_right.set(bottom_right.getInverted() ? -speed : speed);
     }
     public void setBottomL(double speed) {
         bottom_left.set(speed);
@@ -149,7 +150,7 @@ public class ArmSubsystem extends SubsystemBase {
     }
     // Top Motor Control
     public void setTop(double speed) {
-        top_motor_left.set(speed);
+        top_motor_left.set(-speed);
         top_motor_right.set(speed);
     }
     public void stopTop() {
@@ -173,6 +174,9 @@ public class ArmSubsystem extends SubsystemBase {
     public void disablePID() {
         top.disable();
         bottom.disable();
+    }
+    public boolean isPidEnabled() {
+        return top.isEnabled();
     }
 
     /* Getters */
@@ -296,8 +300,8 @@ public class ArmSubsystem extends SubsystemBase {
         //bottom_right_speed.setDouble(bottom_right.get());
 
         if (nextTime < System.currentTimeMillis()) {
-            System.out.println("[TOP] P) " + Constants.ARM_P_TOP + "  I) " + Constants.ARM_I_TOP + "  D) " + Constants.ARM_D_TOP);
-            System.out.println("[BOTTOM] P) " + Constants.ARM_P_BOTTOM + "  I) " + Constants.ARM_I_BOTTOM + "  D) " + Constants.ARM_D_BOTTOM);
+//            System.out.println("[TOP] P) " + Constants.ARM_P_TOP + "  I) " + Constants.ARM_I_TOP + "  D) " + Constants.ARM_D_TOP);
+//            System.out.println("[BOTTOM] P) " + Constants.ARM_P_BOTTOM + "  I) " + Constants.ARM_I_BOTTOM + "  D) " + Constants.ARM_D_BOTTOM);
             nextTime = System.currentTimeMillis() + 1000;
         }
     }

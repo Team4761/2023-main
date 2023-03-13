@@ -7,14 +7,14 @@ public class Constants {
 
     // Ports & LEDs
     public static final int LED_PORT = 0;                       // RoboRIO, PWM port
-    public static final int LED_NUMBER = 30;                    // Number of LEDs
+    public static final int LED_NUMBER = 200;                    // Number of LEDs
     public static final int ARM_ENCODER_TOP_PORT = 9;           // RoboRIO, DIO port
     public static final int ARM_ENCODER_BOTTOM_PORT = 0;        // RoboRIO, DIO port
     //Ports are for new arm old ports on side or the same
-    public static final int ARM_MOTOR_BOTTOM_LEFT_PORT = 3;     // CAN, initialized port //same ports
-    public static final int ARM_MOTOR_BOTTOM_RIGHT_PORT = 2;    // CAN, initialized port //42 for new arm, 2 for old
-    public static final int ARM_MOTOR_TOP_LEFT_PORT = 1;        // CAN, initialized port //same ports
-    public static final int ARM_MOTOR_TOP_RIGHT_PORT = 5;        // CAN, initialized port //same ports
+    public static final int ARM_MOTOR_BOTTOM_LEFT_PORT = 2;     // CAN, initialized port //same ports
+    public static final int ARM_MOTOR_BOTTOM_RIGHT_PORT =1;    // CAN, initialized port //42 for new arm, 2 for old
+    public static final int ARM_MOTOR_TOP_LEFT_PORT = 5;        // CAN, initialized port //same ports
+    public static final int ARM_MOTOR_TOP_RIGHT_PORT = 3;        // CAN, initialized port //same ports
     public static final int ARM_MOTOR_INTAKE_PORT = 4;          // CAN, initialized port //only for new arm
     public static final double ROBOT_LENGTH = 27;
     public static final double ROBOT_WIDTH = 24;
@@ -42,24 +42,24 @@ public class Constants {
     // Arm Constants
     static final public double ARM_LENGTH_BOTTOM = 22.5;         // Bottom Arm?  //now 22.5 was 25
     static final public double ARM_LENGTH_TOP = 39.0;            // Top Arm?     //now 28.5 was 30
-    static public double ARM_P_TOP = 0.4;                        // PID control for arms
+    static public double ARM_P_TOP = 0.7;                        // PID control for arms
     static public double ARM_I_TOP = 0.0;                        // PID control for arms
-    static public double ARM_D_TOP = 0.1;                        // PID control for arms
+    static public double ARM_D_TOP = 0.0;                        // PID control for arms
     static public double ARM_P_BOTTOM = 0.6;                     // PID control for arms
     static public double ARM_I_BOTTOM = 0.0;                     // PID control for arms
     static public double ARM_D_BOTTOM = 0.0;                     // PID control for arms
     static final public double ARM_MAX_ACCELERATION_SPEED = 0.1;
     static final public double ARM_MAX_ROTATION_SPEED = 1.0;
-    static final public double ENCODER_ZERO_VALUE_TOP = 4.6; //PAST: 0.6189683810569215
-    static final public double ENCODER_ZERO_VALUE_BOTTOM = 3.9; //PAST: 5.06664074953627
+    static final public double ENCODER_ZERO_VALUE_TOP = 3.5; //PAST: 0.6189683810569215
+    static final public double ENCODER_ZERO_VALUE_BOTTOM = 4.0; //PAST: 5.06664074953627
     public static final double JOINT_2_MAX = 110.8;
     public static final double JOINT_2_MIN = -200.5;
     public static final double JOINT_1_MAX = 100;
     public static final double JOINT_1_MIN = -100;
     public static final double KINEMATICS_OFFSET_TOP = Math.toRadians(15);
     public static final double KINEMATICS_OFFSET_BOTTOM = Math.toRadians(15);
-    public static final double FLAT_ARM_TOP_OFFSET = 0.0;   // To tune
-    public static final double FLAT_ARM_BOTTOM_OFFSET = 0.0;   // To tune
+    public static final double FLAT_ARM_TOP_OFFSET = 3.45;   // To tune
+    public static final double FLAT_ARM_BOTTOM_OFFSET = 3.4;   // To tune
     public static final double CONTROLLER_DEADZONE = 0.05;
     
     //Arm Feedforward
@@ -86,7 +86,9 @@ public class Constants {
 
     // Set Positions
     public static final Translation2d INTAKE_POSITION = new Translation2d(0.18, 0.270);    // x & y are angles in radians (top_rotation, bottom_rotation)
-    public static final Translation2d MID_RUNG_POSITION = new Translation2d(2.0, 2.4);    // x & y are angles in radians (top_rotation, bottom_rotation) [Went to 2.1, 2.2]
-    public static final Translation2d TOP_RUNG_POSITION = new Translation2d(2.22, 3.14);    // x & y are angles in radians (top_rotation, bottom_rotation) [Went to 2.4, 3.02]
+    public static final Translation2d MID_RUNG_POSITION = new Translation2d(1.94, 1.54);    // x & y are angles in radians (top_rotation, bottom_rotation) [Went to 2.1, 2.2]
+    public static final Translation2d TOP_RUNG_POSITION = new Translation2d(3.12, 2.23);    // x & y are angles in radians (top_rotation, bottom_rotation) [Went to 2.4, 3.02]
+    public static final Translation2d SHELF_POSITION = new Translation2d(1.57, 1.0);       //same as those
+    public static final Translation2d NEUTRAL_POSITION = new Translation2d(1.09, 0.49);
     public static final Translation2d STARTING_POSITION = new Translation2d(1.50, 0.08);    // x & y are angles in radians (top_rotation, bottom_rotation) [Went to 2.4, 3.02]
 }

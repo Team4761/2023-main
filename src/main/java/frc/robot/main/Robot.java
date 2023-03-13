@@ -51,9 +51,9 @@ public class Robot extends TimedRobot
   private final UpdateLED updateLED = new UpdateLED();
   // Subsystems
   public static DrivetrainSubsystem driveTrain = DrivetrainSubsystem.getInstance();
-  private final DriveController driveController = new DriveController(1);
+  public static final DriveController driveController = new DriveController(1);
   public static ArmSubsystem arms = ArmSubsystem.getInstance();
-  private final ArmControl armControl = new ArmControl(0);
+  public static final ArmControl armControl = new ArmControl(0);
   public static IntakeSubsystem intake = IntakeSubsystem.getInstance();
   public static LEDSubsystem leds = LEDSubsystem.getInstance();
   public static RobocketsShuffleboard m_shuffleboard = new RobocketsShuffleboard();
@@ -124,11 +124,11 @@ public class Robot extends TimedRobot
   /** This method is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
-    leds.enableLEDs();
+    //leds.enableLEDs();
 
-    commandScheduler.schedule(new getPoseData());
+    //commandScheduler.schedule(new getPoseData());
     commandScheduler.schedule(armControl.repeatedly());
-    commandScheduler.schedule(updateLED.repeatedly());
+    //commandScheduler.schedule(updateLED.repeatedly());
     commandScheduler.schedule(driveController.repeatedly());
   }
 
