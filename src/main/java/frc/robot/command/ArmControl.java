@@ -33,8 +33,8 @@ public class ArmControl extends CommandBase {
         xbox.rightBumper().whileTrue(Commands.run(this::onPressRightBumper, DrivetrainSubsystem.getInstance()));
         xbox.rightBumper().onFalse(Commands.runOnce(this::onPressRightBumperRelease, DrivetrainSubsystem.getInstance()));
 
-//        xbox.leftTrigger().onTrue(Commands.runOnce(this::onPressTrigger, armSubsystem));
-//        xbox.rightTrigger().onTrue(Commands.runOnce(this::onPressTrigger, armSubsystem));
+        xbox.leftTrigger().onTrue(Commands.runOnce(this::onPressTrigger, armSubsystem));
+        xbox.rightTrigger().onTrue(Commands.runOnce(this::onPressTrigger, armSubsystem));
     }
 
     private void onPressA() {
@@ -60,6 +60,10 @@ public class ArmControl extends CommandBase {
         Robot.arms.disablePID();
         Robot.arms.setTop(.05);
         Robot.arms.setBottom(.05);
+    }
+
+    public void onPressTrigger() {
+        // Robot.arms.disablePID();
     }
 
     private void onPressRightBumperRelease() {
