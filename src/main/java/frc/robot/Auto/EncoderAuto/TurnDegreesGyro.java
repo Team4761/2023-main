@@ -7,7 +7,7 @@ import frc.robot.main.Constants;
 
 
 
-public class TurnToGyro extends CommandBase {
+public class TurnDegreesGyro extends CommandBase {
     private double setAngle;
 
     private double leftSpeed;
@@ -18,8 +18,8 @@ public class TurnToGyro extends CommandBase {
     private double lastTime;
     private double output = 0;
 
-    // degrees relative to start position of robot
-    public TurnToGyro(double angle) {
+    // degrees relative to position at time of making command
+    public TurnDegreesGyro(double angle) {
         // each subsystem used by the command must be passed into the
         // addRequirements() method (which takes a vararg of Subsystem)\
         setAngle = angle;
@@ -31,6 +31,8 @@ public class TurnToGyro extends CommandBase {
     public void initialize() {
         timer.start();
         lastTime = timer.get();
+
+        setAngle += Paligator.m_gyro.getAngle(); // the only line different from TurnDegreesGyro
     }
 
     @Override
@@ -39,7 +41,7 @@ public class TurnToGyro extends CommandBase {
         lastTime = timer.get();
 
         // we love stack overflow
-        double diff = (setAngle - Paligator.m_gyro.getAngle()%360 + 180 ) % 360 - 180;
+        double diff = (setAngle%360 - Paligator.m_gyro.getAngle()%360 + 180 ) % 360 - 180;
 
         targetVelocity = Math.max(Math.min(diff/360*Constants.trackWidth*3*Math.PI, Constants.DRIVETRAIN_MAX_VELOCITY), -Constants.DRIVETRAIN_MAX_VELOCITY);
 

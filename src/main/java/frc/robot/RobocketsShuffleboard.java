@@ -151,8 +151,8 @@ public class RobocketsShuffleboard {
     public void updateDrive() {
         Constants.DRIVETRAIN_SPEED = driveSpeed.getDouble(Constants.DRIVETRAIN_SPEED);
         Constants.DRIVETRAIN_ROTATION_SPEED = driveSpeed.getDouble(Constants.DRIVETRAIN_ROTATION_SPEED);
-        if (Robot.driveController.port != (int)joystickPortArm.getInteger(1))
-            Robot.driveController.reinitController((int)joystickPortArm.getInteger(1));
+        //if (Robot.driveController.port != (int)joystickPortArm.getInteger(1))
+        //    Robot.driveController.reinitController((int)joystickPortArm.getInteger(1));
     }
 
 

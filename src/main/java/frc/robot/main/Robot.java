@@ -30,6 +30,8 @@ import frc.robot.impl.westcoast.WestCoast;
 import frc.robot.intake.IntakeSubsystem;
 import frc.robot.leds.UpdateLED;
 
+import frc.robot.Auto.PurePursuit.*;
+
 /**
  * The VM is configured to automatically run this class, and to call the methods corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -61,7 +63,9 @@ public class Robot extends TimedRobot
   public static DifferentialDriveOdometry odometry;
   public static Pose2d pose;
 
-  public Timer timer = new Timer();
+  public double[][] path = {{3.0, 0.0}, {3.5, 1.0}};
+  public PathoGen pathToFollow = new PathoGen(path);
+  public PathFollower pathFollower = new PathFollower(pathToFollow.getPoints(), pathToFollow.getTargetVelocities());
 
   /**
    * This method is run when the robot is first started up and should be used for any
@@ -98,7 +102,10 @@ public class Robot extends TimedRobot
     SmartDashboard.putNumber("odometry x", pose.getX());
     SmartDashboard.putNumber("odometry y", pose.getY());
     
-    SmartDashboard.putNumber("gyro", Paligator.m_gyro.getAngle());
+    SmartDashboard.putNumber("velocity left", Paligator.getLeftVelocity()*Constants.distancePerEncoderTick);
+    SmartDashboard.putNumber("velocity right", Paligator.getRightVelocity()*Constants.distancePerEncoderTick);
+    
+    SmartDashboard.putNumber("gyro", Paligator.m_gyro.getAngle()%360);
     pose = odometry.update(
           Paligator.m_gyro.getRotation2d(),
           Paligator.frontLeftPosition()*Constants.distancePerEncoderTick,
@@ -111,14 +118,17 @@ public class Robot extends TimedRobot
   public void autonomousInit()
   {
     commandScheduler.schedule(new MainAutoCommand(getAutoSelector()));
-    timer.start();
   }
 
   /** This method is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic()
   {
-    commandScheduler.run();
+    //commandScheduler.run();
+
+    // pathfollowing test
+    double[] volts = pathFollower.calculate(pose, Paligator.getLeftVelocity()*Constants.distancePerEncoderTick, Paligator.getRightVelocity()*Constants.distancePerEncoderTick);
+    Paligator.setVoltages(volts[0], volts[1]);
   }
 
   /** This method is called once when teleop is enabled. */
