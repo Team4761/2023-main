@@ -41,7 +41,7 @@ public class TurnDegreesGyro extends CommandBase {
         lastTime = timer.get();
 
         // we love stack overflow
-        double diff = (setAngle - Paligator.m_gyro.getAngle()%360 + 180 ) % 360 - 180;
+        double diff = (setAngle%360 - Paligator.m_gyro.getAngle()%360 + 180 ) % 360 - 180;
 
         targetVelocity = Math.max(Math.min(diff/360*Constants.trackWidth*3*Math.PI, Constants.DRIVETRAIN_MAX_VELOCITY), -Constants.DRIVETRAIN_MAX_VELOCITY);
 

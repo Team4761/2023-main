@@ -59,19 +59,19 @@ public class DriveController extends CommandBase {
     }
 
     private void onPressA() {
-        CommandScheduler.getInstance().schedule(new TurnToGyro(90));
+        CommandScheduler.getInstance().schedule(new TurnDegreesGyro(90));
     }
 
     private void onPressB() {
-        CommandScheduler.getInstance().schedule(new TurnToGyro(-90));
+        CommandScheduler.getInstance().schedule(new TurnDegreesGyro(-90));
     }
 
     private void onPressX() {
-        CommandScheduler.getInstance().schedule(new GoMetersEncoder(3));
+        //CommandScheduler.getInstance().schedule(new GoMetersEncoder(3));
     }
 
     private void onPressY() {
-        CommandScheduler.getInstance().schedule(new GoMetersEncoder(-3));
+        //CommandScheduler.getInstance().schedule(new GoMetersEncoder(-3));
     }
 
     private void onLeftTrigger() {
@@ -100,7 +100,7 @@ public class DriveController extends CommandBase {
     }
 
     private void arcadeDrive() {
-        DifferentialDrive.WheelSpeeds wheelSpeeds = arcadeDriveIK(xbox.getLeftY(), -(xbox.getRightX())*Constants.DRIVETRAIN_ROTATION_SPEED);
+        DifferentialDrive.WheelSpeeds wheelSpeeds = arcadeDriveIK((xbox.getLeftY()+Math.signum(MathUtil.applyDeadband(xbox.getLeftY(), Constants.CONTROLLER_DEADZONE))*0.3)/1.3, -(xbox.getRightX())*Constants.DRIVETRAIN_ROTATION_SPEED);
 
         double maxChange = Math.abs((timer.get()-lastTime) * Constants.DRIVETRAIN_MAX_ACCELERATION * 1);
         outputL = MathUtil.clamp(wheelSpeeds.left*1.5, outputL-maxChange, outputL+maxChange);
