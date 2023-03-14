@@ -48,10 +48,10 @@ public class ArmPIDSubsystem extends ProfiledPIDSubsystem {
             Robot.m_shuffleboard.setTopFF(subsystem.calculateFeedforwards().get(1,0) / 12.0);
         if (motorType.equalsIgnoreCase("bottom"))
             Robot.m_shuffleboard.setBottomFF(subsystem.calculateFeedforwards().get(0,0) / 12.0);
-        // if(motorType.equalsIgnoreCase("top") && ArmSubsystem.getInstance().useFeedForward)
-        //     ff = subsystem.calculateFeedforwards().get(1,0) / 12.0;
-        // if(motorType.equalsIgnoreCase("bottom") & ArmSubsystem.getInstance().useFeedForward)
-        //     ff = subsystem.calculateFeedforwards().get(0,0) / 12.0;
+        if(motorType.equalsIgnoreCase("top") && ArmSubsystem.getInstance().useFeedForward)
+            ff = subsystem.calculateFeedforwards().get(1,0) / 12.0;
+        if(motorType.equalsIgnoreCase("bottom") & ArmSubsystem.getInstance().useFeedForward)
+            ff = subsystem.calculateFeedforwards().get(0,0) / 12.0;
     
         System.out.println("CURRENT OUTPUT: " + output);
         System.out.println("ERROR: " + (ArmSubsystem.getInstance().getDesiredTopRotation()-ArmSubsystem.getInstance().getTopRotation()));
@@ -62,6 +62,10 @@ public class ArmPIDSubsystem extends ProfiledPIDSubsystem {
         if (motorType.equalsIgnoreCase("bottom")) {
             ArmSubsystem.getInstance().setBottom(-(output + ff));
         }
+        if (Robot.m_shuffleboard.usingSetSpeed() && motorType.equalsIgnoreCase("top"))
+            ArmSubsystem.getInstance().setTop(Robot.m_shuffleboard.getSetSpeedT());
+        if (Robot.m_shuffleboard.usingSetSpeed() && motorType.equalsIgnoreCase("bottom"))
+            ArmSubsystem.getInstance().setBottom(Robot.m_shuffleboard.getSetSpeedB());
         System.out.println(motorType + " | " + getController().getP() + " , " + getController().getI() + " , " + getController().getD());
     }
 

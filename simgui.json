@@ -21,6 +21,15 @@
     },
     "transitory": {
       "Shuffleboard": {
+        "Arms": {
+          "Bottom": {
+            "open": true
+          },
+          "Top": {
+            "open": true
+          },
+          "open": true
+        },
         "open": true
       }
     }

@@ -54,6 +54,9 @@ public class RobocketsShuffleboard {
     GenericEntry manual_bottom_arm_speed;
     GenericEntry top_ff;
     GenericEntry bottom_ff;
+    GenericEntry manual_set_speed_bottom;
+    GenericEntry manual_set_speed_top;
+    GenericEntry setSpeedArms;
 
     public void initArms() {
         arms_tab = Shuffleboard.getTab("Arms");
@@ -83,9 +86,12 @@ public class RobocketsShuffleboard {
 
         manual_top_arm_speed = settings.add("Manual Top Speed", .2).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min", .1, "max", 1.0)).getEntry();
         manual_bottom_arm_speed = settings.add("Manual Bottom Speed", .15).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min", .1, "max", 1.0)).getEntry();
-
+        manual_set_speed_bottom = settings.add("Set Manual Bottom Speed", .15).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min", -1.0, "max", 1.0)).getEntry();
+        manual_set_speed_top = settings.add("Set Manual Top Speed", .15).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min", -1.0, "max", 1.0)).getEntry();
+        
         changingPIDEntry = settings.add("Is Updating PID", true).withWidget(BuiltInWidgets.kToggleSwitch).getEntry();
         manualControlArms = settings.add("Using Manual Control", true).withWidget(BuiltInWidgets.kToggleSwitch).getEntry();
+        setSpeedArms = settings.add("Using Set Speeds", false).withWidget(BuiltInWidgets.kToggleSwitch).getEntry();
         armsBoundsChecker = settings.add("Arms Bound Checker", true).withWidget(BuiltInWidgets.kToggleSwitch).getEntry();
         useFeedForward = settings.add("Using Feed Forward", false).withWidget(BuiltInWidgets.kToggleSwitch).getEntry();
         joystickPortArm = settings.add("Joystick Port", 0).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min", 0, "max", 10, "block increment", 1)).getEntry();
@@ -130,6 +136,9 @@ public class RobocketsShuffleboard {
     public void setBottomFF(double ff) {
         bottom_ff.setDouble(ff);
     }
+    public double getSetSpeedB() { return manual_set_speed_bottom.getDouble(0.0); }
+    public double getSetSpeedT() { return manual_set_speed_top.getDouble(0.0); }
+    public boolean usingSetSpeed() { return setSpeedArms.getBoolean(false); }
 
 
 
