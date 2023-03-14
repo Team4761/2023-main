@@ -23,8 +23,8 @@ public class Constants {
     // Drivetrain constants.
     public static final double drivetrainGearRatio = 8.0;
     public static final double wheelRadiusInches = 2.0;
-    public static double DRIVETRAIN_SPEED = 5.0;
-    public static double DRIVETRAIN_ROTATION_SPEED = 0.8;
+    public static double DRIVETRAIN_SPEED = 4;                                                                                                                 
+    public static double DRIVETRAIN_ROTATION_SPEED = 0.2; // previously 0.8
     //public static final double wheelCircumference = wheelRadiusInches * 2 * Math.PI;
     public static final double wheelRadius = 0.0508; //meters
     public static final double wheelCircumference = wheelRadius * 2 * Math.PI;
@@ -36,7 +36,7 @@ public class Constants {
 
     public static final double trackWidth = 0.5;//Inches : 19.5 //Meters : 0.4953
 
-    public static final double DRIVETRAIN_MAX_ACCELERATION = 2.5; // meters/s^2
+    public static final double DRIVETRAIN_MAX_ACCELERATION = 3; // meters/s^2
     public static final double DRIVETRAIN_MAX_VELOCITY = 1.1; // meters/s
 
     // Arm Constants
