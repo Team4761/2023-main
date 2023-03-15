@@ -23,7 +23,7 @@ public class ArmControl extends CommandBase {
         xbox.a().onTrue(Commands.runOnce(this::onPressA, armSubsystem));
         xbox.b().onTrue(Commands.runOnce(this::onPressB, armSubsystem));
         xbox.x().onTrue(Commands.runOnce(this::onPressX, armSubsystem));
-        xbox.y().onTrue(Commands.runOnce(this::onPressY, armSubsystem));
+        xbox.y().onTrue(new MoveArmAngles(Constants.NEUTRAL_POSITION));
 
         // For the Wii U button board, right stick is actually the start button
         xbox.leftStick().onTrue(Commands.runOnce(this::onPressDisablePidButton, armSubsystem));
@@ -58,12 +58,12 @@ public class ArmControl extends CommandBase {
 
     private void onPressRightBumper() {
         Robot.arms.disablePID();
-        Robot.arms.setTop(.05);
-        Robot.arms.setBottom(.05);
+        Robot.arms.setTop(-.01);
+        Robot.arms.setBottom(-.01);
     }
 
     public void onPressTrigger() {
-        // Robot.arms.disablePID();
+        Robot.arms.enablePID();
     }
 
     private void onPressRightBumperRelease() {
@@ -98,10 +98,10 @@ public class ArmControl extends CommandBase {
             )
         ) {
             if (xbox.getLeftY() != 0) {
-                Robot.arms.setTop(getTopArmSpeed() * (xbox.getLeftY() > 0 ? 1 : -1));
+                //Robot.arms.setTop(getTopArmSpeed() * (xbox.getLeftY() > 0 ? 1 : -1));
             }
             if (xbox.getRightY() != 0) {
-                Robot.arms.setBottom(getBottomArmSpeed() * (xbox.getRightY() > 0 ? 1 : -1));
+                //Robot.arms.setBottom(getBottomArmSpeed() * (xbox.getRightY() > 0 ? 1 : -1));
             }
         }
     }

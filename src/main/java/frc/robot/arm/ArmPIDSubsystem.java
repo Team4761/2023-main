@@ -5,6 +5,7 @@ import com.revrobotics.CANSparkMax;
 //import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDSubsystem;
 import frc.robot.main.Constants;
 import frc.robot.main.Robot;
@@ -42,27 +43,29 @@ public class ArmPIDSubsystem extends ProfiledPIDSubsystem {
     @Override
     public void useOutput(double output, TrapezoidProfile.State setpoint) {
         ff = 0.0;
-        System.out.println("Calculation: " + m_controller.getSetpoint().position + " | " + m_controller.getGoal().position);
+        //System.out.println("Calculation: " + m_controller.getSetpoint().position + " | " + m_controller.getGoal().position);
 
         if (motorType.equalsIgnoreCase("top"))
             Robot.m_shuffleboard.setTopFF(subsystem.calculateFeedforwards().get(1,0) / 12.0);
+            SmartDashboard.putNumber("top ff", subsystem.calculateFeedforwards().get(1,0) / 12.0);
         if (motorType.equalsIgnoreCase("bottom"))
             Robot.m_shuffleboard.setBottomFF(subsystem.calculateFeedforwards().get(0,0) / 12.0);
-        // if(motorType.equalsIgnoreCase("top") && ArmSubsystem.getInstance().useFeedForward)
-        //     ff = subsystem.calculateFeedforwards().get(1,0) / 12.0;
-        // if(motorType.equalsIgnoreCase("bottom") & ArmSubsystem.getInstance().useFeedForward)
-        //     ff = subsystem.calculateFeedforwards().get(0,0) / 12.0;
+            SmartDashboard.putNumber("botto ff", subsystem.calculateFeedforwards().get(0,0) / 12.0);
+        if(motorType.equalsIgnoreCase("top"))// && ArmSubsystem.getInstance().useFeedForward)
+             ff = subsystem.calculateFeedforwards().get(1,0) / 12.0 / 3;
+         if(motorType.equalsIgnoreCase("bottom"))// & ArmSubsystem.getInstance().useFeedForward)
+             ff = subsystem.calculateFeedforwards().get(0,0) / 12.0 / 9;
     
-        System.out.println("CURRENT OUTPUT: " + output);
-        System.out.println("ERROR: " + (ArmSubsystem.getInstance().getDesiredTopRotation()-ArmSubsystem.getInstance().getTopRotation()));
+        //System.out.println("CURRENT OUTPUT: " + output);
+        //System.out.println("ERROR: " + (ArmSubsystem.getInstance().getDesiredTopRotation()-ArmSubsystem.getInstance().getTopRotation()));
 
         if (motorType.equalsIgnoreCase("top")) {
-            ArmSubsystem.getInstance().setTop(-(output + ff));
+            ArmSubsystem.getInstance().setTop(-(output+ff));
         }
         if (motorType.equalsIgnoreCase("bottom")) {
-            ArmSubsystem.getInstance().setBottom(-(output + ff));
+            ArmSubsystem.getInstance().setBottom(-(output+ff));
         }
-        System.out.println(motorType + " | " + getController().getP() + " , " + getController().getI() + " , " + getController().getD());
+        //System.out.println(motorType + " | " + getController().getP() + " , " + getController().getI() + " , " + getController().getD());
     }
 
     @Override
@@ -70,11 +73,11 @@ public class ArmPIDSubsystem extends ProfiledPIDSubsystem {
         //System.out.println("Our current rotation is | " + ArmSubsystem.getInstance().getTopRotation() + " | and our desired rotation is | " + ArmSubsystem.getInstance().getDesiredTopRotation());
         ArmSubsystem instance = ArmSubsystem.getInstance();
         if (motorType.equalsIgnoreCase("top")) {
-            System.out.println(ArmSubsystem.getInstance().getTopRotation());
+            //System.out.println(ArmSubsystem.getInstance().getTopRotation());
             return ArmSubsystem.getInstance().getTopRotation();
         }
         else {
-            System.out.println(ArmSubsystem.getInstance().getBottomRotation());
+            //System.out.println(ArmSubsystem.getInstance().getBottomRotation());
             return ArmSubsystem.getInstance().getBottomRotation();
         }
 
@@ -86,13 +89,13 @@ public class ArmPIDSubsystem extends ProfiledPIDSubsystem {
         }
         if (motorType.equalsIgnoreCase("top"))
             super.getController().setPID(p, i, d);
-        System.out.println(motorType + " | " + getController().getP() + " , " + getController().getI() + " , " + getController().getD());
+        //System.out.println(motorType + " | " + getController().getP() + " , " + getController().getI() + " , " + getController().getD());
     }
 
     @Override
     public void periodic() {
         if (m_enabled) {
-            System.out.println("Periodic: " + m_controller.getSetpoint() + " | " + m_controller.getGoal());
+            //System.out.println("Periodic: " + m_controller.getSetpoint() + " | " + m_controller.getGoal());
             useOutput(m_controller.calculate(getMeasurement()) /*+ feedforward.calculate(encoder.getRotation(), encoder.getVelocity(), encoder.getAcceleration())*/, m_controller.getSetpoint());
         }
         encoder.updateEncoder();

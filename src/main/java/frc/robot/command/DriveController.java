@@ -100,7 +100,7 @@ public class DriveController extends CommandBase {
     }
 
     private void arcadeDrive() {
-        DifferentialDrive.WheelSpeeds wheelSpeeds = arcadeDriveIK((xbox.getLeftY()+Math.signum(MathUtil.applyDeadband(xbox.getLeftY(), Constants.CONTROLLER_DEADZONE))*0.3)/1.3, -(xbox.getRightX())*Constants.DRIVETRAIN_ROTATION_SPEED);
+        DifferentialDrive.WheelSpeeds wheelSpeeds = arcadeDriveIK((xbox.getLeftY()+Math.signum(xbox.getLeftY())*0.25)/1.25, -(xbox.getRightX())*Constants.DRIVETRAIN_ROTATION_SPEED);
 
         double maxChange = Math.abs((timer.get()-lastTime) * Constants.DRIVETRAIN_MAX_ACCELERATION * 1);
         outputL = MathUtil.clamp(wheelSpeeds.left*1.5, outputL-maxChange, outputL+maxChange);
@@ -127,8 +127,9 @@ public class DriveController extends CommandBase {
 
     // math from differentialDrive
     DifferentialDrive.WheelSpeeds arcadeDriveIK(double xSpeed, double zRotation) {
-        xSpeed = MathUtil.clamp(MathUtil.applyDeadband(xSpeed, Constants.CONTROLLER_DEADZONE), -1.0, 1.0);
-        zRotation = MathUtil.clamp(MathUtil.applyDeadband(zRotation, Constants.CONTROLLER_DEADZONE), -1.0, 1.0);
+        // removed deadzone here because applied in xboxcontrol
+        xSpeed = MathUtil.clamp(xSpeed, -1.0, 1.0);
+        zRotation = MathUtil.clamp(zRotation, -1.0, 1.0);
 
         // Square the inputs (while preserving the sign) to increase fine control
         zRotation = Math.copySign(Math.pow(zRotation, 3), zRotation);
