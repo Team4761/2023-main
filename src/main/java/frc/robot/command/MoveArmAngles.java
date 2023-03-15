@@ -13,20 +13,20 @@ public class MoveArmAngles extends CommandBase {
     @Override
     public void initialize() {
         Robot.arms.enablePID();
+        Robot.arms.bottom.getController().setTolerance(0.2, 0.2);
+        Robot.arms.top.getController().setTolerance(0.2, 0.2);
         Robot.arms.movePID();
         Robot.arms.moveToSetRotation(pos);
-
-        Robot.arms.bottom.getController().setTolerance(0.1, 0.1);
-        Robot.arms.top.getController().setTolerance(0.1, 0.1);
     }
     @Override
     public void execute() {
-        System.out.println("arm angle command");
+        // PID does all the work
     }
+
     @Override 
     public void end(boolean interrupted) {
-        if (interrupted) System.out.println("interrupted");
-        else System.out.println("done");
+        if (interrupted) System.out.println("move arm angles interrupted");
+        else System.out.println("move arm angles done");
     }
     @Override
     public boolean isFinished() {
