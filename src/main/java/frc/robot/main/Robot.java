@@ -50,14 +50,14 @@ public class Robot extends TimedRobot
   private final SendableChooser<String> chooser = new SendableChooser<>();
   public static RobotImpl impl = new Paligator();
   public final CommandScheduler commandScheduler = CommandScheduler.getInstance();
-  private final UpdateLED updateLED = new UpdateLED();
   // Subsystems
+  public static LEDSubsystem leds = LEDSubsystem.getInstance();
+  private final UpdateLED updateLED = new UpdateLED();
   public static DrivetrainSubsystem driveTrain = DrivetrainSubsystem.getInstance();
   public static final DriveController driveController = new DriveController(1);
   public static ArmSubsystem arms = ArmSubsystem.getInstance();
   public static final ArmControl armControl = new ArmControl(0);
   public static IntakeSubsystem intake = IntakeSubsystem.getInstance();
-  public static LEDSubsystem leds = LEDSubsystem.getInstance();
   public static RobocketsShuffleboard m_shuffleboard = new RobocketsShuffleboard();
 
   public static DifferentialDriveOdometry odometry;
@@ -151,17 +151,22 @@ public class Robot extends TimedRobot
     m_shuffleboard.updateDrive();
   }
 
+  // @Override
+  // public void teleopExit() {
+    
+  // }
+
   /** This method is called once when the robot is disabled. */
   @Override
   public void disabledInit() {
     Paligator.setVoltages(0, 0);
+    //leds.disableLEDs();
   }
 
   /** This method is called periodically when disabled. */
   @Override
   public void disabledPeriodic() {
     arms.stop();
-    leds.disableLEDs();
     commandScheduler.cancelAll();
   }
 
