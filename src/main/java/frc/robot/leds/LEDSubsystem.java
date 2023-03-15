@@ -11,8 +11,8 @@
     
     // LED Specific Information
     private int led_PORT;                           // The port connected to the LED strip
-    public static int led_HEIGHT = 8;               // The height of the LED strip
-    public static int led_WIDTH = 64;               // The width of the LED strip
+    public int led_HEIGHT = 8;                      // The height of the LED strip
+    public int led_WIDTH = 64;                      // The width of the LED strip
     public int led_NumOfBuffers = 4;                // The number of preloaded buffers
 
     AddressableLED m_led;
@@ -38,11 +38,12 @@
 
         // Functionality
         loadBuffers();
-        m_led.setLength(m_ledBuffer.getLength());
+        int ledLength = led_HEIGHT * led_WIDTH;
+        m_led.setLength(ledLength);
         m_led.setData(m_ledBuffer);
 
         // Text
-        // encChars = new EncodedCharacters();
+        encChars = new EncodedCharacters();
     }
 
 
@@ -82,30 +83,31 @@
     }
 
     public void setAllLEDs (int r, int g, int b) {
+        AddressableLEDBuffer buff = new AddressableLEDBuffer(led_HEIGHT * led_WIDTH);
         for (int i = 0; i < led_HEIGHT * led_WIDTH; i++)
-            m_ledBuffer.setRGB(i, r, g, b);
-        m_led.setData(m_ledBuffer);
+            buff.setRGB(i, r, g, b);
+        m_led.setData(buff);
     }
 
     public void drawText(char nextChar, int stage) {
         // Shift all of the text over by 1 column
-        for (int i = led_WIDTH-3; i >= 0; i--) {
-            currentText[i-1] = currentText[i];
+        for (int i = led_WIDTH-3; i > 0; i--) {
+            currentText[i] = currentText[i-1];
         }
         // Add the new text (column) that should appear
-        if (stage >= 4)
-            currentText[0] = encChars.getLetter(nextChar)[stage];
+        if (stage <= 4)
+            currentText[0] = encChars.getLetter(nextChar)[4-stage];
         else if (stage == 5)
             currentText[0] = encChars.SPACE;
         // Add the current text information to the led buffer
         for (int x = 0; x < led_WIDTH; x++) {
             for (int y = 0; y < led_HEIGHT; y++) {
                 if (currentText[x][y])
-                    m_ledBuffer.setRGB(y+x*led_WIDTH,255,255,255);
+                    textBuffer.setRGB(y*led_WIDTH+led_WIDTH-1-x,255,255,255);
                 else
-                    m_ledBuffer.setRGB(y+x*led_WIDTH,0,0,0);
+                    textBuffer.setRGB(y*led_WIDTH+led_WIDTH-1-x,0,0,0);
             }
         }
-        m_led.setData(m_ledBuffer);
+        m_led.setData(textBuffer);
     }
 }

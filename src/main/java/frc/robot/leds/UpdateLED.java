@@ -10,14 +10,14 @@ public class UpdateLED extends CommandBase {
     private final int TEXT_DISPLAY = 1;
 
     // Decides Whether To Display Colors or Text
-    private int currentState = 0;
+    private int currentState = TEXT_DISPLAY;
 
     // String Display Variables
-    private ArrayList<Character> charactersToDisplay = new ArrayList<Character>();
-    private boolean textRepeating = false;
+    private static ArrayList<Character> charactersToDisplay = new ArrayList<Character>();
+    private boolean textRepeating = true;
     private char curChar;
     private long nextTime = 0;
-    private int textSpeed = 500;    // Milliseconds
+    private int textSpeed = 100;    // Milliseconds
     private int textStage = 0;
     
 
@@ -25,13 +25,24 @@ public class UpdateLED extends CommandBase {
     public void execute() {
         if (currentState == TEXT_DISPLAY) {
             if (nextTime <= System.currentTimeMillis()) {
-                if (textStage == 0)
+                if (textStage == 0) {
                     curChar = charactersToDisplay.get(0);
+                    if (textRepeating)
+                        charactersToDisplay.add(charactersToDisplay.get(0));
+                    charactersToDisplay.remove(0);
+                }
                 Robot.leds.drawText(curChar, textStage);
 
                 textStage = (textStage+1) % 6;
                 nextTime = System.currentTimeMillis() + textSpeed;
             }
+        }
+    }
+
+    public static void setText(String m) {
+        charactersToDisplay.clear();
+        for (int i = 0; i < m.length(); i++) {
+            charactersToDisplay.add(m.charAt(i));
         }
     }
 

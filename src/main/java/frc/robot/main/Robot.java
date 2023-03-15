@@ -134,11 +134,12 @@ public class Robot extends TimedRobot
   /** This method is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
-    //leds.enableLEDs();
+    UpdateLED.setText("Strout Is Bacon   ");
+    leds.enableLEDs();
 
     //commandScheduler.schedule(new getPoseData());
     commandScheduler.schedule(armControl.repeatedly());
-    //commandScheduler.schedule(updateLED.repeatedly());
+    commandScheduler.schedule(updateLED.repeatedly());
     commandScheduler.schedule(driveController.repeatedly());
   }
 
@@ -160,7 +161,7 @@ public class Robot extends TimedRobot
   @Override
   public void disabledInit() {
     Paligator.setVoltages(0, 0);
-    //leds.disableLEDs();
+    leds.disableLEDs();
   }
 
   /** This method is called periodically when disabled. */
