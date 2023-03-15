@@ -23,7 +23,7 @@ public class ArmControl extends CommandBase {
         xbox.a().onTrue(Commands.runOnce(this::onPressA, armSubsystem));
         xbox.b().onTrue(Commands.runOnce(this::onPressB, armSubsystem));
         xbox.x().onTrue(Commands.runOnce(this::onPressX, armSubsystem));
-        xbox.y().onTrue(Commands.runOnce(this::onPressY, armSubsystem));
+        xbox.y().onTrue(new MoveArmAngles(Constants.NEUTRAL_POSITION));
 
         // For the Wii U button board, right stick is actually the start button
         xbox.leftStick().onTrue(Commands.runOnce(this::onPressDisablePidButton, armSubsystem));
