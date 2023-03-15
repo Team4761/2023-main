@@ -58,12 +58,12 @@ public class ArmControl extends CommandBase {
 
     private void onPressRightBumper() {
         Robot.arms.disablePID();
-        Robot.arms.setTop(.05);
-        Robot.arms.setBottom(.05);
+        Robot.arms.setTop(-.01);
+        Robot.arms.setBottom(-.01);
     }
 
     public void onPressTrigger() {
-        // Robot.arms.disablePID();
+        Robot.arms.enablePID();
     }
 
     private void onPressRightBumperRelease() {
@@ -98,10 +98,10 @@ public class ArmControl extends CommandBase {
             )
         ) {
             if (xbox.getLeftY() != 0) {
-                Robot.arms.setTop(getTopArmSpeed() * (xbox.getLeftY() > 0 ? 1 : -1));
+                //Robot.arms.setTop(getTopArmSpeed() * (xbox.getLeftY() > 0 ? 1 : -1));
             }
             if (xbox.getRightY() != 0) {
-                Robot.arms.setBottom(getBottomArmSpeed() * (xbox.getRightY() > 0 ? 1 : -1));
+                //Robot.arms.setBottom(getBottomArmSpeed() * (xbox.getRightY() > 0 ? 1 : -1));
             }
         }
     }

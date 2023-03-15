@@ -94,8 +94,8 @@ public class ArmSubsystem extends SubsystemBase {
     }
     //FEEDFORWARD IMPL //Needs to be based off 0,0 as straight extensions (intial arm math)
     public Vector<N2> calculateFeedforwards() {
-        double inputUpper = -desiredTopRotation + Math.toRadians(Constants.FLAT_ARM_TOP_OFFSET); // Angle is the outside, not inside angle.... WHYYYYY
-        double inputLower = -desiredBottomRotation + Math.toRadians(Constants.FLAT_ARM_BOTTOM_OFFSET);
+        double inputUpper = -getTopRotation() + Math.toRadians(Constants.FLAT_ARM_TOP_OFFSET); // Angle is the outside, not inside angle.... WHYYYYY
+        double inputLower = -getBottomRotation() + Math.toRadians(Constants.FLAT_ARM_BOTTOM_OFFSET);
         Vector<N2> angles = VecBuilder.fill(inputLower, inputUpper);
 
         Vector<N2> vectorFF = djArmFeedforward.feedforward(angles);
