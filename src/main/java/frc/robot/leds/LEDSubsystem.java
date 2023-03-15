@@ -53,6 +53,12 @@
     }
 
     public void enableLEDs () {
+        // Clear text buffer
+        for (int x = 0; x < led_WIDTH; x++) {
+            for (int y = 0; y < led_HEIGHT; y++) {
+                currentText[x][y] = false;
+            }
+        }
         m_led.start();
     }
 

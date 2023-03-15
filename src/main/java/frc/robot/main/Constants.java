@@ -6,6 +6,8 @@ import edu.wpi.first.math.system.plant.DCMotor;
 public class Constants {
 
     // Ports & LEDs
+    public static final int ARM_CONTROLLER_PORT = 0;            // Port Defined On Driver Station
+    public static final int DRIVE_CONTROLLER_PORT = 1;          // Port Defined On Driver Station
     public static final int LED_PORT = 0;                       // RoboRIO, PWM port
     public static final int LED_NUMBER = 512;                   // Number of LEDs
     public static final int ARM_ENCODER_TOP_PORT = 9;           // RoboRIO, DIO port

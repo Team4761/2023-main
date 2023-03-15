@@ -52,11 +52,14 @@ public class Robot extends TimedRobot
   public final CommandScheduler commandScheduler = CommandScheduler.getInstance();
   // Subsystems
   public static LEDSubsystem leds = LEDSubsystem.getInstance();
-  private final UpdateLED updateLED = new UpdateLED();
+  public static UpdateLED updateLED = new UpdateLED();
+
   public static DrivetrainSubsystem driveTrain = DrivetrainSubsystem.getInstance();
-  public static final DriveController driveController = new DriveController(1);
+  public static DriveController driveController = new DriveController(Constants.DRIVE_CONTROLLER_PORT);
+
   public static ArmSubsystem arms = ArmSubsystem.getInstance();
-  public static final ArmControl armControl = new ArmControl(0);
+  public static ArmControl armControl = new ArmControl(Constants.ARM_CONTROLLER_PORT);
+  
   public static IntakeSubsystem intake = IntakeSubsystem.getInstance();
   public static RobocketsShuffleboard m_shuffleboard = new RobocketsShuffleboard();
 
@@ -136,6 +139,9 @@ public class Robot extends TimedRobot
   public void teleopInit() {
     UpdateLED.setText("Strout Is Bacon   ");
     leds.enableLEDs();
+    armControl = new ArmControl(Constants.ARM_CONTROLLER_PORT);
+    updateLED = new UpdateLED();
+    driveController = new DriveController(Constants.DRIVE_CONTROLLER_PORT);
 
     //commandScheduler.schedule(new getPoseData());
     commandScheduler.schedule(armControl.repeatedly());

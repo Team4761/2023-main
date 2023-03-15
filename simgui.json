@@ -12,6 +12,7 @@
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
+      "/Shuffleboard/Auto/Settings/Starting Position (1 is red, 6 is blue)": "String Chooser",
       "/SmartDashboard/Robot Choices": "String Chooser"
     }
   },
