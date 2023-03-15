@@ -10,7 +10,7 @@ public class ScoreDirectlyInFront extends SequentialCommandGroup {
     public ScoreDirectlyInFront() {
         addCommands(
             new MoveArmAngles(Constants.NEUTRAL_POSITION),
-            //new MoveArmAngles(Constants.MID_RUNG_POSITION),
+            new MoveArmAngles(Constants.MID_RUNG_POSITION),
             new OutTakeCommand(IntakeSubsystem.getInstance(), 0.5)
         );
     }
