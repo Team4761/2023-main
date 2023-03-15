@@ -1,6 +1,7 @@
 package frc.robot;
 
 import java.util.Map;
+import java.util.Optional;
 
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.*;
@@ -185,7 +186,7 @@ public class RobocketsShuffleboard {
     public boolean usingManualDrive() { return manualControlDrive.getBoolean(true); }
     public boolean armsBoundChecker() { return armsBoundsChecker.getBoolean(true); }
     public boolean getAlliance() { return alliance.getBoolean(true); }
-    public int getStartPos() { return 1; }
+    public int getStartPos() { return Optional.of(startingPos.getSelected()).orElse(1); }
     public double getManualTopArmSpeed() { return manual_top_arm_speed.getDouble(.2); }
     public double getManualBottomArmSpeed() { return manual_bottom_arm_speed.getDouble(.15); }
     public double getAutoMaxSpeed() { return autoSpeed.getDouble(0.8); }
