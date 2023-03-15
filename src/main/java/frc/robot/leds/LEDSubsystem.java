@@ -55,7 +55,7 @@
 
         for (int i = 0; i < led_HEIGHT * led_WIDTH; i++)
         m_ledBuffers[0].setRGB(i,200,0,0);
-        for (int i = 0; i < led_HEIGHT * led_WIDTH; i++)
+        for (int i = 00; i < led_HEIGHT * led_WIDTH; i++)
         m_ledBuffers[1].setRGB(i,0,0,200);
         for (int i = 0; i < led_HEIGHT * led_WIDTH; i++)
         m_ledBuffers[2].setRGB(i,200,255,0);
