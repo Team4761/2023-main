@@ -137,11 +137,12 @@ public class Robot extends TimedRobot
   /** This method is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
-    UpdateLED.setText("Strout Is Bacon   ");
     leds.enableLEDs();
     armControl = new ArmControl(Constants.ARM_CONTROLLER_PORT);
     updateLED = new UpdateLED();
     driveController = new DriveController(Constants.DRIVE_CONTROLLER_PORT);
+
+    UpdateLED.setText("%(255,0,0)Strout %(0,255,0)Is %(0,0,255)Bacon   ");
 
     //commandScheduler.schedule(new getPoseData());
     commandScheduler.schedule(armControl.repeatedly());

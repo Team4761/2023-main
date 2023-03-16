@@ -23,6 +23,8 @@
     boolean[][] currentText = new boolean[led_WIDTH][led_HEIGHT];
     EncodedCharacters encChars;
     AddressableLEDBuffer textBuffer = new AddressableLEDBuffer(led_HEIGHT * led_WIDTH);
+    Color[] textColors = new Color[led_WIDTH];
+    Color curColor = new Color(0,0,0);
 
 
     @SuppressWarnings("WeakerAccess")
@@ -95,25 +97,33 @@
         m_led.setData(buff);
     }
 
-    public void drawText(char nextChar, int stage) {
+    public void drawText(char nextChar, int stage, Color c) {
         // Shift all of the text over by 1 column
-        for (int i = led_WIDTH-3; i > 0; i--) {
+        for (int i = led_WIDTH-1; i > 0; i--) {
+            textColors[i] = textColors[i-1];
             currentText[i] = currentText[i-1];
         }
         // Add the new text (column) that should appear
-        if (stage <= 4)
+        if (stage <= 4) {
+            textColors[0] = c;
             currentText[0] = encChars.getLetter(nextChar)[4-stage];
+        }
         else if (stage == 5)
             currentText[0] = encChars.SPACE;
         // Add the current text information to the led buffer
         for (int x = 0; x < led_WIDTH; x++) {
             for (int y = 0; y < led_HEIGHT; y++) {
                 if (currentText[x][y])
-                    textBuffer.setRGB(y*led_WIDTH+led_WIDTH-1-x,255,255,255);
+                    textBuffer.setRGB(y*led_WIDTH+led_WIDTH-1-x, textColors[x].r, textColors[x].g, textColors[x].b);
                 else
                     textBuffer.setRGB(y*led_WIDTH+led_WIDTH-1-x,0,0,0);
             }
         }
         m_led.setData(textBuffer);
+    }
+
+    public void clearText() {
+        textColors = new Color[led_HEIGHT];
+        currentText = new boolean[led_HEIGHT][led_WIDTH];
     }
 }

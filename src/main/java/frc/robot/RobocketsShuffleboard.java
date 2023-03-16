@@ -7,6 +7,7 @@ import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.*;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.arm.ArmSubsystem;
+import frc.robot.leds.UpdateLED;
 import frc.robot.main.Constants;
 import frc.robot.main.Robot;
 
@@ -15,6 +16,7 @@ public class RobocketsShuffleboard {
     ShuffleboardTab arms_tab;
     ShuffleboardTab drive_tab;
     ShuffleboardTab auto_tab;
+    ShuffleboardTab led_tab;
 
     public RobocketsShuffleboard() {
         init();
@@ -23,10 +25,12 @@ public class RobocketsShuffleboard {
     public void init() {
         drive_tab = Shuffleboard.getTab("Drive Train");
         auto_tab = Shuffleboard.getTab("Auto");
+        led_tab = Shuffleboard.getTab("LEDs");
         
         initDrive();
         initAuto();
         initArms();
+        initLEDs();
     }
 
 
@@ -94,8 +98,6 @@ public class RobocketsShuffleboard {
 
     public void updateArms() {
         arms_tab = Shuffleboard.getTab("Arms");
-        ShuffleboardLayout lower = arms_tab.getLayout("Bottom");
-        ShuffleboardLayout top = arms_tab.getLayout("Top");
 
         if (changingPIDEntry.getBoolean(false)) {
             if (Constants.ARM_P_BOTTOM != p_bottom.getDouble(Constants.ARM_P_BOTTOM) || Constants.ARM_I_BOTTOM != i_bottom.getDouble(Constants.ARM_I_BOTTOM) || Constants.ARM_D_BOTTOM != d_bottom.getDouble(Constants.ARM_D_BOTTOM))
@@ -181,6 +183,37 @@ public class RobocketsShuffleboard {
     }
 
 
+    
+    GenericEntry isTextDisplay;
+    GenericEntry isForcingText;
+    GenericEntry coneText;
+    GenericEntry cubeText;
+    GenericEntry forceDisplayText;
+    GenericEntry ledSpeed;
+    public void initLEDs() {
+        ShuffleboardLayout presets = led_tab.getLayout("Presets",BuiltInLayouts.kList).withSize(2,6);
+        ShuffleboardLayout settings = led_tab.getLayout("Settings", BuiltInLayouts.kList).withSize(2,6);
+
+        isTextDisplay = settings.add("Displaying Text", true).withWidget(BuiltInWidgets.kToggleSwitch).getEntry();
+        isForcingText = settings.add("Display Force Text", false).withWidget(BuiltInWidgets.kToggleSwitch).getEntry();
+        ledSpeed = settings.add("Text Speed", 100).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",20,"max",2000)).getEntry();
+
+        coneText = presets.add("Text For Cone", "%(200,255,0)CONE ").withWidget(BuiltInWidgets.kTextView).getEntry();
+        cubeText = presets.add("Text For Cube", "%(100,0,200)CUBE ").withWidget(BuiltInWidgets.kTextView).getEntry();
+        forceDisplayText = presets.add("Forced Text", "%(255,0,0)4761 ").withWidget(BuiltInWidgets.kTextView).getEntry();
+    }
+
+    public void updateLEDs() {
+        if (isForcingText.getBoolean(false)) {
+            UpdateLED.setText(forceDisplayText.getString("UHHH"));
+            isForcingText.setBoolean(false);
+        }
+        if (UpdateLED.textSpeed != ledSpeed.getInteger(100)) {
+            UpdateLED.textSpeed = (int)ledSpeed.getInteger(100);
+        }
+    }
+
+
 
     /* GETTERS */
     public boolean usingManualArms() { return manualControlArms.getBoolean(true); }
@@ -191,4 +224,5 @@ public class RobocketsShuffleboard {
     public double getManualTopArmSpeed() { return manual_top_arm_speed.getDouble(.2); }
     public double getManualBottomArmSpeed() { return manual_bottom_arm_speed.getDouble(.15); }
     public double getAutoMaxSpeed() { return autoSpeed.getDouble(0.8); }
+    public boolean usingTextDisplay() { return isTextDisplay.getBoolean(true); }
 }
