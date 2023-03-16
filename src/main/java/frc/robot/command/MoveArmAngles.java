@@ -8,6 +8,7 @@ import frc.robot.main.Robot;
 public class MoveArmAngles extends CommandBase {
     Translation2d pos;
     public MoveArmAngles(Translation2d pt) {
+        addRequirements(ArmSubsystem.getInstance());
         pos = pt;
     }
     @Override

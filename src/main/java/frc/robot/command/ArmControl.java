@@ -1,6 +1,7 @@
 package frc.robot.command;
 
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Drivetrain.DrivetrainSubsystem;
@@ -20,12 +21,14 @@ public class ArmControl extends CommandBase {
         this.port = port;
 
         ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
-        xbox.a().onTrue(Commands.runOnce(this::onPressA, armSubsystem));
-        xbox.b().onTrue(Commands.runOnce(this::onPressB, armSubsystem));
-        xbox.x().onTrue(Commands.runOnce(this::onPressX, armSubsystem));
-        xbox.y().onTrue(new MoveArmAngles(Constants.NEUTRAL_POSITION));
+        xbox.a().onTrue(new SequentialCommandGroup(new MoveArmAngles(Constants.NEUTRAL_POSITION), new MoveArmAngles(Constants.INTAKE_POSITION)));
+        xbox.b().onTrue(new SequentialCommandGroup(new MoveArmAngles(Constants.NEUTRAL_POSITION), new MoveArmAngles(Constants.MID_RUNG_POSITION)));
+        xbox.x().onTrue(new SequentialCommandGroup(new MoveArmAngles(Constants.NEUTRAL_POSITION), new MoveArmAngles(Constants.SHELF_POSITION)));
+        xbox.y().onTrue(new SequentialCommandGroup(new MoveArmAngles(Constants.NEUTRAL_POSITION), new MoveArmAngles(Constants.MID_RUNG_POSITION).withTimeout(0.8), new MoveArmAngles(Constants.TOP_RUNG_POSITION)));
 
         // For the Wii U button board, right stick is actually the start button
+        xbox.leftStick().onTrue(Commands.runOnce(this::onPressDisablePidButton, armSubsystem));
+
         xbox.leftStick().onTrue(Commands.runOnce(this::onPressDisablePidButton, armSubsystem));
         xbox.rightStick().onTrue(Commands.runOnce(this::onPressDisablePidButton, armSubsystem));
 

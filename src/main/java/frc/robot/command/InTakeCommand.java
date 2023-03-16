@@ -19,7 +19,7 @@ public class InTakeCommand extends CommandBase {
     }
     @Override
     public void execute() {
-        m_intake.setSpeed(-1+timer.get()/4);
+        m_intake.setSpeed(1-timer.get()/4);
     }
     @Override
     public boolean isFinished() {

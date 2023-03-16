@@ -25,8 +25,8 @@ public class Constants {
     // Drivetrain constants.
     public static final double drivetrainGearRatio = 8.0;
     public static final double wheelRadiusInches = 2.0;
-    public static double DRIVETRAIN_SPEED = 4;                                                                                                                 
-    public static double DRIVETRAIN_ROTATION_SPEED = 0.4; // adjusted on shuffleboard, should be around
+    public static double DRIVETRAIN_SPEED = 5;                                                                                                                 
+    public static double DRIVETRAIN_ROTATION_SPEED = 0.9; // adjust on shuffleboard commented for now
     //public static final double wheelCircumference = wheelRadiusInches * 2 * Math.PI;
     public static final double wheelRadius = 0.0508; //meters
     public static final double wheelCircumference = wheelRadius * 2 * Math.PI;
@@ -38,16 +38,16 @@ public class Constants {
 
     public static final double trackWidth = 0.5;//Inches : 19.5 //Meters : 0.4953
 
-    public static final double DRIVETRAIN_MAX_ACCELERATION = 3; // meters/s^2
+    public static final double DRIVETRAIN_MAX_ACCELERATION = 5; // meters/s^2
     public static final double DRIVETRAIN_MAX_VELOCITY = 1.1; // meters/s
 
     // Arm Constants
     static final public double ARM_LENGTH_BOTTOM = 22.5;         // Bottom Arm?  //now 22.5 was 25
     static final public double ARM_LENGTH_TOP = 39.0;            // Top Arm?     //now 28.5 was 30
-    static public double ARM_P_TOP = 0.6;                        // PID control for arms
+    static public double ARM_P_TOP = 0.8;                        // PID control for arms
     static public double ARM_I_TOP = 0.0;                        // PID control for arms
     static public double ARM_D_TOP = 0.0;                        // PID control for arms
-    static public double ARM_P_BOTTOM = 0.25;                     // PID control for arms
+    static public double ARM_P_BOTTOM = 0.4;                     // PID control for arms
     static public double ARM_I_BOTTOM = 0.0;                     // PID control for arms
     static public double ARM_D_BOTTOM = 0.0;                     // PID control for arms
     static final public double ARM_MAX_ACCELERATION_SPEED = 4;
@@ -87,10 +87,11 @@ public class Constants {
 
 
     // Set Positions
-    public static final Translation2d INTAKE_POSITION = new Translation2d(0.18, 0.270);    // x & y are angles in radians (top_rotation, bottom_rotation)
-    public static final Translation2d MID_RUNG_POSITION = new Translation2d(1.94, 1.54);    // x & y are angles in radians (top_rotation, bottom_rotation) [Went to 2.1, 2.2]
-    public static final Translation2d TOP_RUNG_POSITION = new Translation2d(3.12, 2.23);    // x & y are angles in radians (top_rotation, bottom_rotation) [Went to 2.4, 3.02]
-    public static final Translation2d SHELF_POSITION = new Translation2d(1.57, 1.0);       //same as those
+    public static final Translation2d INTAKE_POSITION = new Translation2d(0.18, 0.530);    // x & y are angles in radians (top_rotation, bottom_rotation)
+    public static final Translation2d MID_RUNG_POSITION = new Translation2d(1.8, 1.43);    // x & y are angles in radians (top_rotation, bottom_rotation) [Went to 2.1, 2.2]
+    public static final Translation2d TOP_RUNG_POSITION = new Translation2d(3.05, 2.14);    // x & y are angles in radians (top_rotation, bottom_rotation) [Went to 2.4, 3.02]
+    public static final Translation2d SHELF_POSITION = new Translation2d(1.45, 1.0);       //same as those
     public static final Translation2d NEUTRAL_POSITION = new Translation2d(1.09, 0.49);
     public static final Translation2d STARTING_POSITION = new Translation2d(1.50, 0.08);    // x & y are angles in radians (top_rotation, bottom_rotation) [Went to 2.4, 3.02]
 }
+
