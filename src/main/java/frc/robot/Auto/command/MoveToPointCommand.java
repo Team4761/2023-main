@@ -30,7 +30,7 @@ public class MoveToPointCommand extends SequentialCommandGroup {
             Translation2d delta = goalPostion.minus(currentPos);
 
             // TODO: this only does one direction
-            double topSpeed = SmartDashboard.getNumber("autoTopSpeed", .8);
+            double topSpeed = Robot.m_shuffleboard.getAutoMaxSpeed();
             if (Math.abs(delta.getX()) > Math.abs(delta.getY())) {
                 int pointedAwayFromOrigin = currentPos.getAngle().getDegrees() < 45 ? 1 : -1;
                 int sign = pointedAwayFromOrigin * ((goalPostion.getX() > currentPos.getX()) ? 1 : -1);

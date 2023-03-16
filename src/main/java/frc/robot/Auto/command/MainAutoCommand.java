@@ -2,36 +2,38 @@ package frc.robot.Auto.command;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.command.MoveArmAngles;
 import frc.robot.Vision.visionVarsAndMethods;
 import frc.robot.command.MoveStraightMeasuredCommand;
 
 import java.util.Arrays;
 import java.util.Comparator;
-import frc.robot.command.MoveStraightMeasuredCommand;
+import frc.robot.main.Constants;
+import frc.robot.main.Robot;
 
 public class MainAutoCommand extends SequentialCommandGroup {
-    public static final String POS_1 = "1";
-    public static final String POS_2 = "2";
-    public static final String POS_3 = "3";
-    public static final String POS_6 = "6";
-    public static final String POS_7 = "7";
-    public static final String POS_8 = "8";
+    public static final int POS_1 = 1;
+    public static final int POS_2 = 2;
+    public static final int POS_3 = 3;
+    public static final int POS_6 = 6;
+    public static final int POS_7 = 7;
+    public static final int POS_8 = 8;
 
-    public MainAutoCommand(String autoSelector){
+    public MainAutoCommand(int autoSelector){
         addCommands(
             new ScoreDirectlyInFront(),
-            getCommand(autoSelector)
+            getCommand(autoSelector),
+            new MoveArmAngles(Constants.INTAKE_POSITION)
         );
     }
 
-    private CommandBase getCommand(String autoSelector)
+    private CommandBase getCommand(int autoSelector)
     {
         if (!getAutoOnlyScoreMobility()) {
             var pose = visionVarsAndMethods.getEstimatedPose().getFirst();
-            if (pose.getX() != 0 && pose.getY() == 0) {
+            if (pose.getX() != 0 && pose.getY() != 0) {
                 return closestPoint(pose.getX(), pose.getY());
             }
             switch (autoSelector) {
@@ -45,7 +47,8 @@ public class MainAutoCommand extends SequentialCommandGroup {
             }
         }
         // The goal of this is to achieve mobility ... just haul backward 4.0 meters and stay put
-        return new MoveStraightMeasuredCommand(-1.0,4.0);
+        var topSpeed = Robot.m_shuffleboard.getAutoMaxSpeed();
+        return new MoveStraightMeasuredCommand(-topSpeed,4.0);
     }
 
     private CommandBase closestPoint(double x, double y) {
@@ -60,6 +63,6 @@ public class MainAutoCommand extends SequentialCommandGroup {
     }
 
     public boolean getAutoOnlyScoreMobility() {
-        return SmartDashboard.getBoolean("autoSimple", true);
+        return SmartDashboard.getBoolean("autoSimple", false);
     }
 }

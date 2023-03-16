@@ -30,6 +30,8 @@ import frc.robot.impl.westcoast.WestCoast;
 import frc.robot.intake.IntakeSubsystem;
 import frc.robot.leds.UpdateLED;
 
+import frc.robot.Auto.PurePursuit.*;
+
 /**
  * The VM is configured to automatically run this class, and to call the methods corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -48,20 +50,22 @@ public class Robot extends TimedRobot
   private final SendableChooser<String> chooser = new SendableChooser<>();
   public static RobotImpl impl = new Paligator();
   public final CommandScheduler commandScheduler = CommandScheduler.getInstance();
-  private final UpdateLED updateLED = new UpdateLED();
   // Subsystems
+  public static LEDSubsystem leds = LEDSubsystem.getInstance();
+  private final UpdateLED updateLED = new UpdateLED();
   public static DrivetrainSubsystem driveTrain = DrivetrainSubsystem.getInstance();
   public static final DriveController driveController = new DriveController(1);
   public static ArmSubsystem arms = ArmSubsystem.getInstance();
   public static final ArmControl armControl = new ArmControl(0);
   public static IntakeSubsystem intake = IntakeSubsystem.getInstance();
-  public static LEDSubsystem leds = LEDSubsystem.getInstance();
   public static RobocketsShuffleboard m_shuffleboard = new RobocketsShuffleboard();
 
   public static DifferentialDriveOdometry odometry;
   public static Pose2d pose;
 
-  public Timer timer = new Timer();
+  public double[][] path = {{3.0, 0.0}, {3.5, 1.0}};
+  public PathoGen pathToFollow = new PathoGen(path);
+  public PathFollower pathFollower = new PathFollower(pathToFollow.getPoints(), pathToFollow.getTargetVelocities());
 
   /**
    * This method is run when the robot is first started up and should be used for any
@@ -98,7 +102,10 @@ public class Robot extends TimedRobot
     SmartDashboard.putNumber("odometry x", pose.getX());
     SmartDashboard.putNumber("odometry y", pose.getY());
     
-    SmartDashboard.putNumber("gyro", Paligator.m_gyro.getAngle());
+    SmartDashboard.putNumber("velocity left", Paligator.getLeftVelocity()*Constants.distancePerEncoderTick);
+    SmartDashboard.putNumber("velocity right", Paligator.getRightVelocity()*Constants.distancePerEncoderTick);
+    
+    SmartDashboard.putNumber("gyro", Paligator.m_gyro.getAngle()%360);
     pose = odometry.update(
           Paligator.m_gyro.getRotation2d(),
           Paligator.frontLeftPosition()*Constants.distancePerEncoderTick,
@@ -111,7 +118,6 @@ public class Robot extends TimedRobot
   public void autonomousInit()
   {
     commandScheduler.schedule(new MainAutoCommand(getAutoSelector()));
-    timer.start();
   }
 
   /** This method is called periodically during autonomous. */
@@ -119,19 +125,26 @@ public class Robot extends TimedRobot
   public void autonomousPeriodic()
   {
     commandScheduler.run();
+
+    // pathfollowing test
+//    double[] volts = pathFollower.calculate(pose, Paligator.getLeftVelocity()*Constants.distancePerEncoderTick, Paligator.getRightVelocity()*Constants.distancePerEncoderTick);
+//    Paligator.setVoltages(volts[0], volts[1]);
   }
 
   /** This method is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
-    //leds.enableLEDs();
+    UpdateLED.setText("Strout Is Bacon   ");
+    leds.enableLEDs();
 
     //commandScheduler.schedule(new getPoseData());
     commandScheduler.schedule(armControl.repeatedly());
-    //commandScheduler.schedule(updateLED.repeatedly());
+    commandScheduler.schedule(updateLED.repeatedly());
     commandScheduler.schedule(driveController.repeatedly());
   }
 
+  long nextTime = 0;
+  int curPattern = 0;
   /** This method is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
@@ -139,19 +152,25 @@ public class Robot extends TimedRobot
 
     m_shuffleboard.updateArms();
     m_shuffleboard.updateDrive();
+    //System.out.println(m_shuffleboard.useFeedForward);
   }
+
+  // @Override
+  // public void teleopExit() {
+    
+  // }
 
   /** This method is called once when the robot is disabled. */
   @Override
   public void disabledInit() {
     Paligator.setVoltages(0, 0);
+    leds.disableLEDs();
   }
 
   /** This method is called periodically when disabled. */
   @Override
   public void disabledPeriodic() {
     arms.stop();
-    leds.disableLEDs();
     commandScheduler.cancelAll();
   }
 
@@ -189,8 +208,8 @@ public class Robot extends TimedRobot
     }
   }
 
-  private String getAutoSelector() {
-    return SmartDashboard.getString("Auto", "2");
+  private int getAutoSelector() {
+    return m_shuffleboard.getStartPos();
   }
 
 }

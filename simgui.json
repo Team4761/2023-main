@@ -1,6 +1,9 @@
 {
   "HALProvider": {
     "Addressable LEDs": {
+      "0": {
+        "columns": 64
+      },
       "window": {
         "visible": true
       }
@@ -21,8 +24,17 @@
     },
     "transitory": {
       "Shuffleboard": {
+        "Arms": {
+          "Bottom": {
+            "open": true
+          },
+          "open": true
+        },
         "open": true
       }
     }
+  },
+  "NetworkTables View": {
+    "visible": false
   }
 }

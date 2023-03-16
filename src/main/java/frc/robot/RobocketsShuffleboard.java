@@ -1,6 +1,7 @@
 package frc.robot;
 
 import java.util.Map;
+import java.util.Optional;
 
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.*;
@@ -98,9 +99,9 @@ public class RobocketsShuffleboard {
 
         if (changingPIDEntry.getBoolean(false)) {
             if (Constants.ARM_P_BOTTOM != p_bottom.getDouble(Constants.ARM_P_BOTTOM) || Constants.ARM_I_BOTTOM != i_bottom.getDouble(Constants.ARM_I_BOTTOM) || Constants.ARM_D_BOTTOM != d_bottom.getDouble(Constants.ARM_D_BOTTOM))
-                ArmSubsystem.getInstance().getBottomPID().updatePIDValues(p_bottom.getDouble(Constants.ARM_P_BOTTOM), i_bottom.getDouble(Constants.ARM_I_BOTTOM), d_bottom.getDouble(Constants.ARM_D_BOTTOM));
+                //ArmSubsystem.getInstance().getBottomPID().updatePIDValues(p_bottom.getDouble(Constants.ARM_P_BOTTOM), i_bottom.getDouble(Constants.ARM_I_BOTTOM), d_bottom.getDouble(Constants.ARM_D_BOTTOM));
             if (Constants.ARM_P_TOP != p_top.getDouble(Constants.ARM_P_TOP) || Constants.ARM_I_TOP != i_top.getDouble(Constants.ARM_I_TOP) || Constants.ARM_D_TOP != d_top.getDouble(Constants.ARM_D_TOP))
-                ArmSubsystem.getInstance().getTopPID().updatePIDValues(p_top.getDouble(Constants.ARM_P_TOP), i_top.getDouble(Constants.ARM_I_TOP), d_top.getDouble(Constants.ARM_D_TOP));
+                //ArmSubsystem.getInstance().getTopPID().updatePIDValues(p_top.getDouble(Constants.ARM_P_TOP), i_top.getDouble(Constants.ARM_I_TOP), d_top.getDouble(Constants.ARM_D_TOP));
             Constants.ARM_P_BOTTOM = p_bottom.getDouble(Constants.ARM_P_BOTTOM);
             Constants.ARM_I_BOTTOM = i_bottom.getDouble(Constants.ARM_I_BOTTOM);
             Constants.ARM_D_BOTTOM = d_bottom.getDouble(Constants.ARM_D_BOTTOM);
@@ -151,22 +152,32 @@ public class RobocketsShuffleboard {
     public void updateDrive() {
         Constants.DRIVETRAIN_SPEED = driveSpeed.getDouble(Constants.DRIVETRAIN_SPEED);
         Constants.DRIVETRAIN_ROTATION_SPEED = driveSpeed.getDouble(Constants.DRIVETRAIN_ROTATION_SPEED);
-        if (Robot.driveController.port != (int)joystickPortArm.getInteger(1))
-            Robot.driveController.reinitController((int)joystickPortArm.getInteger(1));
+        //if (Robot.driveController.port != (int)joystickPortArm.getInteger(1))
+        //    Robot.driveController.reinitController((int)joystickPortArm.getInteger(1));
     }
 
 
 
 
     GenericEntry alliance;
-    GenericEntry startingPos;
+    GenericEntry autoSpeed;
+    SendableChooser<Integer> startingPos;
     public void initAuto() {
         ShuffleboardLayout settings = auto_tab.getLayout("Settings",BuiltInLayouts.kList).withSize(2, 6);
 
         alliance = settings.add("Alliance", false).withWidget(BuiltInWidgets.kToggleSwitch).withProperties(Map.of("min", 0, "max", 1)).getEntry();
-        startingPos = settings.add("Starting Position (0 is left)", 0).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min", 0, "max", 2)).getEntry();
-    }
+        autoSpeed = settings.add("Max Speed", 0.8).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",1)).getEntry();
 
+        startingPos = new SendableChooser<>();
+        startingPos.setDefaultOption(Integer.toString(1), 1);
+        for (int i = 2; i <= 3; ++i) {
+            startingPos.addOption(Integer.toString(i), i);
+        }
+        for (int i = 6; i <= 8; ++i) {
+            startingPos.addOption(Integer.toString(i), i);
+        }
+        settings.add("Starting Position (1 is red, 6 is blue)", startingPos);
+    }
 
 
 
@@ -175,7 +186,8 @@ public class RobocketsShuffleboard {
     public boolean usingManualDrive() { return manualControlDrive.getBoolean(true); }
     public boolean armsBoundChecker() { return armsBoundsChecker.getBoolean(true); }
     public boolean getAlliance() { return alliance.getBoolean(true); }
-    public int getStartPos() { return (int)startingPos.getDouble(0); }
+    public int getStartPos() { return Optional.of(startingPos.getSelected()).orElse(1); }
     public double getManualTopArmSpeed() { return manual_top_arm_speed.getDouble(.2); }
     public double getManualBottomArmSpeed() { return manual_bottom_arm_speed.getDouble(.15); }
+    public double getAutoMaxSpeed() { return autoSpeed.getDouble(0.8); }
 }

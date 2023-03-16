@@ -9,7 +9,7 @@ public class IntakeSubsystem extends SubsystemBase {
     
     private final static IntakeSubsystem INSTANCE = new IntakeSubsystem();
 
-    private CANSparkMax intakeMotor = new CANSparkMax(4, MotorType.kBrushed);
+    private CANSparkMax intakeMotor = new CANSparkMax(4, MotorType.kBrushless);
 
     public IntakeSubsystem () {
         

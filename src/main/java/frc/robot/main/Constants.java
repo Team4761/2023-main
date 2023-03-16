@@ -7,7 +7,7 @@ public class Constants {
 
     // Ports & LEDs
     public static final int LED_PORT = 0;                       // RoboRIO, PWM port
-    public static final int LED_NUMBER = 200;                    // Number of LEDs
+    public static final int LED_NUMBER = 512;                   // Number of LEDs
     public static final int ARM_ENCODER_TOP_PORT = 9;           // RoboRIO, DIO port
     public static final int ARM_ENCODER_BOTTOM_PORT = 0;        // RoboRIO, DIO port
     //Ports are for new arm old ports on side or the same
@@ -23,8 +23,8 @@ public class Constants {
     // Drivetrain constants.
     public static final double drivetrainGearRatio = 8.0;
     public static final double wheelRadiusInches = 2.0;
-    public static double DRIVETRAIN_SPEED = 5.0;
-    public static double DRIVETRAIN_ROTATION_SPEED = 0.8;
+    public static double DRIVETRAIN_SPEED = 4;                                                                                                                 
+    public static double DRIVETRAIN_ROTATION_SPEED = 0.4; // adjusted on shuffleboard, should be around
     //public static final double wheelCircumference = wheelRadiusInches * 2 * Math.PI;
     public static final double wheelRadius = 0.0508; //meters
     public static final double wheelCircumference = wheelRadius * 2 * Math.PI;
@@ -36,19 +36,19 @@ public class Constants {
 
     public static final double trackWidth = 0.5;//Inches : 19.5 //Meters : 0.4953
 
-    public static final double DRIVETRAIN_MAX_ACCELERATION = 2.5; // meters/s^2
+    public static final double DRIVETRAIN_MAX_ACCELERATION = 3; // meters/s^2
     public static final double DRIVETRAIN_MAX_VELOCITY = 1.1; // meters/s
 
     // Arm Constants
     static final public double ARM_LENGTH_BOTTOM = 22.5;         // Bottom Arm?  //now 22.5 was 25
     static final public double ARM_LENGTH_TOP = 39.0;            // Top Arm?     //now 28.5 was 30
-    static public double ARM_P_TOP = 0.7;                        // PID control for arms
+    static public double ARM_P_TOP = 0.6;                        // PID control for arms
     static public double ARM_I_TOP = 0.0;                        // PID control for arms
     static public double ARM_D_TOP = 0.0;                        // PID control for arms
-    static public double ARM_P_BOTTOM = 0.6;                     // PID control for arms
+    static public double ARM_P_BOTTOM = 0.25;                     // PID control for arms
     static public double ARM_I_BOTTOM = 0.0;                     // PID control for arms
     static public double ARM_D_BOTTOM = 0.0;                     // PID control for arms
-    static final public double ARM_MAX_ACCELERATION_SPEED = 0.1;
+    static final public double ARM_MAX_ACCELERATION_SPEED = 4;
     static final public double ARM_MAX_ROTATION_SPEED = 1.0;
     static final public double ENCODER_ZERO_VALUE_TOP = 3.5; //PAST: 0.6189683810569215
     static final public double ENCODER_ZERO_VALUE_BOTTOM = 4.0; //PAST: 5.06664074953627

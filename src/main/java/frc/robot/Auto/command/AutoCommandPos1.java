@@ -2,6 +2,7 @@ package frc.robot.Auto.command;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Auto.EncoderAuto.TurnDegreesGyro;
 import frc.robot.field.Field;
 import frc.robot.main.Robot;
 
@@ -14,10 +15,11 @@ public class AutoCommandPos1 extends SequentialCommandGroup implements StartPose
         var goalPosition = Field.ZONE_1.bottomShelfMid.getCenterRight();
 
         Robot.impl.setPose(startPose);
+        System.out.println("Running auto 1");
 
         addCommands(
-            new MoveToPointCommand(item.getX() + PAST_ITEM, startPose.getY())
-//            new TurnCommand(-180),
+            new MoveToPointCommand(item.getX() + PAST_ITEM, startPose.getY()),
+            new TurnDegreesGyro(180)
         );
     }
 
