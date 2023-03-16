@@ -150,8 +150,9 @@ public class RobocketsShuffleboard {
     }
 
     public void updateDrive() {
-        Constants.DRIVETRAIN_SPEED = driveSpeed.getDouble(Constants.DRIVETRAIN_SPEED);
-        Constants.DRIVETRAIN_ROTATION_SPEED = driveSpeed.getDouble(Constants.DRIVETRAIN_ROTATION_SPEED);
+        // commented cause keeps resetting and i don't know where to set default
+       // Constants.DRIVETRAIN_SPEED = driveSpeed.getDouble(Constants.DRIVETRAIN_SPEED);
+        //Constants.DRIVETRAIN_ROTATION_SPEED = driveSpeed.getDouble(Constants.DRIVETRAIN_ROTATION_SPEED);
         //if (Robot.driveController.port != (int)joystickPortArm.getInteger(1))
         //    Robot.driveController.reinitController((int)joystickPortArm.getInteger(1));
     }
