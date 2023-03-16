@@ -9,6 +9,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.field.Field;
 import frc.robot.impl.Paligator.Paligator;
+import frc.robot.main.Robot;
 import org.photonvision.PhotonCamera;
 import org.photonvision.RobotPoseEstimator;
 import org.photonvision.RobotPoseEstimator.PoseStrategy;
@@ -49,26 +50,34 @@ public class visionVarsAndMethods {
     );
 
     //Cameras for use with PhotonLib
-    static PhotonCamera camera_drive = new PhotonCamera("driveCamera");
-    static PhotonCamera camera_tagsLeft = new PhotonCamera("tagLeftCamera");
-    static PhotonCamera camera_tagsRight = new PhotonCamera("tagRightCamera");
+    static PhotonCamera camera_front_left = new PhotonCamera("frontLeftCamera");
+    static PhotonCamera camera_front_right = new PhotonCamera("frontRightCamera");
 
-    static Transform3d cDriveToRobot =
+    static final double OFFSET_X_CAMERA_TO_FRONT_INCHES = 5;
+    static final double OFFSET_Y_CAMERA_TO_EDGE_INCHES = 5;
+    static final double OFFSET_Z_CAMERA_FROM_GROUND_INCHES = 10;
+
+    // camera is on the front left of the robot, all deltas are relative to the center of the robot assuming it is
+    // facing away from the origin along the x-axis
+    static Transform3d cDriveFrontLeft =
         new Transform3d(
             new Translation3d(
-                Units.inchesToMeters(25 - Paligator.ROBOT_LENGTH_INCHES / 2),
-                Units.inchesToMeters(-(Paligator.ROBOT_WIDTH_INCHES / 2 - 5)),
-                Units.inchesToMeters(10 - Paligator.ROBOT_HEIGHT_INCHES / 2)),
+                Units.inchesToMeters(Paligator.ROBOT_LENGTH_INCHES - OFFSET_X_CAMERA_TO_FRONT_INCHES - Paligator.ROBOT_LENGTH_INCHES / 2),
+                Units.inchesToMeters(Paligator.ROBOT_WIDTH_INCHES / 2 - OFFSET_Y_CAMERA_TO_EDGE_INCHES),
+                Units.inchesToMeters(OFFSET_Z_CAMERA_FROM_GROUND_INCHES - Paligator.ROBOT_HEIGHT_INCHES / 2)),
             new Rotation3d(0,0,0)
         );
-    static Transform3d ctagsLeftToRobot = new Transform3d(new Translation3d(0,1,1), new Rotation3d(0,0,90));
-    static Transform3d ctagsRightToRobot = new Transform3d(new Translation3d(0,0,-1), new Rotation3d(0,0,270));
 
-    static Pair<PhotonCamera, Transform3d> pairedDriveCamera = new Pair<>(camera_drive, cDriveToRobot);
-//    static Pair<PhotonCamera, Transform3d> pairedLeftCamera = new Pair<>(camera_tagsLeft, ctagsLeftToRobot);
-//    static Pair<PhotonCamera, Transform3d> pairedRightCamera = new Pair<>(camera_tagsRight, ctagsRightToRobot);
-    //final list of photon cameras
-    static List<Pair<PhotonCamera, Transform3d>> photonCameraList = Arrays.asList(pairedDriveCamera/*, pairedLeftCamera, pairedRightCamera*/);
+    // camera is on the front right of the robot as a mirror image along the x-axis with the first camera
+    static Transform3d cDriveFrontRight =
+            new Transform3d(
+                new Translation3d(cDriveFrontLeft.getX(), -cDriveFrontLeft.getY(), cDriveFrontLeft.getZ()),
+                new Rotation3d(0,0,0)
+            );
+
+    static Pair<PhotonCamera, Transform3d> pairedFrontLeftCam = new Pair<>(camera_front_left, cDriveFrontLeft);
+    static Pair<PhotonCamera, Transform3d> pairedFrontRightCam = new Pair<>(camera_front_right, cDriveFrontRight);
+    static List<Pair<PhotonCamera, Transform3d>> photonCameraList = Arrays.asList(pairedFrontLeftCam, pairedFrontLeftCam);
 
     //pose estimator (object from photon lib to estimate coords)
     public static RobotPoseEstimator robotPoseEstimator = new RobotPoseEstimator(fieldLayout, PoseStrategy.AVERAGE_BEST_TARGETS, photonCameraList);
@@ -92,7 +101,7 @@ public class visionVarsAndMethods {
 
 
     public static Pair<Double, Double> getBestTagTransform(){
-        var result = camera_drive.getLatestResult();
+        var result = camera_front_left.getLatestResult();
         boolean hasTargets = result.hasTargets();
         if(hasTargets){
             PhotonTrackedTarget target = result.getBestTarget();
@@ -107,7 +116,7 @@ public class visionVarsAndMethods {
     }
 
     public static int getBestTagID(){
-        var result = camera_drive.getLatestResult();
+        var result = camera_front_left.getLatestResult();
         boolean hasTargets = result.hasTargets();
         if(hasTargets){
             PhotonTrackedTarget target = result.getBestTarget();
@@ -119,7 +128,7 @@ public class visionVarsAndMethods {
     }
 
     public static double getBestTagPoseAmbi(){
-        var result = camera_drive.getLatestResult();
+        var result = camera_front_left.getLatestResult();
         boolean hasTargets = result.hasTargets();
         if(hasTargets){
             PhotonTrackedTarget target = result.getBestTarget();
@@ -131,7 +140,7 @@ public class visionVarsAndMethods {
     }
 
     public static boolean getIsTarget(){
-        var result = camera_drive.getLatestResult();
+        var result = camera_front_left.getLatestResult();
         return result.hasTargets();
     }
 
