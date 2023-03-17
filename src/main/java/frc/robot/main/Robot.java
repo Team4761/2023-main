@@ -118,6 +118,8 @@ public class Robot extends TimedRobot
           Paligator.frontRightPosition()*Constants.distancePerEncoderTick
     );
     initFromSelector();
+
+    m_shuffleboard.updateAuto();
   }
 
   @Override

@@ -7,6 +7,7 @@ import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.*;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.arm.ArmSubsystem;
+import frc.robot.leds.LEDSubsystem;
 import frc.robot.leds.UpdateLED;
 import frc.robot.main.Constants;
 import frc.robot.main.Robot;
@@ -163,13 +164,15 @@ public class RobocketsShuffleboard {
 
 
     GenericEntry alliance;
+    GenericEntry allianceColor;
     GenericEntry autoSpeed;
     SendableChooser<Integer> startingPos;
     public void initAuto() {
         ShuffleboardLayout settings = auto_tab.getLayout("Settings",BuiltInLayouts.kList).withSize(2, 6);
 
-        alliance = settings.add("Alliance", false).withWidget(BuiltInWidgets.kToggleSwitch).withProperties(Map.of("min", 0, "max", 1)).getEntry();
-        autoSpeed = settings.add("Max Speed", 0.8).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",1)).getEntry();
+        alliance = settings.addPersistent("Alliance", false).withWidget(BuiltInWidgets.kToggleSwitch).withProperties(Map.of("min", 0, "max", 1)).getEntry();
+        allianceColor = settings.addPersistent("Alliance Color",false).withWidget(BuiltInWidgets.kBooleanBox).withProperties(Map.of("color when true", 1717145)).getEntry();
+        autoSpeed = settings.addPersistent("Max Speed", 0.8).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",0,"max",1)).getEntry();
 
         startingPos = new SendableChooser<>();
         startingPos.setDefaultOption(Integer.toString(1), 1);
@@ -182,10 +185,19 @@ public class RobocketsShuffleboard {
         settings.add("Starting Position (1 is red, 6 is blue)", startingPos);
     }
 
+    public void updateAuto() {
+        if (allianceColor.getBoolean(false) != alliance.getBoolean(false)) {
+            allianceColor.setBoolean(alliance.getBoolean(false));
+        }
+    }
+
 
     
     GenericEntry isTextDisplay;
     GenericEntry isForcingText;
+    GenericEntry isRepeatingLED;
+    GenericEntry isInversedLEDs;
+    GenericEntry isStaticDisplay;
     GenericEntry coneText;
     GenericEntry cubeText;
     GenericEntry forceDisplayText;
@@ -196,6 +208,9 @@ public class RobocketsShuffleboard {
 
         isTextDisplay = settings.add("Displaying Text", true).withWidget(BuiltInWidgets.kToggleSwitch).getEntry();
         isForcingText = settings.add("Display Force Text", false).withWidget(BuiltInWidgets.kToggleSwitch).getEntry();
+        isRepeatingLED = settings.add("Text Repeating", true).withWidget(BuiltInWidgets.kToggleSwitch).getEntry();
+        isInversedLEDs = settings.add("Inverse LEDs", false).withWidget(BuiltInWidgets.kToggleSwitch).getEntry();
+        isStaticDisplay = settings.add("Static LEDs", false).withWidget(BuiltInWidgets.kToggleSwitch).getEntry();
         ledSpeed = settings.add("Text Speed", 100).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",20,"max",2000)).getEntry();
 
         coneText = presets.add("Text For Cone", "%(200,255,0)CONE ").withWidget(BuiltInWidgets.kTextView).getEntry();
@@ -210,6 +225,20 @@ public class RobocketsShuffleboard {
         }
         if (UpdateLED.textSpeed != ledSpeed.getInteger(100)) {
             UpdateLED.textSpeed = (int)ledSpeed.getInteger(100);
+        }
+        if (UpdateLED.textRepeating != isRepeatingLED.getBoolean(true)) {
+            UpdateLED.textRepeating = isRepeatingLED.getBoolean(true);
+        }
+        if (LEDSubsystem.textInverted != isInversedLEDs.getBoolean(false)) {
+            LEDSubsystem.textInverted = isInversedLEDs.getBoolean(false);
+        }
+        
+        UpdateLED.isStatic = isStaticDisplay.getBoolean(false);
+
+        if (isTextDisplay.getBoolean(true)) {
+            UpdateLED.currentState = UpdateLED.TEXT_DISPLAY;
+        } else {
+            UpdateLED.currentState = UpdateLED.SOLID_COLOR;
         }
     }
 

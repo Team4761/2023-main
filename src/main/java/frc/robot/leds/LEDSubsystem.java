@@ -23,8 +23,10 @@
     boolean[][] currentText = new boolean[led_WIDTH][led_HEIGHT];
     EncodedCharacters encChars;
     AddressableLEDBuffer textBuffer = new AddressableLEDBuffer(led_HEIGHT * led_WIDTH);
+    AddressableLEDBuffer letterBuffer = new AddressableLEDBuffer(led_HEIGHT * led_WIDTH);
     Color[] textColors = new Color[led_WIDTH];
     Color curColor = new Color(0,0,0);
+    public static boolean textInverted = false;
 
 
     @SuppressWarnings("WeakerAccess")
@@ -97,6 +99,35 @@
         m_led.setData(buff);
     }
 
+    public void drawStaticText(Character[] characters, Color color) {
+        int charOffset = characters.length*3-1 + led_WIDTH/2;
+        for (int i = 0; i < characters.length; i++) {
+            if (i*6-charOffset <= led_WIDTH && i*6-charOffset >= 0) {
+                drawLetter(characters[i], i*6-charOffset, color);
+            }
+        }
+    }
+
+    public void drawLetter(char c, int row, Color color) {   // row is measured as the left most row
+        for (int i = 0; i < led_WIDTH * led_HEIGHT; i++) {
+            if (textInverted)
+                letterBuffer.setRGB(i, color.r, color.g, color.b);
+            else
+                letterBuffer.setRGB(i, 0, 0, 0);
+        }
+        boolean[][] chars = encChars.getLetter(c);
+        for (int x = 0; x < 5; x++) {
+            for (int y = 0; y < led_HEIGHT; y++) {
+                if (chars[x][y] && !textInverted) {
+                    letterBuffer.setRGB(x*led_HEIGHT+y, color.r, color.g, color.b);
+                }
+                else if (chars[x][y] && textInverted) {
+                    letterBuffer.setRGB(x*led_HEIGHT+y, 0, 0, 0);
+                }
+            }
+        }
+    }
+
     public void drawText(char nextChar, int stage, Color c) {
         // Shift all of the text over by 1 column
         for (int i = led_WIDTH-1; i > 0; i--) {
@@ -115,15 +146,26 @@
         for (int x = led_WIDTH-1; x >= 0; x--) {
             count++;
             for (int y = 0; y < led_HEIGHT; y++) {
-                if (currentText[x][y] && count % 2 == 0)
-                    textBuffer.setRGB(x*led_HEIGHT+led_HEIGHT-y-1, textColors[x].r, textColors[x].g, textColors[x].b);
-                else if (count % 2 == 0)
-                    textBuffer.setRGB(x*led_HEIGHT+led_HEIGHT-y-1,0,0,0);
-                else if (currentText[x][y] && count % 2 == 1) {
-                    textBuffer.setRGB(x*led_HEIGHT+y, textColors[x].r, textColors[x].g, textColors[x].b);
+                if (!textInverted) {
+                    if (currentText[x][y] && count % 2 == 0)
+                        textBuffer.setRGB(x*led_HEIGHT+led_HEIGHT-y-1, textColors[x].r, textColors[x].g, textColors[x].b);
+                    else if (count % 2 == 0)
+                        textBuffer.setRGB(x*led_HEIGHT+led_HEIGHT-y-1,0,0,0);
+                    else if (currentText[x][y] && count % 2 == 1)
+                        textBuffer.setRGB(x*led_HEIGHT+y, textColors[x].r, textColors[x].g, textColors[x].b);
+                    else
+                        textBuffer.setRGB(x*led_HEIGHT+y,0,0,0);
                 }
-                else
-                    textBuffer.setRGB(x*led_HEIGHT+y,0,0,0);
+                else if (textColors[x] != null){
+                    if (currentText[x][y] && count % 2 == 0)
+                        textBuffer.setRGB(x*led_HEIGHT+led_HEIGHT-y-1,0,0,0);
+                    else if (count % 2 == 0)
+                        textBuffer.setRGB(x*led_HEIGHT+led_HEIGHT-y-1, textColors[x].r, textColors[x].g, textColors[x].b);
+                    else if (currentText[x][y] && count % 2 == 1)
+                        textBuffer.setRGB(x*led_HEIGHT+y,0,0,0);
+                    else
+                        textBuffer.setRGB(x*led_HEIGHT+y, textColors[x].r, textColors[x].g, textColors[x].b);
+                }
             }
         }
         m_led.setData(textBuffer);

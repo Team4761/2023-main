@@ -12,6 +12,7 @@ import frc.robot.impl.Paligator.Paligator;
 import frc.robot.Auto.EncoderAuto.*;
 import frc.robot.intake.IntakeSubsystem;
 import frc.robot.leds.LEDSubsystem;
+import frc.robot.leds.UpdateLED;
 import frc.robot.main.Constants;
 
 public class DriveController extends CommandBase {
@@ -86,10 +87,12 @@ public class DriveController extends CommandBase {
     }
 
     private void onPressX() {
+        UpdateLED.displayCone();
         //CommandScheduler.getInstance().schedule(new GoMetersEncoder(3));
     }
 
     private void onPressY() {
+        UpdateLED.displayCube();
         //CommandScheduler.getInstance().schedule(new GoMetersEncoder(-3));
     }
 
