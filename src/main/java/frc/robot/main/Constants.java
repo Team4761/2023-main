@@ -87,11 +87,11 @@ public class Constants {
 
 
     // Set Positions
-    public static final Translation2d INTAKE_POSITION = new Translation2d(0.18, 0.530);    // x & y are angles in radians (top_rotation, bottom_rotation)
+    public static final Translation2d INTAKE_POSITION = new Translation2d(0.2, 0.530);    // x & y are angles in radians (top_rotation, bottom_rotation)
     public static final Translation2d MID_RUNG_POSITION = new Translation2d(1.8, 1.43);    // x & y are angles in radians (top_rotation, bottom_rotation) [Went to 2.1, 2.2]
     public static final Translation2d TOP_RUNG_POSITION = new Translation2d(3.05, 2.14);    // x & y are angles in radians (top_rotation, bottom_rotation) [Went to 2.4, 3.02]
     public static final Translation2d SHELF_POSITION = new Translation2d(1.45, 1.0);       //same as those
-    public static final Translation2d NEUTRAL_POSITION = new Translation2d(1.09, 0.49);
+    public static final Translation2d NEUTRAL_POSITION = new Translation2d(0.8, 0);
     public static final Translation2d STARTING_POSITION = new Translation2d(1.50, 0.08);    // x & y are angles in radians (top_rotation, bottom_rotation) [Went to 2.4, 3.02]
 }
 

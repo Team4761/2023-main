@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Drivetrain.DrivetrainSubsystem;
 import frc.robot.arm.ArmMath;
 import frc.robot.arm.ArmSubsystem;
+import frc.robot.intake.IntakeSubsystem;
 import frc.robot.controller.XboxControl;
 import frc.robot.main.Constants;
 import frc.robot.main.Robot;
@@ -38,6 +39,22 @@ public class ArmControl extends CommandBase {
 
         xbox.leftTrigger().onTrue(Commands.runOnce(this::onPressTrigger, armSubsystem));
         xbox.rightTrigger().onTrue(Commands.runOnce(this::onPressTrigger, armSubsystem));
+        
+        IntakeSubsystem intakeSubsystem = IntakeSubsystem.getInstance();
+        xbox.leftTrigger().whileTrue(Commands.run(this::inTake, intakeSubsystem));
+        xbox.rightTrigger().whileTrue(Commands.run(this::outTake, intakeSubsystem));
+        xbox.leftBumper().whileFalse(Commands.run(this::disableIntake, intakeSubsystem));
+        xbox.rightBumper().whileFalse(Commands.run(this::disableIntake, intakeSubsystem));
+    }
+    
+    private void inTake() {
+        IntakeSubsystem.getInstance().setSpeed(0.6);
+    }
+    private void outTake() {
+        IntakeSubsystem.getInstance().setSpeed(-0.1);
+    }
+    private void disableIntake() {
+        IntakeSubsystem.getInstance().setSpeed(0.15);
     }
 
     private void onPressA() {
@@ -89,6 +106,7 @@ public class ArmControl extends CommandBase {
             manualControl();
         }
         Robot.arms.debug();
+        
     }
 
     public void manualControl() {

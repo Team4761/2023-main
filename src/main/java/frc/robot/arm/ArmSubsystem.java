@@ -258,6 +258,8 @@ public class ArmSubsystem extends SubsystemBase {
     //GenericEntry bottom_right_speed;
 
     public void debug() {
+        System.out.println("top left: "+top_motor_left.getOutputCurrent());
+        System.out.println("bottom left: "+bottom_left.getOutputCurrent());
         //if (!finishedDebugInit) {
             //ShuffleboardTab tab = Shuffleboard.getTab("Arms");
             //p_bottom = tab.add("P_bottom", Constants.ARM_P_BOTTOM).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min", 0, "max", 3)).getEntry();
