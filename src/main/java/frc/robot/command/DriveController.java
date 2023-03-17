@@ -12,12 +12,14 @@ import frc.robot.impl.Paligator.Paligator;
 import frc.robot.Auto.EncoderAuto.*;
 import frc.robot.intake.IntakeSubsystem;
 import frc.robot.leds.LEDSubsystem;
+import frc.robot.leds.UpdateLED;
 import frc.robot.main.Constants;
 
 public class DriveController extends CommandBase {
 
     private XboxControl xbox;
     private boolean isArcade = true;
+    private double multiplier = 1;
     DrivetrainSubsystem drivetrainSubsystem = DrivetrainSubsystem.getInstance();
     Timer timer = new Timer();
     double lastTime;
@@ -39,23 +41,41 @@ public class DriveController extends CommandBase {
         //xbox.leftTrigger().onTrue(Commands.runOnce(this::onLeftTrigger, drivetrainSubsystem));
         //xbox.rightTrigger().onTrue(Commands.runOnce(this::onRightTrigger, drivetrainSubsystem));
 
+        // fast medium slow current is medium
+        // default as medium
+
         IntakeSubsystem intakeSubsystem = IntakeSubsystem.getInstance();
-        xbox.leftBumper().whileTrue(Commands.run(this::inTake, intakeSubsystem));
-        xbox.rightBumper().whileTrue(Commands.run(this::outTake, intakeSubsystem));
-        xbox.leftBumper().whileFalse(Commands.run(this::disableIntake, intakeSubsystem));
-        xbox.rightBumper().whileFalse(Commands.run(this::disableIntake, intakeSubsystem));
+        xbox.leftBumper().onTrue(Commands.runOnce(this::inTake, intakeSubsystem));
+        xbox.rightBumper().onTrue(Commands.runOnce(this::outTake, intakeSubsystem));
+        xbox.leftBumper().onFalse(Commands.runOnce(this::disableIntake, intakeSubsystem));
+        xbox.rightBumper().onFalse(Commands.runOnce(this::disableIntake, intakeSubsystem));
+
+        xbox.leftTrigger().onFalse(Commands.runOnce(this::medium));
+        xbox.rightTrigger().onFalse(Commands.runOnce(this::medium));
+        xbox.leftTrigger().onTrue(Commands.runOnce(this::slow));
+        xbox.rightTrigger().onTrue(Commands.runOnce(this::fast));
         //xbox.leftBumper().onTrue(Commands.runOnce(this::onLeftBumper, drivetrainSubsystem));
         //xbox.rightBumper().onTrue(Commands.runOnce(this::onRightBumper, drivetrainSubsystem));
     }
 
+    private void slow() {
+        multiplier = 0.35;
+    }
+    private void medium() {
+        multiplier = 1;
+    }
+    private void fast() {
+        multiplier = 2;
+    }
+
     private void inTake() {
-        IntakeSubsystem.getInstance().setSpeed(-0.5);
+        IntakeSubsystem.getInstance().setSpeed(0.6);
     }
     private void outTake() {
-        IntakeSubsystem.getInstance().setSpeed(0.5);
+        IntakeSubsystem.getInstance().setSpeed(-0.12);
     }
     private void disableIntake() {
-        IntakeSubsystem.getInstance().setSpeed(0.0);
+        IntakeSubsystem.getInstance().setSpeed(0.15);
     }
 
     private void onPressA() {
@@ -67,10 +87,12 @@ public class DriveController extends CommandBase {
     }
 
     private void onPressX() {
+        UpdateLED.displayCone();
         //CommandScheduler.getInstance().schedule(new GoMetersEncoder(3));
     }
 
     private void onPressY() {
+        UpdateLED.displayCube();
         //CommandScheduler.getInstance().schedule(new GoMetersEncoder(-3));
     }
 
@@ -101,24 +123,45 @@ public class DriveController extends CommandBase {
 
     private void arcadeDrive() {
         DifferentialDrive.WheelSpeeds wheelSpeeds = arcadeDriveIK((xbox.getLeftY()+Math.signum(xbox.getLeftY())*0.25)/1.25, -(xbox.getRightX())*Constants.DRIVETRAIN_ROTATION_SPEED);
+        
+        // changing to make acceleration only take as long as the side that accelerates the least
+        // so when going from straight to turning, one side would not be limited while the other isn't
 
-        double maxChange = Math.abs((timer.get()-lastTime) * Constants.DRIVETRAIN_MAX_ACCELERATION * 1);
-        outputL = MathUtil.clamp(wheelSpeeds.left*1.5, outputL-maxChange, outputL+maxChange);
-        outputR = MathUtil.clamp(wheelSpeeds.right*1.5, outputR-maxChange, outputR+maxChange);
+        // the time it would take for the lower change side is t = lowerSpeedNeeded/MAXACCEL
+        // the maxChange to get the higher change side to that is higherSpeedNeeded/t*(timer.get()-lastTime)
+
+        double lowerMaxChange = Math.abs((timer.get()-lastTime) * Constants.DRIVETRAIN_MAX_ACCELERATION * 1); // lower max change for lower desired-current
+        double higherMaxChange;
+
+        if (wheelSpeeds.left*1.5-outputL != 0 && wheelSpeeds.right*1.5-outputR!=0) {
+            // higherNeeded*maxAccel/lowerneeded*deltaT
+            higherMaxChange = Math.max(Math.abs(wheelSpeeds.left*1.5-outputL),Math.abs(wheelSpeeds.right*1.5-outputR)) * Constants.DRIVETRAIN_MAX_ACCELERATION / Math.min(Math.abs(wheelSpeeds.left*1.5-outputL),Math.abs(wheelSpeeds.right*1.5-outputR)) * (timer.get()-lastTime);
+        } else {
+            // very high
+            higherMaxChange = 10000;
+        }
+        
+        // if left needs less change
+        if (Math.abs(outputL-wheelSpeeds.left*1.5)<Math.abs(outputR-wheelSpeeds.right*1.5)) {
+            outputL = MathUtil.clamp(wheelSpeeds.left*1.5, outputL-lowerMaxChange, outputL+lowerMaxChange);
+            outputR = MathUtil.clamp(wheelSpeeds.right*1.5, outputR-higherMaxChange, outputR+higherMaxChange);
+        } else {
+            outputL = MathUtil.clamp(wheelSpeeds.left*1.5, outputL-higherMaxChange, outputL+higherMaxChange);
+            outputR = MathUtil.clamp(wheelSpeeds.right*1.5, outputR-lowerMaxChange, outputR+lowerMaxChange);
+        }
 
         //          kV                                    kS
-        double vL = outputL*Constants.DRIVETRAIN_SPEED + Math.signum(outputL)*0.25 + 0.1 * (outputL-Paligator.getLeftVelocity()*Constants.distancePerEncoderTick);
+        double vL = outputL*Constants.DRIVETRAIN_SPEED + Math.signum(outputL)*0.3 + 0.1 * (outputL-Paligator.getLeftVelocity()*Constants.distancePerEncoderTick);
         double vR = outputR*Constants.DRIVETRAIN_SPEED + Math.signum(outputR)*0.15 + 0.1 * (outputR-Paligator.getRightVelocity()*Constants.distancePerEncoderTick);
 
-        // trying feed forward with numbers from sysid, need new sysid                      
+        // trying feed forward with numbers from sysid, need new sysid measurements                     
         // ks, kv, ka
         //double vL = 0.1768 * Math.signum(outputL) + 4.676/1.5 * outputL;// + 0.1287 * (outputL-Paligator.getLeftVelocity()*Constants.distancePerEncoderTick);
         //double vR = 0.1008 * Math.signum(outputR) + 4.784/1.5 * outputR;// + 0.137 * (outputR-Paligator.getRightVelocity()*Constants.distancePerEncoderTick);
 
         lastTime = timer.get();
 
-        // would be nice to account for static friction somehow
-        Paligator.setVoltages(vL, vR);
+        Paligator.setVoltages(vL*multiplier, vR*multiplier);
     }
 
     @Override

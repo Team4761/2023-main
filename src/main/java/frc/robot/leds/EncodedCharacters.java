@@ -234,7 +234,14 @@ public class EncodedCharacters {
         {'@',' ',' ',' ',' ','@',' ','@'},
         {'@',' ',' ','@','@',' ',' ','@'},
         {'@',' ','@',' ',' ',' ',' ','@'},
-        {'@','@',' ',' ',' ',' ',' ','@'}})
+        {'@','@',' ',' ',' ',' ',' ','@'}}),
+
+        encode(new char[][]{
+        {' ',' ','@',' ',' ','@',' ',' '},
+        {' ',' ','@',' ',' ','@',' ',' '},
+        {' ',' ','@',' ',' ','@',' ',' '},
+        {' ',' ','@',' ',' ','@',' ',' '},
+        {' ',' ','@',' ',' ','@',' ',' '}})
         };
     }
 
@@ -265,6 +272,9 @@ public class EncodedCharacters {
         }
         if (ascii >= 97 && ascii <= 122) {  // Lowercase letters between 'a' and 'z' (ascii values) WARNING DOES NOT ACTUALLY DISPLAY LOWERCASE
             return characters[ascii-87];
+        }
+        if (ascii == 61) {
+            return characters[36];
         }
         
         return new boolean[WIDTH][HEIGHT];    // Couldn't find character

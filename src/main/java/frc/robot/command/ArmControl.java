@@ -1,11 +1,15 @@
 package frc.robot.command;
 
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.Drivetrain.DrivetrainSubsystem;
 import frc.robot.arm.ArmMath;
 import frc.robot.arm.ArmSubsystem;
+import frc.robot.intake.IntakeSubsystem;
+import frc.robot.leds.LEDSubsystem;
+import frc.robot.leds.UpdateLED;
 import frc.robot.controller.XboxControl;
 import frc.robot.main.Constants;
 import frc.robot.main.Robot;
@@ -13,47 +17,101 @@ import frc.robot.main.Robot;
 public class ArmControl extends CommandBase {
     public XboxControl xbox;
     public int port;
+    
     ArmMath armMath = new ArmMath();
+
+    // for delay on arm movement
+    // 0 neutral, 1 intake, 2 mid, 3 shelf, 4 top
+    private int position = 0;
 
     public ArmControl(int port) {
         xbox = new XboxControl(port);
         this.port = port;
 
         ArmSubsystem armSubsystem = ArmSubsystem.getInstance();
-        xbox.a().onTrue(Commands.runOnce(this::onPressA, armSubsystem));
-        xbox.b().onTrue(Commands.runOnce(this::onPressB, armSubsystem));
-        xbox.x().onTrue(Commands.runOnce(this::onPressX, armSubsystem));
-        xbox.y().onTrue(new MoveArmAngles(Constants.NEUTRAL_POSITION));
+        xbox.leftBumper().onTrue(getNeutralSequence());
+        xbox.a().onTrue(new SequentialCommandGroup(getNeutralSequence(), new MoveArmAngles(Constants.INTAKE_POSITION), Commands.runOnce(this::setPosition1)));
+        xbox.b().onTrue(new SequentialCommandGroup(getNeutralSequence(), new MoveArmDelayBottom(Constants.MID_RUNG_POSITION, 0.2), Commands.runOnce(this::setPosition2)));
+        xbox.x().onTrue(new SequentialCommandGroup(getNeutralSequence(), new MoveArmDelayBottom(Constants.SHELF_POSITION, 0.2), Commands.runOnce(this::setPosition3)));
+        xbox.y().onTrue(new SequentialCommandGroup(getNeutralSequence(), /*new MoveArmAngles(Constants.MID_RUNG_POSITION).withTimeout(0.8), */Commands.runOnce(this::setPosition4), new MoveArmDelayBottom(Constants.TOP_RUNG_POSITION, 1.2)));
 
         // For the Wii U button board, right stick is actually the start button
         xbox.leftStick().onTrue(Commands.runOnce(this::onPressDisablePidButton, armSubsystem));
-        xbox.rightStick().onTrue(Commands.runOnce(this::onPressDisablePidButton, armSubsystem));
 
-        xbox.leftBumper().onTrue(Commands.runOnce(this::onPressLeftBumper, DrivetrainSubsystem.getInstance()));
-        xbox.rightBumper().whileTrue(Commands.run(this::onPressRightBumper, DrivetrainSubsystem.getInstance()));
+        xbox.leftStick().onTrue(Commands.runOnce(this::onPressDisablePidButton, armSubsystem));
+        xbox.rightStick().onTrue(Commands.runOnce(this::onPressEnablePidButton, armSubsystem));
+
+        xbox.rightBumper().whileTrue(Commands.runOnce(this::onPressRightBumper, DrivetrainSubsystem.getInstance()));
         xbox.rightBumper().onFalse(Commands.runOnce(this::onPressRightBumperRelease, DrivetrainSubsystem.getInstance()));
 
-        xbox.leftTrigger().onTrue(Commands.runOnce(this::onPressTrigger, armSubsystem));
-        xbox.rightTrigger().onTrue(Commands.runOnce(this::onPressTrigger, armSubsystem));
+        //xbox.leftTrigger().onTrue(Commands.runOnce(this::onPressTrigger, armSubsystem));
+        //xbox.rightTrigger().onTrue(Commands.runOnce(this::onPressTrigger, armSubsystem));
+        
+
+        xbox.povUp().onTrue(Commands.runOnce(this::setLEDCone, LEDSubsystem.getInstance()));
+        xbox.povDown().onTrue(Commands.runOnce(this::setLEDCube, LEDSubsystem.getInstance()));
+
+        
+        IntakeSubsystem intakeSubsystem = IntakeSubsystem.getInstance();
+        xbox.leftTrigger().onTrue(Commands.runOnce(this::inTake, intakeSubsystem));
+        xbox.rightTrigger().onTrue(Commands.runOnce(this::outTake, intakeSubsystem));
+        xbox.leftTrigger().onFalse(Commands.runOnce(this::disableIntake, intakeSubsystem));
+        xbox.rightTrigger().onFalse(Commands.runOnce(this::disableIntake, intakeSubsystem));
     }
 
-    private void onPressA() {
-        moveToSetPoint(Constants.INTAKE_POSITION);
+    // allows for delays when travelling from certain positions back to neutral
+    private SequentialCommandGroup getNeutralSequence() {
+        switch(position) {
+            case 0:
+            return new SequentialCommandGroup(new MoveArmAngles(Constants.NEUTRAL_POSITION), Commands.runOnce(this::setPosition0));
+
+            case 1:
+            return new SequentialCommandGroup(new MoveArmAngles(Constants.NEUTRAL_POSITION), Commands.runOnce(this::setPosition0));
+            
+            case 2:
+            return new SequentialCommandGroup(new MoveArmDelayTop(Constants.NEUTRAL_POSITION, 0.2), Commands.runOnce(this::setPosition0));
+
+            case 3:
+            return new SequentialCommandGroup(new MoveArmDelayTop(Constants.NEUTRAL_POSITION, 0.3), Commands.runOnce(this::setPosition0));
+
+            case 4:
+            return new SequentialCommandGroup(new MoveArmDelayTop(Constants.INBETWEEN_POSITION, 1.5), new MoveArmAngles(Constants.NEUTRAL_POSITION), Commands.runOnce(this::setPosition0));
+
+            default:
+            return new SequentialCommandGroup();
+        }
+    }
+    private void setPosition0() {
+        this.position = 0;
+    }
+    private void setPosition1() {
+        this.position = 1;
+    }
+    private void setPosition2() {
+        this.position = 2;
+    }
+    private void setPosition3() {
+        this.position = 3;
+    }
+    private void setPosition4() {
+        this.position = 4;
     }
 
-    private void onPressB() {
-        moveToSetPoint(Constants.MID_RUNG_POSITION);
+    private void setLEDCone() {
+        UpdateLED.displayCone();
     }
-
-    private void onPressX() {
-        moveToSetPoint(Constants.SHELF_POSITION);
+    private void setLEDCube() {
+        UpdateLED.displayCube();
     }
-    private void onPressY() {
-        moveToSetPoint(Constants.TOP_RUNG_POSITION);
+    
+    private void inTake() {
+        IntakeSubsystem.getInstance().setSpeed(0.6);
     }
-
-    private void onPressLeftBumper() {
-        moveToSetPoint(Constants.NEUTRAL_POSITION);
+    private void outTake() {
+        IntakeSubsystem.getInstance().setSpeed(-0.12);
+    }
+    private void disableIntake() {
+        IntakeSubsystem.getInstance().setSpeed(0.15);
     }
 
     private void onPressRightBumper() {
@@ -79,6 +137,9 @@ public class ArmControl extends CommandBase {
     private void onPressDisablePidButton() {
         Robot.arms.disablePID();
     }
+    private void onPressEnablePidButton() {
+        Robot.arms.enablePID();
+    }
 
     @Override
     public void execute() {
@@ -86,6 +147,7 @@ public class ArmControl extends CommandBase {
             manualControl();
         }
         Robot.arms.debug();
+
     }
 
     public void manualControl() {

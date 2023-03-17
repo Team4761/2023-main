@@ -5,16 +5,19 @@
 
 package frc.robot.main;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.RobocketsShuffleboard;
 import frc.robot.Auto.command.MainAutoCommand;
 import frc.robot.Drivetrain.DrivetrainSubsystem;
@@ -52,11 +55,14 @@ public class Robot extends TimedRobot
   public final CommandScheduler commandScheduler = CommandScheduler.getInstance();
   // Subsystems
   public static LEDSubsystem leds = LEDSubsystem.getInstance();
-  private final UpdateLED updateLED = new UpdateLED();
+  public static UpdateLED updateLED = new UpdateLED();
+
   public static DrivetrainSubsystem driveTrain = DrivetrainSubsystem.getInstance();
-  public static final DriveController driveController = new DriveController(1);
+  public static DriveController driveController = new DriveController(Constants.DRIVE_CONTROLLER_PORT);
+
   public static ArmSubsystem arms = ArmSubsystem.getInstance();
-  public static final ArmControl armControl = new ArmControl(0);
+  public static ArmControl armControl = new ArmControl(Constants.ARM_CONTROLLER_PORT);
+  
   public static IntakeSubsystem intake = IntakeSubsystem.getInstance();
   public static RobocketsShuffleboard m_shuffleboard = new RobocketsShuffleboard();
 
@@ -88,6 +94,8 @@ public class Robot extends TimedRobot
           new Pose2d(0, 0, new Rotation2d())
     );
     pose = odometry.getPoseMeters();
+
+    IntakeSubsystem.getInstance().setSpeed(0.15);
   }
 
   /**
@@ -99,6 +107,7 @@ public class Robot extends TimedRobot
    */
   @Override
   public void robotPeriodic() {
+
     SmartDashboard.putNumber("odometry x", pose.getX());
     SmartDashboard.putNumber("odometry y", pose.getY());
     
@@ -112,12 +121,23 @@ public class Robot extends TimedRobot
           Paligator.frontRightPosition()*Constants.distancePerEncoderTick
     );
     initFromSelector();
+
+    m_shuffleboard.updateAuto();
   }
 
   @Override
   public void autonomousInit()
   {
+    IntakeSubsystem.getInstance().setSpeed(0.15);
+    arms.setDesiredBottomRotation(Constants.NEUTRAL_POSITION.getY());
+    arms.setDesiredTopRotation(Constants.NEUTRAL_POSITION.getX());
     commandScheduler.schedule(new MainAutoCommand(getAutoSelector()));
+    /*commandScheduler.schedule(
+          new SequentialCommandGroup(
+            new MoveStraightMeasuredCommand(-.5, Units.feetToMeters(2)),
+            new MoveStraightMeasuredCommand(.5, Units.feetToMeters(2))
+          )
+    );*/
   }
 
   /** This method is called periodically during autonomous. */
@@ -134,8 +154,17 @@ public class Robot extends TimedRobot
   /** This method is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
-    UpdateLED.setText("Strout Is Bacon   ");
+    IntakeSubsystem.getInstance().setSpeed(0.15);
+    commandScheduler.schedule(new MoveArmAngles(Constants.NEUTRAL_POSITION));
+    arms.enablePID();
     leds.enableLEDs();
+    armControl = new ArmControl(Constants.ARM_CONTROLLER_PORT);
+    updateLED = new UpdateLED();
+    driveController = new DriveController(Constants.DRIVE_CONTROLLER_PORT);
+
+    CameraServer.startAutomaticCapture(0);
+ 
+    UpdateLED.setText("%(10,0,0)ROBOCKETS %(10,0,0)4761  ");
 
     //commandScheduler.schedule(new getPoseData());
     commandScheduler.schedule(armControl.repeatedly());
@@ -149,6 +178,7 @@ public class Robot extends TimedRobot
   @Override
   public void teleopPeriodic() {
     commandScheduler.run();
+
 
     m_shuffleboard.updateArms();
     m_shuffleboard.updateDrive();

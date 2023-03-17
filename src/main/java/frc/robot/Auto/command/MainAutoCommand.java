@@ -4,6 +4,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Auto.EncoderAuto.GoMetersBackwards;
 import frc.robot.command.MoveArmAngles;
 import frc.robot.Vision.visionVarsAndMethods;
 import frc.robot.command.MoveStraightMeasuredCommand;
@@ -24,8 +25,10 @@ public class MainAutoCommand extends SequentialCommandGroup {
     public MainAutoCommand(int autoSelector){
         addCommands(
             new ScoreDirectlyInFront(),
-            getCommand(autoSelector),
-            new MoveArmAngles(Constants.INTAKE_POSITION)
+            new MoveArmAngles(Constants.NEUTRAL_POSITION),
+            getCommand(autoSelector)
+            //new GoMetersBackwards(-3),
+
         );
     }
 

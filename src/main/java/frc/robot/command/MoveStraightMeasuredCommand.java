@@ -12,28 +12,28 @@ import frc.robot.main.Robot;
 
 public class MoveStraightMeasuredCommand extends CommandBase {
     final int kCountsPerRev = 2048;  //Encoder counts per revolution of the motor shaft.
-    final double linearSpeedIncrease = .01;
 
-    private final Distances start;
+    private Distances start;
     private final double goalSpeed;
 
     private final double meters;
     private final double drivetrainGearRatio;
-
-    private final double startAngle;
 
     /**
      * @param xSpeed between -1.0 and 1.0
      * @param meters the number of meters to go forward
      */
     public MoveStraightMeasuredCommand(double xSpeed, double meters) {
-        start = Robot.impl.getSensorReadings();
         goalSpeed = MathUtil.applyDeadband(xSpeed, RobotDriveBase.kDefaultDeadband);
         SmartDashboard.putNumber("GoalSpeed", goalSpeed);
         this.meters = meters;
-        Paligator.m_gyro.reset();
-        startAngle = Paligator.m_gyro.getAngle();
         drivetrainGearRatio = SmartDashboard.getNumber("Drivetrain Gear Ratio", 7.3);
+    }
+
+    @Override
+    public void initialize() {
+        super.initialize();
+        start = Robot.impl.getSensorReadings();
     }
 
     @Override
@@ -41,7 +41,6 @@ public class MoveStraightMeasuredCommand extends CommandBase {
         var speeds = DifferentialDrive.tankDriveIK(goalSpeed, goalSpeed, true);
         SmartDashboard.putNumber("Speed Left", speeds.left);
         SmartDashboard.putNumber("Speed Right", speeds.right);
-
 
         var delta = getDelta();
         var avgDeltaLeftRight = (delta.frontLeft - delta.frontRight) / 2;
