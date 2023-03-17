@@ -199,7 +199,7 @@ public class RobocketsShuffleboard {
         ledSpeed = settings.add("Text Speed", 100).withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min",20,"max",2000)).getEntry();
 
         coneText = presets.add("Text For Cone", "%(200,255,0)CONE ").withWidget(BuiltInWidgets.kTextView).getEntry();
-        cubeText = presets.add("Text For Cube", "%(100,0,200)CUBE ").withWidget(BuiltInWidgets.kTextView).getEntry();
+        cubeText = presets.add("Text For Cube", "%(5,0,10)CUBE ").withWidget(BuiltInWidgets.kTextView).getEntry();
         forceDisplayText = presets.add("Forced Text", "%(255,0,0)4761 ").withWidget(BuiltInWidgets.kTextView).getEntry();
     }
 

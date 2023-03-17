@@ -12,7 +12,7 @@
     // LED Specific Information
     private int led_PORT;                           // The port connected to the LED strip
     public int led_HEIGHT = 8;                      // The height of the LED strip
-    public int led_WIDTH = 64;                      // The width of the LED strip
+    public int led_WIDTH = 32;                      // The width of the LED strip
     public int led_NumOfBuffers = 4;                // The number of preloaded buffers
 
     AddressableLED m_led;
@@ -111,12 +111,19 @@
         else if (stage == 5)
             currentText[0] = encChars.SPACE;
         // Add the current text information to the led buffer
-        for (int x = 0; x < led_WIDTH; x++) {
+        int count = 0;
+        for (int x = led_WIDTH-1; x >= 0; x--) {
+            count++;
             for (int y = 0; y < led_HEIGHT; y++) {
-                if (currentText[x][y])
-                    textBuffer.setRGB(y*led_WIDTH+led_WIDTH-1-x, textColors[x].r, textColors[x].g, textColors[x].b);
+                if (currentText[x][y] && count % 2 == 0)
+                    textBuffer.setRGB(x*led_HEIGHT+led_HEIGHT-y-1, textColors[x].r, textColors[x].g, textColors[x].b);
+                else if (count % 2 == 0)
+                    textBuffer.setRGB(x*led_HEIGHT+led_HEIGHT-y-1,0,0,0);
+                else if (currentText[x][y] && count % 2 == 1) {
+                    textBuffer.setRGB(x*led_HEIGHT+y, textColors[x].r, textColors[x].g, textColors[x].b);
+                }
                 else
-                    textBuffer.setRGB(y*led_WIDTH+led_WIDTH-1-x,0,0,0);
+                    textBuffer.setRGB(x*led_HEIGHT+y,0,0,0);
             }
         }
         m_led.setData(textBuffer);
