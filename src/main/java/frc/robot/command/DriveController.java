@@ -18,6 +18,7 @@ public class DriveController extends CommandBase {
 
     private XboxControl xbox;
     private boolean isArcade = true;
+    private double multiplier = 1;
     DrivetrainSubsystem drivetrainSubsystem = DrivetrainSubsystem.getInstance();
     Timer timer = new Timer();
     double lastTime;
@@ -39,13 +40,31 @@ public class DriveController extends CommandBase {
         //xbox.leftTrigger().onTrue(Commands.runOnce(this::onLeftTrigger, drivetrainSubsystem));
         //xbox.rightTrigger().onTrue(Commands.runOnce(this::onRightTrigger, drivetrainSubsystem));
 
+        // fast medium slow current is medium
+        // default as medium
+
         IntakeSubsystem intakeSubsystem = IntakeSubsystem.getInstance();
         xbox.leftBumper().whileTrue(Commands.run(this::inTake, intakeSubsystem));
         xbox.rightBumper().whileTrue(Commands.run(this::outTake, intakeSubsystem));
         xbox.leftBumper().whileFalse(Commands.run(this::disableIntake, intakeSubsystem));
         xbox.rightBumper().whileFalse(Commands.run(this::disableIntake, intakeSubsystem));
+
+        xbox.leftTrigger().onFalse(Commands.runOnce(this::medium));
+        xbox.rightTrigger().onFalse(Commands.runOnce(this::medium));
+        xbox.leftTrigger().onTrue(Commands.runOnce(this::slow));
+        xbox.rightTrigger().onTrue(Commands.runOnce(this::fast));
         //xbox.leftBumper().onTrue(Commands.runOnce(this::onLeftBumper, drivetrainSubsystem));
         //xbox.rightBumper().onTrue(Commands.runOnce(this::onRightBumper, drivetrainSubsystem));
+    }
+
+    private void slow() {
+        multiplier = 0.2;
+    }
+    private void medium() {
+        multiplier = 1;
+    }
+    private void fast() {
+        multiplier = 2;
     }
 
     private void inTake() {
@@ -101,7 +120,7 @@ public class DriveController extends CommandBase {
 
     private void arcadeDrive() {
         DifferentialDrive.WheelSpeeds wheelSpeeds = arcadeDriveIK((xbox.getLeftY()+Math.signum(xbox.getLeftY())*0.25)/1.25, -(xbox.getRightX())*Constants.DRIVETRAIN_ROTATION_SPEED);
-
+        
         double maxChange = Math.abs((timer.get()-lastTime) * Constants.DRIVETRAIN_MAX_ACCELERATION * 1);
         outputL = MathUtil.clamp(wheelSpeeds.left*1.5, outputL-maxChange, outputL+maxChange);
         outputR = MathUtil.clamp(wheelSpeeds.right*1.5, outputR-maxChange, outputR+maxChange);
@@ -118,7 +137,7 @@ public class DriveController extends CommandBase {
         lastTime = timer.get();
 
         // would be nice to account for static friction somehow
-        Paligator.setVoltages(vL, vR);
+        Paligator.setVoltages(vL*multiplier, vR*multiplier);
     }
 
     @Override

@@ -102,6 +102,7 @@ public class Robot extends TimedRobot
    */
   @Override
   public void robotPeriodic() {
+
     SmartDashboard.putNumber("odometry x", pose.getX());
     SmartDashboard.putNumber("odometry y", pose.getY());
     

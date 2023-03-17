@@ -19,6 +19,11 @@ public class IntakeSubsystem extends SubsystemBase {
         intakeMotor.set(speed);
     }
 
+    @Override
+    public void periodic() {
+        intakeMotor.set(0.15);
+    }
+
     public static IntakeSubsystem getInstance() {
         return INSTANCE;
     }
