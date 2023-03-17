@@ -129,6 +129,8 @@ public class Robot extends TimedRobot
   public void autonomousInit()
   {
     IntakeSubsystem.getInstance().setSpeed(0.15);
+    arms.setDesiredBottomRotation(Constants.NEUTRAL_POSITION.getY());
+    arms.setDesiredTopRotation(Constants.NEUTRAL_POSITION.getX());
     commandScheduler.schedule(new MainAutoCommand(getAutoSelector()));
     /*commandScheduler.schedule(
           new SequentialCommandGroup(
@@ -153,6 +155,7 @@ public class Robot extends TimedRobot
   @Override
   public void teleopInit() {
     IntakeSubsystem.getInstance().setSpeed(0.15);
+    commandScheduler.schedule(new MoveArmAngles(Constants.NEUTRAL_POSITION));
     arms.enablePID();
     leds.enableLEDs();
     armControl = new ArmControl(Constants.ARM_CONTROLLER_PORT);

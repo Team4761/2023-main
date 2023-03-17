@@ -55,8 +55,8 @@ public class ArmControl extends CommandBase {
         IntakeSubsystem intakeSubsystem = IntakeSubsystem.getInstance();
         xbox.leftTrigger().onTrue(Commands.runOnce(this::inTake, intakeSubsystem));
         xbox.rightTrigger().onTrue(Commands.runOnce(this::outTake, intakeSubsystem));
-        xbox.leftBumper().onFalse(Commands.runOnce(this::disableIntake, intakeSubsystem));
-        xbox.rightBumper().onFalse(Commands.runOnce(this::disableIntake, intakeSubsystem));
+        xbox.leftTrigger().onFalse(Commands.runOnce(this::disableIntake, intakeSubsystem));
+        xbox.rightTrigger().onFalse(Commands.runOnce(this::disableIntake, intakeSubsystem));
     }
 
     // allows for delays when travelling from certain positions back to neutral
