@@ -6,7 +6,7 @@ import frc.robot.field.Field;
 import frc.robot.main.Robot;
 
 public class AutoCommandPos1 extends SequentialCommandGroup {
-    public static final double PAST_ITEM = 18; // inches
+    public static final double PAST_ITEM = 40; // inches
 
     public AutoCommandPos1(){
         var startPose = Field.STARTING_POSE_1;
