@@ -3,6 +3,7 @@ package frc.robot.Auto.command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Auto.EncoderAuto.GoMetersBackwards;
 import frc.robot.command.MoveArmAngles;
 import frc.robot.command.MoveStraightMeasuredCommand;
 import frc.robot.main.Constants;
@@ -20,8 +21,9 @@ public class MainAutoCommand extends SequentialCommandGroup {
         addCommands(
             new ScoreDirectlyInFront(),
             new MoveArmAngles(Constants.NEUTRAL_POSITION),
-            getCommand(autoSelector),
-            new MoveArmAngles(Constants.INTAKE_POSITION)
+            getCommand(autoSelector)
+            //new GoMetersBackwards(-3),
+
         );
     }
 

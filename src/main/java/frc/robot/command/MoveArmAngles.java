@@ -8,12 +8,13 @@ import frc.robot.main.Robot;
 public class MoveArmAngles extends CommandBase {
     Translation2d pos;
     public MoveArmAngles(Translation2d pt) {
+        
         addRequirements(ArmSubsystem.getInstance());
         pos = pt;
     }
     @Override
     public void initialize() {
-        Robot.arms.enablePID();
+        //Robot.arms.enablePID();
         Robot.arms.bottom.getController().setTolerance(0.2, 0.2);
         Robot.arms.top.getController().setTolerance(0.2, 0.2);
         Robot.arms.movePID();

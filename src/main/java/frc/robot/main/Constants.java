@@ -38,20 +38,20 @@ public class Constants {
 
     public static final double trackWidth = 0.5;//Inches : 19.5 //Meters : 0.4953
 
-    public static final double DRIVETRAIN_MAX_ACCELERATION = 5; // meters/s^2
+    public static final double DRIVETRAIN_MAX_ACCELERATION = 4; // meters/s^2
     public static final double DRIVETRAIN_MAX_VELOCITY = 1.1; // meters/s
 
     // Arm Constants
     static final public double ARM_LENGTH_BOTTOM = 22.5;         // Bottom Arm?  //now 22.5 was 25
     static final public double ARM_LENGTH_TOP = 39.0;            // Top Arm?     //now 28.5 was 30
-    static public double ARM_P_TOP = 0.8;                        // PID control for arms
+    static public double ARM_P_TOP = 0.9;                        // PID control for arms
     static public double ARM_I_TOP = 0.0;                        // PID control for arms
     static public double ARM_D_TOP = 0.0;                        // PID control for arms
     static public double ARM_P_BOTTOM = 0.4;                     // PID control for arms
     static public double ARM_I_BOTTOM = 0.0;                     // PID control for arms
     static public double ARM_D_BOTTOM = 0.0;                     // PID control for arms
     static final public double ARM_MAX_ACCELERATION_SPEED = 4;
-    static final public double ARM_MAX_ROTATION_SPEED = 1.0;
+    static final public double ARM_MAX_ROTATION_SPEED = 1.1;
     static final public double ENCODER_ZERO_VALUE_TOP = 3.5; //PAST: 0.6189683810569215
     static final public double ENCODER_ZERO_VALUE_BOTTOM = 4.0; //PAST: 5.06664074953627
     public static final double JOINT_2_MAX = 110.8;
@@ -66,8 +66,8 @@ public class Constants {
     
     //Arm Feedforward
     public static final double TOP_LENGTH = 1.016;//m
-    public static final double TOP_MASS = 5.08;//kg
-    public static final double TOP_MOI = 2.05;//kgm^2
+    public static final double TOP_MASS = 5.08+0.05;//kg, increased to account for cone/cube
+    public static final double TOP_MOI = 2.05+0.02;//kgm^2, same as mass
     public static final double TOP_CGRADIUS = 0.635;//m
     public static final DCMotor TOP_MOTOR = DCMotor.getNEO(2).withReduction(45.45454545);
     public static final double BOTTOM_LENGTH = 0.5715;//m
@@ -87,11 +87,12 @@ public class Constants {
 
 
     // Set Positions
-    public static final Translation2d INTAKE_POSITION = new Translation2d(0.2, 0.530);    // x & y are angles in radians (top_rotation, bottom_rotation)
-    public static final Translation2d MID_RUNG_POSITION = new Translation2d(1.8, 1.43);    // x & y are angles in radians (top_rotation, bottom_rotation) [Went to 2.1, 2.2]
+    public static final Translation2d INTAKE_POSITION = new Translation2d(0.25, 0.530);    // x & y are angles in radians (top_rotation, bottom_rotation)
+    public static final Translation2d MID_RUNG_POSITION = new Translation2d(1.7, 1.43);    // x & y are angles in radians (top_rotation, bottom_rotation) [Went to 2.1, 2.2]
+    public static final Translation2d INBETWEEN_POSITION = new Translation2d(1.5, -0.05);       // for returning from top, is supposed to soften fall and make bottom retract faster than top
     public static final Translation2d TOP_RUNG_POSITION = new Translation2d(3.05, 2.14);    // x & y are angles in radians (top_rotation, bottom_rotation) [Went to 2.4, 3.02]
     public static final Translation2d SHELF_POSITION = new Translation2d(1.45, 1.0);       //same as those
-    public static final Translation2d NEUTRAL_POSITION = new Translation2d(0.8, 0);
-    public static final Translation2d STARTING_POSITION = new Translation2d(1.50, 0.08);    // x & y are angles in radians (top_rotation, bottom_rotation) [Went to 2.4, 3.02]
+    public static final Translation2d NEUTRAL_POSITION = new Translation2d(0.8, 0.05);
+    public static final Translation2d STARTING_POSITION = new Translation2d(1.50, 0.0);    // x & y are angles in radians (top_rotation, bottom_rotation) [Went to 2.4, 3.02]
 }
 

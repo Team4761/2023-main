@@ -52,7 +52,7 @@ public class ArmPIDSubsystem extends ProfiledPIDSubsystem {
             Robot.m_shuffleboard.setBottomFF(subsystem.calculateFeedforwards().get(0,0) / 12.0);
             SmartDashboard.putNumber("botto ff", subsystem.calculateFeedforwards().get(0,0) / 12.0);
         if(motorType.equalsIgnoreCase("top"))// && ArmSubsystem.getInstance().useFeedForward)
-             ff = subsystem.calculateFeedforwards().get(1,0) / 12.0 / 2.5;
+             ff = subsystem.calculateFeedforwards().get(1,0) / 12.0 / 3;
          if(motorType.equalsIgnoreCase("bottom"))// & ArmSubsystem.getInstance().useFeedForward)
              ff = subsystem.calculateFeedforwards().get(0,0) / 12.0 / 3.9;
     

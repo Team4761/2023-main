@@ -12,18 +12,15 @@ public class IntakeSubsystem extends SubsystemBase {
     private CANSparkMax intakeMotor = new CANSparkMax(4, MotorType.kBrushless);
 
     public IntakeSubsystem () {
-        
+    }
+    @Override
+    public void periodic() {
+        //intakeMotor.set(0.15);
     }
 
     public void setSpeed (double speed) {
         intakeMotor.set(speed);
     }
-
-    @Override
-    public void periodic() {
-        intakeMotor.set(0.15);
-    }
-
     public static IntakeSubsystem getInstance() {
         return INSTANCE;
     }

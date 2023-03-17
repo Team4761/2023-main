@@ -11,7 +11,7 @@ import frc.robot.main.Constants;
 
 
 
-public class GoMetersEncoder extends CommandBase {
+public class GoMetersBackwards extends CommandBase {
     private double distance;
 
     private double leftSpeed;
@@ -25,8 +25,8 @@ public class GoMetersEncoder extends CommandBase {
     private DifferentialDriveOdometry odometry;
     private Pose2d pose;
 
-    // doesn't do negative
-    public GoMetersEncoder(double distance) {
+    // do not put in negative numbers
+    public GoMetersBackwards(double distance) {
         // each subsystem used by the command must be passed into the
         // addRequirements() method (which takes a vararg of Subsystem)
         this.distance = Math.abs(distance);
@@ -46,8 +46,8 @@ public class GoMetersEncoder extends CommandBase {
     @Override
     public void execute() {
         pose = odometry.update(new Rotation2d(Paligator.m_gyro.getAngle()*0.0174533), Paligator.frontLeftPosition()*Constants.distancePerEncoderTick, Paligator.frontRightPosition()*Constants.distancePerEncoderTick);
-        SmartDashboard.putNumber("forward command", pose.getX());
-        targetVelocity = Math.max(Math.min((distance-pose.getX())*1.5, Constants.DRIVETRAIN_MAX_VELOCITY), -Constants.DRIVETRAIN_MAX_VELOCITY);
+        SmartDashboard.putNumber("backward command", pose.getX());
+        targetVelocity = Math.max(Math.min((pose.getX()-distance)*1.5, Constants.DRIVETRAIN_MAX_VELOCITY), -Constants.DRIVETRAIN_MAX_VELOCITY);
 
         double maxChange = (timer.get()-lastTime) * Constants.DRIVETRAIN_MAX_ACCELERATION;
         lastTime = timer.get();
@@ -68,7 +68,7 @@ public class GoMetersEncoder extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return targetVelocity<=0;
+        return targetVelocity>=0;
     }
 
     @Override

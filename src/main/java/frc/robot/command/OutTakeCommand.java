@@ -21,7 +21,7 @@ public class OutTakeCommand extends CommandBase {
     }
     @Override
     public void execute() {
-        m_intake.setSpeed(-0.1);
+        m_intake.setSpeed(-0.12);
     }
     @Override
     public boolean isFinished() {
@@ -29,6 +29,6 @@ public class OutTakeCommand extends CommandBase {
     }
     @Override
     public void end(boolean interrupted) {
-        m_intake.setSpeed(0);
+        m_intake.setSpeed(0.15);
     }
 }

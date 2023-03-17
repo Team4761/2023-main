@@ -28,7 +28,7 @@ public class InTakeCommand extends CommandBase {
     }
     @Override
     public void end(boolean interrupted) {
-        m_intake.setSpeed(0);
+        m_intake.setSpeed(0.15);
         this.cancel();
     }
 }

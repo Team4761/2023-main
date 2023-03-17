@@ -5,6 +5,7 @@
 
 package frc.robot.main;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
@@ -93,6 +94,8 @@ public class Robot extends TimedRobot
           new Pose2d(0, 0, new Rotation2d())
     );
     pose = odometry.getPoseMeters();
+
+    IntakeSubsystem.getInstance().setSpeed(0.15);
   }
 
   /**
@@ -125,13 +128,14 @@ public class Robot extends TimedRobot
   @Override
   public void autonomousInit()
   {
-//    commandScheduler.schedule(new MainAutoCommand(getAutoSelector()));
-    commandScheduler.schedule(
+    IntakeSubsystem.getInstance().setSpeed(0.15);
+    commandScheduler.schedule(new MainAutoCommand(getAutoSelector()));
+    /*commandScheduler.schedule(
           new SequentialCommandGroup(
             new MoveStraightMeasuredCommand(-.5, Units.feetToMeters(2)),
             new MoveStraightMeasuredCommand(.5, Units.feetToMeters(2))
           )
-    );
+    );*/
   }
 
   /** This method is called periodically during autonomous. */
@@ -148,12 +152,16 @@ public class Robot extends TimedRobot
   /** This method is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
+    IntakeSubsystem.getInstance().setSpeed(0.15);
+    arms.enablePID();
     leds.enableLEDs();
     armControl = new ArmControl(Constants.ARM_CONTROLLER_PORT);
     updateLED = new UpdateLED();
     driveController = new DriveController(Constants.DRIVE_CONTROLLER_PORT);
 
-    UpdateLED.setText("%(255,0,0)Strout %(0,255,0)Is %(0,0,255)Bacon   ");
+    CameraServer.startAutomaticCapture(0);
+ 
+    UpdateLED.setText("%(10,0,0)ROBOCKETS %(10,0,0)4761  ");
 
     //commandScheduler.schedule(new getPoseData());
     commandScheduler.schedule(armControl.repeatedly());
@@ -167,6 +175,7 @@ public class Robot extends TimedRobot
   @Override
   public void teleopPeriodic() {
     commandScheduler.run();
+
 
     m_shuffleboard.updateArms();
     m_shuffleboard.updateDrive();
