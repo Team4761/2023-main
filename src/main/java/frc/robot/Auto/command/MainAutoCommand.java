@@ -4,50 +4,46 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.Auto.EncoderAuto.GoMetersBackwards;
-import frc.robot.command.MoveArmAngles;
 import frc.robot.Vision.visionVarsAndMethods;
+import frc.robot.command.MoveArmAngles;
 import frc.robot.command.MoveStraightMeasuredCommand;
-
-import java.util.Arrays;
-import java.util.Comparator;
 import frc.robot.main.Constants;
 import frc.robot.main.Robot;
 
-public class MainAutoCommand extends SequentialCommandGroup {
-    public static final int POS_1 = 1;
-    public static final int POS_2 = 2;
-    public static final int POS_3 = 3;
-    public static final int POS_6 = 6;
-    public static final int POS_7 = 7;
-    public static final int POS_8 = 8;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
 
-    public MainAutoCommand(int autoSelector){
+public class MainAutoCommand extends SequentialCommandGroup {
+    public static List<BaseAutoCommand> AUTO_COMMANDS =
+        Arrays.asList(
+            new AutoCommandPos1(), new AutoCommandPos2(), new AutoCommandPos3(),
+            new AutoCommandPos6(), new AutoCommandPos7(), new AutoCommandPos8()
+        );
+
+    public MainAutoCommand(){
         addCommands(
             new ScoreDirectlyInFront(),
             new MoveArmAngles(Constants.NEUTRAL_POSITION),
-            getCommand(autoSelector)
-            //new GoMetersBackwards(-3),
-
+            getCommand()
         );
     }
 
-    private CommandBase getCommand(int autoSelector)
+    private CommandBase getCommand()
     {
         if (!getAutoOnlyScoreMobility()) {
             var pose = visionVarsAndMethods.getEstimatedPose().getFirst();
             if (pose.getX() != 0 && pose.getY() != 0) {
                 return closestPoint(pose.getX(), pose.getY());
             }
-            switch (autoSelector) {
-                case POS_1: return new AutoCommandPos1();
-                case POS_2: return new AutoCommandPos2();
-                case POS_3: return new AutoCommandPos3();
-
-                case POS_6: return new AutoCommandPos6();
-                case POS_7: return new AutoCommandPos7();
-                case POS_8: return new AutoCommandPos8();
+            var startPos = Robot.m_shuffleboard.getStartPos();
+            for (BaseAutoCommand command : AUTO_COMMANDS) {
+                if (command.getAprilTag() == startPos) {
+                    return command;
+                }
             }
+            return new AutoCommandPos1();
         }
         // The goal of this is to achieve mobility ... just haul backward 4.0 meters and stay put
         var topSpeed = Robot.m_shuffleboard.getAutoMaxSpeed();
@@ -56,13 +52,11 @@ public class MainAutoCommand extends SequentialCommandGroup {
 
     private CommandBase closestPoint(double x, double y) {
         Translation2d pos = new Translation2d(x, y);
-        var commands =
-            Arrays.asList(
-                new AutoCommandPos1(), new AutoCommandPos2(), new AutoCommandPos3(),
-                new AutoCommandPos6(), new AutoCommandPos7(), new AutoCommandPos8()
-            );
+        var commands = new ArrayList<>(AUTO_COMMANDS);
         commands.sort(Comparator.comparingDouble(c -> Math.abs(pos.getDistance(c.getStartPose().getTranslation()))));
-        return commands.get(0);
+        BaseAutoCommand selectedCommand = commands.get(0);
+        SmartDashboard.putNumber("Closest April Tag", selectedCommand.getAprilTag());
+        return selectedCommand;
     }
 
     public boolean getAutoOnlyScoreMobility() {

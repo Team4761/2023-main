@@ -86,6 +86,7 @@ public class Robot extends TimedRobot
     SmartDashboard.putData("Robot Choices", chooser);
 
     Paligator.zeroEncoders();
+    commandScheduler.schedule(new getPoseData());
 
     odometry = new DifferentialDriveOdometry(
           Paligator.m_gyro.getRotation2d(),
@@ -131,13 +132,7 @@ public class Robot extends TimedRobot
     IntakeSubsystem.getInstance().setSpeed(0.15);
     arms.setDesiredBottomRotation(Constants.NEUTRAL_POSITION.getY());
     arms.setDesiredTopRotation(Constants.NEUTRAL_POSITION.getX());
-    commandScheduler.schedule(new MainAutoCommand(getAutoSelector()));
-    /*commandScheduler.schedule(
-          new SequentialCommandGroup(
-            new MoveStraightMeasuredCommand(-.5, Units.feetToMeters(2)),
-            new MoveStraightMeasuredCommand(.5, Units.feetToMeters(2))
-          )
-    );*/
+    commandScheduler.schedule(new MainAutoCommand());
   }
 
   /** This method is called periodically during autonomous. */
@@ -166,7 +161,6 @@ public class Robot extends TimedRobot
  
     UpdateLED.setText("%(10,0,0)ROBOCKETS %(10,0,0)4761  ");
 
-    //commandScheduler.schedule(new getPoseData());
     commandScheduler.schedule(armControl.repeatedly());
     commandScheduler.schedule(updateLED.repeatedly());
     commandScheduler.schedule(driveController.repeatedly());
