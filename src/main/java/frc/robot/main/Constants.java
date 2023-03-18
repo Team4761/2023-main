@@ -51,7 +51,8 @@ public class Constants {
     static public double ARM_I_BOTTOM = 0.0;                     // PID control for arms
     static public double ARM_D_BOTTOM = 0.0;                     // PID control for arms
     static final public double ARM_MAX_ACCELERATION_SPEED = 4;
-    static final public double ARM_MAX_ROTATION_SPEED = 1.1;
+    static final public double ARM_MAX_ROTATION_SPEED_TOP = 1.2;
+    static final public double ARM_MAX_ROTATION_SPEED_BOTTOM = 1.1;
     static final public double ENCODER_ZERO_VALUE_TOP = 3.5; //PAST: 0.6189683810569215
     static final public double ENCODER_ZERO_VALUE_BOTTOM = 4.0; //PAST: 5.06664074953627
     public static final double JOINT_2_MAX = 110.8;
@@ -88,10 +89,10 @@ public class Constants {
 
     // Set Positions
     public static final Translation2d INTAKE_POSITION = new Translation2d(0.25, 0.530);    // x & y are angles in radians (top_rotation, bottom_rotation)
-    public static final Translation2d MID_RUNG_POSITION = new Translation2d(1.7, 1.5);    // x & y are angles in radians (top_rotation, bottom_rotation) [Went to 2.1, 2.2]
+    public static final Translation2d MID_RUNG_POSITION = new Translation2d(1.75, 1.48);    // x & y are angles in radians (top_rotation, bottom_rotation) [Went to 2.1, 2.2]
     public static final Translation2d INBETWEEN_POSITION = new Translation2d(1.5, 0.05);       // for returning from top, is supposed to soften fall and make bottom retract faster than top
-    public static final Translation2d TOP_RUNG_POSITION = new Translation2d(3.05, 2.22);    // x & y are angles in radians (top_rotation, bottom_rotation) [Went to 2.4, 3.02]
-    public static final Translation2d SHELF_POSITION = new Translation2d(1.45, 1.0);       //same as those
+    public static final Translation2d TOP_RUNG_POSITION = new Translation2d(3.25, 2.2);    // x & y are angles in radians (top_rotation, bottom_rotation) [Went to 2.4, 3.02]
+    public static final Translation2d SHELF_POSITION = new Translation2d(1.7, 1.45);       // good
     public static final Translation2d NEUTRAL_POSITION = new Translation2d(0.8, 0.05);
     public static final Translation2d STARTING_POSITION = new Translation2d(1.50, 0.0);    // x & y are angles in radians (top_rotation, bottom_rotation) [Went to 2.4, 3.02]
 }

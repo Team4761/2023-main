@@ -21,7 +21,7 @@ public class MainAutoCommand extends SequentialCommandGroup {
         addCommands(
             new ScoreDirectlyInFront(),
             //scoreinfront comes with going back to neutral
-            getCommand(autoSelector)
+            getCommand(autoSelector) // maybe delete 678 if using vision and change to near stands mid and far or something
 
         );
     }

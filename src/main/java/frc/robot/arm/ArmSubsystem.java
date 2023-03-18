@@ -50,8 +50,8 @@ public class ArmSubsystem extends SubsystemBase {
         //top_motor_right.setInverted(true);
 
         // Do find '//REMOVABLE' and replace all with nothing to activate bottom control
-        bottom = new ArmPIDSubsystem(bottomEncoder, bottom_left, "bottom", Constants.ARM_P_BOTTOM, Constants.ARM_I_BOTTOM, Constants.ARM_D_BOTTOM, this);
-        top = new ArmPIDSubsystem(topEncoder, top_motor_left, "top", Constants.ARM_P_TOP, Constants.ARM_I_TOP, Constants.ARM_D_TOP, this);
+        bottom = new ArmPIDSubsystem(bottomEncoder, bottom_left, "bottom", Constants.ARM_P_BOTTOM, Constants.ARM_I_BOTTOM, Constants.ARM_D_BOTTOM, Constants.ARM_MAX_ROTATION_SPEED_BOTTOM, this);
+        top = new ArmPIDSubsystem(topEncoder, top_motor_left, "top", Constants.ARM_P_TOP, Constants.ARM_I_TOP, Constants.ARM_D_TOP, Constants.ARM_MAX_ROTATION_SPEED_TOP, this);
 
         inverseKinematics = new ArmMath();
         pos = inverseKinematics.getPoint(getBottomRotation(), getTopRotation());

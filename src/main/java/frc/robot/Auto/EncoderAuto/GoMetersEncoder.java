@@ -36,7 +36,7 @@ public class GoMetersEncoder extends CommandBase {
 
     @Override
     public void initialize() {
-        odometry = new DifferentialDriveOdometry(new Rotation2d(Paligator.m_gyro.getAngle()*0.0174533), Paligator.frontLeftPosition()*Constants.distancePerEncoderTick, Paligator.frontRightPosition()*Constants.distancePerEncoderTick);
+        odometry = new DifferentialDriveOdometry(new Rotation2d(Paligator.m_gyro.getAngle()*0.0174533), Paligator.frontLeftPosition()*Constants.distancePerEncoderTick, Paligator.frontRightPosition()*Constants.distancePerEncoderTick, new Pose2d());
         pose = odometry.getPoseMeters();
 
         timer.start();

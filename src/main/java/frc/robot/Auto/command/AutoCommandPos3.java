@@ -26,7 +26,7 @@ public class AutoCommandPos3 extends SequentialCommandGroup {
 
         addCommands(
             new MoveToPointCommand(item.getX() + PAST_ITEM, startPose.getY()),
-            new TurnDegreesGyro(-180),
+            new TurnDegreesGyro(180),
             new MoveArmAngles(Constants.INTAKE_POSITION),
             new ParallelCommandGroup(
                 new InTakeCommand(IntakeSubsystem.getInstance(), 3),

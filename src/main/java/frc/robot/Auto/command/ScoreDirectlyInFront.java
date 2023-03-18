@@ -12,20 +12,23 @@ import frc.robot.command.MoveStraightMeasuredCommand;
 import frc.robot.command.OutTakeCommand;
 import frc.robot.intake.IntakeSubsystem;
 import frc.robot.main.Constants;
+import frc.robot.main.Robot;
 
+// would be nice to reduce the amount of time this takes
 public class ScoreDirectlyInFront extends SequentialCommandGroup {
     public ScoreDirectlyInFront() {
         addCommands(
-            new InTakeCommand(IntakeSubsystem.getInstance(), 0.4),
+            new InTakeCommand(IntakeSubsystem.getInstance(), 0.3),
             //new MoveStraightMeasuredCommand(-.5, Units.feetToMeters(2)),
             //new WaitCommand(1),
             new MoveArmAngles(Constants.NEUTRAL_POSITION),
-            new MoveArmDelayBottom(Constants.TOP_RUNG_POSITION, 1.2).withTimeout(5),
+            Robot.armControl.getTopSequence().withTimeout(4),
             new WaitCommand(0.1),
             //new MoveStraightMeasuredCommand(.5, Units.feetToMeters(2.1)),
             new OutTakeCommand(IntakeSubsystem.getInstance(), 0.5),
+            Commands.runOnce(Robot.armControl::setTopSpeedLow),
             new MoveArmDelayTop(Constants.INBETWEEN_POSITION, 1.5),
-            new MoveArmAngles(Constants.NEUTRAL_POSITION)
+            Robot.armControl.getNeutralSequence(4)
         );
     }
 }

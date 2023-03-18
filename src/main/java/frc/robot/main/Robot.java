@@ -169,8 +169,8 @@ public class Robot extends TimedRobot
   @Override
   public void teleopInit() {
     IntakeSubsystem.getInstance().setSpeed(0.15);
-    commandScheduler.schedule(new MoveArmAngles(Constants.NEUTRAL_POSITION));
-    arms.enablePID();
+    //commandScheduler.schedule(new MoveArmAngles(Constants.NEUTRAL_POSITION));
+    //arms.enablePID();
     leds.enableLEDs();
     armControl = new ArmControl(Constants.ARM_CONTROLLER_PORT);
     updateLED = new UpdateLED();
@@ -179,7 +179,7 @@ public class Robot extends TimedRobot
  
     UpdateLED.setText("%(10,0,0)ROBOCKETS %(10,0,0)4761  ");
 
-    commandScheduler.schedule(armControl.repeatedly());
+    //commandScheduler.schedule(armControl.repeatedly());
     commandScheduler.schedule(updateLED.repeatedly());
     commandScheduler.schedule(driveController.repeatedly());
   }

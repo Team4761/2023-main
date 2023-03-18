@@ -17,14 +17,15 @@ public class Balance extends CommandBase {
     }
     @Override
     public void initialize() {
-        odometry = new DifferentialDriveOdometry(new Rotation2d(Paligator.m_gyro.getAngle()*0.0174533), Paligator.frontLeftPosition()*Constants.distancePerEncoderTick, Paligator.frontRightPosition()*Constants.distancePerEncoderTick);
+        odometry = new DifferentialDriveOdometry(new Rotation2d(Paligator.m_gyro.getAngle()*0.0174533), Paligator.frontLeftPosition()*Constants.distancePerEncoderTick, Paligator.frontRightPosition()*Constants.distancePerEncoderTick, new Pose2d());
         pose = odometry.getPoseMeters();
     }
 
     @Override
     public void execute() {
-        if(pose.getX()<0.1) Paligator.setVoltages(3.2, 3);
-        else if (pose.getX()>0.1) Paligator.setVoltages(-1.95, -1.8);
+        pose = odometry.update(new Rotation2d(Paligator.m_gyro.getAngle()*0.0174533), Paligator.frontLeftPosition()*Constants.distancePerEncoderTick, Paligator.frontRightPosition()*Constants.distancePerEncoderTick);
+        if(pose.getX()<-0.1) Paligator.setVoltages(1.88, 1.8);
+        else if (pose.getX()>0.1) Paligator.setVoltages(-1.88, -1.8);
         else Paligator.setVoltages(0, 0);
     }
 
