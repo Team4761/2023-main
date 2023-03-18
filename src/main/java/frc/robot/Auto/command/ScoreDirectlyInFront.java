@@ -16,14 +16,14 @@ import frc.robot.main.Constants;
 public class ScoreDirectlyInFront extends SequentialCommandGroup {
     public ScoreDirectlyInFront() {
         addCommands(
-            new InTakeCommand(IntakeSubsystem.getInstance(), 1),
+            new InTakeCommand(IntakeSubsystem.getInstance(), 0.4),
             //new MoveStraightMeasuredCommand(-.5, Units.feetToMeters(2)),
             //new WaitCommand(1),
             new MoveArmAngles(Constants.NEUTRAL_POSITION),
-            new MoveArmDelayBottom(Constants.TOP_RUNG_POSITION, 1.2),
-            new WaitCommand(0.5),
+            new MoveArmDelayBottom(Constants.TOP_RUNG_POSITION, 1.2).withTimeout(5),
+            new WaitCommand(0.1),
             //new MoveStraightMeasuredCommand(.5, Units.feetToMeters(2.1)),
-            new OutTakeCommand(IntakeSubsystem.getInstance(), 0.8),
+            new OutTakeCommand(IntakeSubsystem.getInstance(), 0.5),
             new MoveArmDelayTop(Constants.INBETWEEN_POSITION, 1.5),
             new MoveArmAngles(Constants.NEUTRAL_POSITION)
         );

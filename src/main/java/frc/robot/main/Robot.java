@@ -6,6 +6,8 @@
 package frc.robot.main;
 
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.CvSink;
+import edu.wpi.first.cscore.CvSource;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
@@ -72,6 +74,13 @@ public class Robot extends TimedRobot
   public double[][] path = {{3.0, 0.0}, {3.5, 1.0}};
   public PathoGen pathToFollow = new PathoGen(path);
   public PathFollower pathFollower = new PathFollower(pathToFollow.getPoints(), pathToFollow.getTargetVelocities());
+  
+  // camera
+  // Creates the CvSink and connects it to the UsbCamera
+  CvSink cvSink;
+  
+  // Creates the CvSource and MjpegServer [2] and connects them
+  CvSource outputStream;
 
   /**
    * This method is run when the robot is first started up and should be used for any
@@ -96,6 +105,11 @@ public class Robot extends TimedRobot
     pose = odometry.getPoseMeters();
 
     IntakeSubsystem.getInstance().setSpeed(0.15);
+    
+    CameraServer.startAutomaticCapture(0);
+    cvSink = CameraServer.getVideo();
+    outputStream = CameraServer.putVideo("Blur", 640, 480);
+    commandScheduler.schedule(new getPoseData());
   }
 
   /**
@@ -162,11 +176,9 @@ public class Robot extends TimedRobot
     updateLED = new UpdateLED();
     driveController = new DriveController(Constants.DRIVE_CONTROLLER_PORT);
 
-    CameraServer.startAutomaticCapture(0);
  
     UpdateLED.setText("%(10,0,0)ROBOCKETS %(10,0,0)4761  ");
 
-    //commandScheduler.schedule(new getPoseData());
     commandScheduler.schedule(armControl.repeatedly());
     commandScheduler.schedule(updateLED.repeatedly());
     commandScheduler.schedule(driveController.repeatedly());
@@ -176,7 +188,7 @@ public class Robot extends TimedRobot
   int curPattern = 0;
   /** This method is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {
+  public void teleopPeriodic() {    
     commandScheduler.run();
 
 

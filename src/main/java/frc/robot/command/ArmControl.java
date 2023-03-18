@@ -69,7 +69,7 @@ public class ArmControl extends CommandBase {
             return new SequentialCommandGroup(new MoveArmAngles(Constants.NEUTRAL_POSITION), Commands.runOnce(this::setPosition0));
             
             case 2:
-            return new SequentialCommandGroup(new MoveArmDelayTop(Constants.NEUTRAL_POSITION, 0.2), Commands.runOnce(this::setPosition0));
+            return new SequentialCommandGroup(new MoveArmDelayTop(Constants.NEUTRAL_POSITION, 0.6), Commands.runOnce(this::setPosition0));
 
             case 3:
             return new SequentialCommandGroup(new MoveArmDelayTop(Constants.NEUTRAL_POSITION, 0.3), Commands.runOnce(this::setPosition0));

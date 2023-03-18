@@ -2,6 +2,9 @@ package frc.robot.Auto.command;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Auto.EncoderAuto.GoMetersBackwards;
+import frc.robot.Auto.EncoderAuto.GoMetersEncoder;
+import frc.robot.Auto.EncoderAuto.Balance;
 import frc.robot.field.Field;
 import frc.robot.main.Constants;
 import frc.robot.main.Robot;
@@ -17,7 +20,10 @@ public class AutoCommandPos7 extends SequentialCommandGroup {
         Robot.impl.setPose(startPose);
 
         addCommands(
-            new MoveToPointCommand(goalPosition)
+            //new MoveToPointCommand(goalPosition)
+            new GoMetersBackwards(4),
+            new GoMetersEncoder(1.85)
+            //new Balance()
         );
     }
 }

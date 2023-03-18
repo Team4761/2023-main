@@ -20,9 +20,8 @@ public class MainAutoCommand extends SequentialCommandGroup {
     public MainAutoCommand(int autoSelector){
         addCommands(
             new ScoreDirectlyInFront(),
-            new MoveArmAngles(Constants.NEUTRAL_POSITION),
+            //scoreinfront comes with going back to neutral
             getCommand(autoSelector)
-            //new GoMetersBackwards(-3),
 
         );
     }

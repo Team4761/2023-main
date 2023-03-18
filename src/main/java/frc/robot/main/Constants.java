@@ -88,9 +88,9 @@ public class Constants {
 
     // Set Positions
     public static final Translation2d INTAKE_POSITION = new Translation2d(0.25, 0.530);    // x & y are angles in radians (top_rotation, bottom_rotation)
-    public static final Translation2d MID_RUNG_POSITION = new Translation2d(1.7, 1.43);    // x & y are angles in radians (top_rotation, bottom_rotation) [Went to 2.1, 2.2]
-    public static final Translation2d INBETWEEN_POSITION = new Translation2d(1.5, -0.05);       // for returning from top, is supposed to soften fall and make bottom retract faster than top
-    public static final Translation2d TOP_RUNG_POSITION = new Translation2d(3.05, 2.14);    // x & y are angles in radians (top_rotation, bottom_rotation) [Went to 2.4, 3.02]
+    public static final Translation2d MID_RUNG_POSITION = new Translation2d(1.7, 1.5);    // x & y are angles in radians (top_rotation, bottom_rotation) [Went to 2.1, 2.2]
+    public static final Translation2d INBETWEEN_POSITION = new Translation2d(1.5, 0.05);       // for returning from top, is supposed to soften fall and make bottom retract faster than top
+    public static final Translation2d TOP_RUNG_POSITION = new Translation2d(3.05, 2.22);    // x & y are angles in radians (top_rotation, bottom_rotation) [Went to 2.4, 3.02]
     public static final Translation2d SHELF_POSITION = new Translation2d(1.45, 1.0);       //same as those
     public static final Translation2d NEUTRAL_POSITION = new Translation2d(0.8, 0.05);
     public static final Translation2d STARTING_POSITION = new Translation2d(1.50, 0.0);    // x & y are angles in radians (top_rotation, bottom_rotation) [Went to 2.4, 3.02]
