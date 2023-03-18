@@ -1,6 +1,7 @@
 package frc.robot.Auto.command;
 
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Auto.EncoderAuto.TurnDegreesGyro;
@@ -26,12 +27,12 @@ public class AutoCommandPos6 extends SequentialCommandGroup {
         Robot.impl.setPose(startPose);
         
         addCommands(
-            new MoveStraightMeasuredCommand(-.8, item.getX() - startPose.getX()-8),
+            new MoveStraightMeasuredCommand(-.8, Units.inchesToMeters(item.getX() - startPose.getX()-8)),
             new TurnDegreesGyro(-180),
             new MoveArmAngles(Constants.INTAKE_POSITION),
             new ParallelCommandGroup(
                 new InTakeCommand(IntakeSubsystem.getInstance(), 3),
-                new MoveStraightMeasuredCommand(0.4, 1)
+                new MoveStraightMeasuredCommand(0.4, .5)
             )
         );
     }

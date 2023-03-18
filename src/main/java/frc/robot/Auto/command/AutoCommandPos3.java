@@ -30,7 +30,7 @@ public class AutoCommandPos3 extends SequentialCommandGroup {
             new MoveArmAngles(Constants.INTAKE_POSITION),
             new ParallelCommandGroup(
                 new InTakeCommand(IntakeSubsystem.getInstance(), 3),
-                new MoveStraightMeasuredCommand(0.4, 1)
+                new MoveStraightMeasuredCommand(0.4, .5)
             )
         );
     }
