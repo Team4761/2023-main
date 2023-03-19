@@ -40,8 +40,8 @@ public class ArmSubsystem extends SubsystemBase {
     {
         
         //1.72, 0.35, upper, bottom
-        bottomEncoder = new AbsoluteEncoder(Constants.ARM_ENCODER_BOTTOM_PORT, -0.76);
-        topEncoder = new AbsoluteEncoder(Constants.ARM_ENCODER_TOP_PORT, -2); 
+        bottomEncoder = new AbsoluteEncoder(Constants.ARM_ENCODER_BOTTOM_PORT, -0.06/* .198*/); // resting at 0.1, flat 0.104 more
+        topEncoder = new AbsoluteEncoder(Constants.ARM_ENCODER_TOP_PORT, -1.79/*-2.48*/); // resting at 0.5, flat 0.21 more
         bottom_left = new CANSparkMax(Constants.ARM_MOTOR_BOTTOM_LEFT_PORT, CANSparkMaxLowLevel.MotorType.kBrushless);
         bottom_right = new CANSparkMax(Constants.ARM_MOTOR_BOTTOM_RIGHT_PORT, CANSparkMaxLowLevel.MotorType.kBrushless);
         top_motor_left = new CANSparkMax(Constants.ARM_MOTOR_TOP_LEFT_PORT, CANSparkMaxLowLevel.MotorType.kBrushless);

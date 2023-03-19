@@ -43,8 +43,8 @@ public class ArmControl extends CommandBase {
         xbox.leftStick().onTrue(Commands.runOnce(this::bottomOnlyFF, armSubsystem));
         xbox.rightStick().onTrue(Commands.runOnce(this::topOnlyFF, armSubsystem));
 
-        xbox.leftStick().onFalse(new SequentialCommandGroup(Commands.runOnce(this::resetBottomEncoder, armSubsystem), new WaitCommand(0.5), Commands.runOnce(this::bottomWithPID)));
-        xbox.rightStick().onFalse(new SequentialCommandGroup(Commands.runOnce(this::resetTopEncoder, armSubsystem), new WaitCommand(0.5), Commands.runOnce(this::topWithPID)));
+        xbox.leftStick().onFalse(new SequentialCommandGroup(Commands.runOnce(this::bottomWithPID)));
+        xbox.rightStick().onFalse(new SequentialCommandGroup(Commands.runOnce(this::topWithPID)));
 
         //xbox.rightBumper().whileTrue(Commands.runOnce(this::onPressRightBumper, DrivetrainSubsystem.getInstance()));
         xbox.rightBumper().onFalse(Commands.runOnce(this::onPressRightBumperRelease, DrivetrainSubsystem.getInstance()));

@@ -59,10 +59,10 @@ public class Constants {
     public static final double JOINT_2_MIN = -200.5;
     public static final double JOINT_1_MAX = 100;
     public static final double JOINT_1_MIN = -100;
-    public static final double KINEMATICS_OFFSET_TOP = Math.toRadians(15);
+    public static final double KINEMATICS_OFFSET_TOP = Math.toRadians(15); // did not see don't touch for now
     public static final double KINEMATICS_OFFSET_BOTTOM = Math.toRadians(15);
-    public static final double FLAT_ARM_TOP_OFFSET = 180;   // To tune
-    public static final double FLAT_ARM_BOTTOM_OFFSET = -180;   // To tune
+    public static final double FLAT_ARM_TOP_OFFSET = Math.toDegrees(0.71)+180;   // To tune
+    public static final double FLAT_ARM_BOTTOM_OFFSET = Math.toDegrees(-0.204)-180;   // To tune
     public static final double CONTROLLER_DEADZONE = 0.05;
     
     //Arm Feedforward
@@ -88,8 +88,8 @@ public class Constants {
 
 
     // Set Positions
-    public static final double TOP_OFFSET = 0;
-    public static final double BOTTOM_OFFSET = 0;
+    public static final double TOP_OFFSET = 0.1;
+    public static final double BOTTOM_OFFSET = 0.15;
 
     
     public static final Translation2d INTAKE_POSITION = new Translation2d(0.47+TOP_OFFSET, 0.40+BOTTOM_OFFSET);    // x & y are angles in radians (top_rotation, bottom_rotation)

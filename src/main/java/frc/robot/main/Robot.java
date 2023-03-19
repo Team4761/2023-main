@@ -199,7 +199,7 @@ public class Robot extends TimedRobot
   /** This method is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {    
-    //commandScheduler.run();
+    commandScheduler.run();
 
     SmartDashboard.putNumber("lowerArm", arms.getBottomRotation());
     SmartDashboard.putNumber("upperArm", arms.getTopRotation());
