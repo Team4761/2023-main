@@ -122,7 +122,7 @@ public class ArmControl extends CommandBase {
             case 4:
             return new SequentialCommandGroup(
                 Commands.runOnce(this::setTopSpeedLow),
-                new MoveArmDelayTop(Constants.INBETWEEN_POSITION, 0.7, 0.9).withTimeout(5), 
+                new MoveArmDelayTop(Constants.INBETWEEN_POSITION, 0.9, 0.9).withTimeout(3), 
                 Commands.runOnce(this::setTopSpeedMid),
                 new MoveArmAngles(Constants.NEUTRAL_POSITION).withTimeout(3), 
                 Commands.runOnce(this::setPosition0)
@@ -189,7 +189,7 @@ public class ArmControl extends CommandBase {
         IntakeSubsystem.getInstance().setSpeed(0.6);
     }
     private void outTake() {
-        IntakeSubsystem.getInstance().setSpeed(-0.12);
+        IntakeSubsystem.getInstance().setSpeed(-0.1);
     }
     private void disableIntake() {
         IntakeSubsystem.getInstance().setSpeed(0.15);

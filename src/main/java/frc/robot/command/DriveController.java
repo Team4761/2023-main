@@ -72,7 +72,7 @@ public class DriveController extends CommandBase {
         IntakeSubsystem.getInstance().setSpeed(0.6);
     }
     private void outTake() {
-        IntakeSubsystem.getInstance().setSpeed(-0.12);
+        IntakeSubsystem.getInstance().setSpeed(-0.1);
     }
     private void disableIntake() {
         IntakeSubsystem.getInstance().setSpeed(0.15);

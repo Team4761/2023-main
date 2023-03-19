@@ -55,8 +55,8 @@ public class GoMetersBackwards extends CommandBase {
         output = Math.max(Math.min(targetVelocity, output+maxChange), output-maxChange);
 
 
-        leftSpeed =  4 * output +  0.2 * (output - Paligator.getLeftVelocity()*Constants.distancePerEncoderTick);
-        rightSpeed = 4 * output +  0.2 * (output - Paligator.getRightVelocity()*Constants.distancePerEncoderTick);
+        leftSpeed =  3.5 * output +  0.2 * (output - Paligator.getLeftVelocity()*Constants.distancePerEncoderTick);
+        rightSpeed = 3.5 * output +  0.2 * (output - Paligator.getRightVelocity()*Constants.distancePerEncoderTick);
         
         // maybe not needed
         leftSpeed += Math.signum(leftSpeed)*0.33;
