@@ -17,6 +17,8 @@ public class ArmPIDSubsystem extends ProfiledPIDSubsystem {
     String motorType;
     ArmSubsystem subsystem;
     public double ff = 0.0;
+
+    private boolean onlyFF = false;
     // <https://www.reca.lc/arm> has a very useful calculator!!!
 
     //was commneted
@@ -53,18 +55,20 @@ public class ArmPIDSubsystem extends ProfiledPIDSubsystem {
         if(motorType.equalsIgnoreCase("top"))// && ArmSubsystem.getInstance().useFeedForward)
              ff = subsystem.calculateFeedforwards().get(1,0) / 12.0 / 3;
          if(motorType.equalsIgnoreCase("bottom"))// & ArmSubsystem.getInstance().useFeedForward)
-             ff = subsystem.calculateFeedforwards().get(0,0) / 12.0 / 3.9;
+             ff = subsystem.calculateFeedforwards().get(0,0) / 12.0 / 2.8;
     
         //System.out.println("CURRENT OUTPUT: " + output);
         //System.out.println("ERROR: " + (ArmSubsystem.getInstance().getDesiredTopRotation()-ArmSubsystem.getInstance().getTopRotation()));
 
+        if(onlyFF == true) output = 0;
+
         if (motorType.equalsIgnoreCase("top")) {
             SmartDashboard.putNumber("pid top", output);
-            ArmSubsystem.getInstance().setTop(-(output-ff));
+            ArmSubsystem.getInstance().setTop(-(output+ff));
         }
         if (motorType.equalsIgnoreCase("bottom")) {
             SmartDashboard.putNumber("pid bottom", output);
-            ArmSubsystem.getInstance().setBottom(-(output+ff));
+            ArmSubsystem.getInstance().setBottom(-(output-ff));
         }
         //System.out.println(motorType + " | " + getController().getP() + " , " + getController().getI() + " , " + getController().getD());
     }
@@ -82,6 +86,10 @@ public class ArmPIDSubsystem extends ProfiledPIDSubsystem {
             return ArmSubsystem.getInstance().getBottomRotation();
         }
 
+    }
+
+    public void onlyFF(boolean onlyff) {
+        onlyFF = onlyff;
     }
 
     public void updatePIDValues(double p, double i, double d) {

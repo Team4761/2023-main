@@ -168,9 +168,19 @@ public class Robot extends TimedRobot
   /** This method is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
+    // sets encoder positions to 0
+    // currently zeroed to folded, both parallel to ground
+    //arms.topEncoder.reset();
+    //arms.bottomEncoder.reset();
+
+    // for encoder zeroing
+    System.out.println("top, bottom: "+arms.getTopRotation()+", "+arms.getBottomRotation());
+    SmartDashboard.putNumber("top at init", arms.getTopRotation());
+    SmartDashboard.putNumber("bottom at init", arms.getBottomRotation());
+
     IntakeSubsystem.getInstance().setSpeed(0.15);
-    //commandScheduler.schedule(new MoveArmAngles(Constants.NEUTRAL_POSITION));
-    //arms.enablePID();
+    commandScheduler.schedule(new MoveArmAngles(Constants.NEUTRAL_POSITION).withTimeout(3));
+    arms.enablePID();
     leds.enableLEDs();
     armControl = new ArmControl(Constants.ARM_CONTROLLER_PORT);
     updateLED = new UpdateLED();
@@ -179,7 +189,7 @@ public class Robot extends TimedRobot
  
     UpdateLED.setText("%(10,0,0)ROBOCKETS %(10,0,0)4761  ");
 
-    //commandScheduler.schedule(armControl.repeatedly());
+    commandScheduler.schedule(armControl.repeatedly());
     commandScheduler.schedule(updateLED.repeatedly());
     commandScheduler.schedule(driveController.repeatedly());
   }
@@ -189,8 +199,10 @@ public class Robot extends TimedRobot
   /** This method is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {    
-    commandScheduler.run();
+    //commandScheduler.run();
 
+    SmartDashboard.putNumber("lowerArm", arms.getBottomRotation());
+    SmartDashboard.putNumber("upperArm", arms.getTopRotation());
 
     m_shuffleboard.updateArms();
     m_shuffleboard.updateDrive();

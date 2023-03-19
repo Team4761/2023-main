@@ -22,13 +22,21 @@ public class ScoreDirectlyInFront extends SequentialCommandGroup {
             //new MoveStraightMeasuredCommand(-.5, Units.feetToMeters(2)),
             //new WaitCommand(1),
             new MoveArmAngles(Constants.NEUTRAL_POSITION),
-            Robot.armControl.getTopSequence().withTimeout(4),
+            
+            // To top
+            Commands.runOnce(Robot.armControl::setTopSpeedHigh),
+            new MoveArmDelayBottom(Constants.AUTO_TOP_RUNG_POSITION, 0.5, 0.9), //good path but low
+            new MoveArmAngles(Constants.AUTO_TOP_RUNG_POSITION),
+            Commands.runOnce(Robot.armControl::setTopSpeedMid),
             new WaitCommand(0.1),
-            //new MoveStraightMeasuredCommand(.5, Units.feetToMeters(2.1)),
+
             new OutTakeCommand(IntakeSubsystem.getInstance(), 0.5),
+            
+            // Back to neutral
             Commands.runOnce(Robot.armControl::setTopSpeedLow),
             new MoveArmDelayTop(Constants.INBETWEEN_POSITION, 1.5),
-            Robot.armControl.getNeutralSequence(4)
+            Commands.runOnce(Robot.armControl::setTopSpeedMid),
+            new MoveArmAngles(Constants.NEUTRAL_POSITION)
         );
     }
 }

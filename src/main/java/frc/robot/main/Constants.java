@@ -61,8 +61,8 @@ public class Constants {
     public static final double JOINT_1_MIN = -100;
     public static final double KINEMATICS_OFFSET_TOP = Math.toRadians(15);
     public static final double KINEMATICS_OFFSET_BOTTOM = Math.toRadians(15);
-    public static final double FLAT_ARM_TOP_OFFSET = 3.45;   // To tune
-    public static final double FLAT_ARM_BOTTOM_OFFSET = 3.4;   // To tune
+    public static final double FLAT_ARM_TOP_OFFSET = 180;   // To tune
+    public static final double FLAT_ARM_BOTTOM_OFFSET = -180;   // To tune
     public static final double CONTROLLER_DEADZONE = 0.05;
     
     //Arm Feedforward
@@ -88,12 +88,17 @@ public class Constants {
 
 
     // Set Positions
-    public static final Translation2d INTAKE_POSITION = new Translation2d(0.25, 0.530);    // x & y are angles in radians (top_rotation, bottom_rotation)
-    public static final Translation2d MID_RUNG_POSITION = new Translation2d(1.75, 1.48);    // x & y are angles in radians (top_rotation, bottom_rotation) [Went to 2.1, 2.2]
-    public static final Translation2d INBETWEEN_POSITION = new Translation2d(1.5, 0.05);       // for returning from top, is supposed to soften fall and make bottom retract faster than top
-    public static final Translation2d TOP_RUNG_POSITION = new Translation2d(3.25, 2.2);    // x & y are angles in radians (top_rotation, bottom_rotation) [Went to 2.4, 3.02]
-    public static final Translation2d SHELF_POSITION = new Translation2d(1.7, 1.45);       // good
-    public static final Translation2d NEUTRAL_POSITION = new Translation2d(0.8, 0.05);
-    public static final Translation2d STARTING_POSITION = new Translation2d(1.50, 0.0);    // x & y are angles in radians (top_rotation, bottom_rotation) [Went to 2.4, 3.02]
+    public static final double TOP_OFFSET = 0;
+    public static final double BOTTOM_OFFSET = 0;
+
+    
+    public static final Translation2d INTAKE_POSITION = new Translation2d(0.47+TOP_OFFSET, 0.40+BOTTOM_OFFSET);    // x & y are angles in radians (top_rotation, bottom_rotation)
+    public static final Translation2d MID_RUNG_POSITION = new Translation2d(2.1+TOP_OFFSET, 1.42+BOTTOM_OFFSET);    // x & y are angles in radians (top_rotation, bottom_rotation) [Went to 2.1, 2.2]
+    public static final Translation2d INBETWEEN_POSITION = new Translation2d(1+TOP_OFFSET, 0+BOTTOM_OFFSET);       // for returning from top, is supposed to soften fall and make bottom retract faster than top
+    public static final Translation2d AUTO_TOP_RUNG_POSITION = new Translation2d(3.35+TOP_OFFSET, 2.25+BOTTOM_OFFSET);    // perfect
+    public static final Translation2d TOP_RUNG_POSITION = new Translation2d(3.4+TOP_OFFSET, 2.15+BOTTOM_OFFSET);    // x & y are angles in radians (top_rotation, bottom_rotation) [Went to 2.4, 3.02]
+    public static final Translation2d SHELF_POSITION = new Translation2d(2.45+TOP_OFFSET, 1.75+BOTTOM_OFFSET);       // good
+    public static final Translation2d NEUTRAL_POSITION = new Translation2d(1.2+TOP_OFFSET, 0.2+BOTTOM_OFFSET);
+    public static final Translation2d STARTING_POSITION = new Translation2d(1.70+TOP_OFFSET, 0+BOTTOM_OFFSET);    // x & y are angles in radians (top_rotation, bottom_rotation) [Went to 2.4, 3.02]
 }
 
