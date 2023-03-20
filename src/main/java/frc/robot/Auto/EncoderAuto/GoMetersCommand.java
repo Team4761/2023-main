@@ -64,6 +64,9 @@ public class GoMetersCommand extends CommandBase {
 
         targetVelocity =
             Math.max(Math.min((distance - pose.getX()) * 1.5, Constants.DRIVETRAIN_MAX_VELOCITY), -Constants.DRIVETRAIN_MAX_VELOCITY);
+        if (dir == Direction.BACK) {
+            targetVelocity *= -1;
+        }
 
         double maxChange = (timer.get() - lastTime) * Constants.DRIVETRAIN_MAX_ACCELERATION;
         lastTime = timer.get();
