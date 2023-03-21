@@ -24,7 +24,7 @@ public class AutoCommandPos2 extends SequentialCommandGroup {
             //new MoveToPointCommand(goalPosition)
             // 40 inches from edge to center of charge station + 60.69 from edge to charge - 16 inches half of robot
             new GoMetersBackwards(5.1), // about 2.15 meters to get to charge station
-            new GoMetersEncoder(2.9)  // goes out of community first for mobility
+            new GoMetersEncoder(2.9-0.3)  // goes out of community first for mobility adjusted by .3 cause didn't balance
             ,new Balance()
         );
     }

@@ -143,6 +143,7 @@ public class Robot extends TimedRobot
   public void autonomousInit()
   {
     IntakeSubsystem.getInstance().setSpeed(0.15);
+    // consider no neutral if auto too slow
     arms.setDesiredBottomRotation(Constants.NEUTRAL_POSITION.getY());
     arms.setDesiredTopRotation(Constants.NEUTRAL_POSITION.getX());
     commandScheduler.schedule(new MainAutoCommand(getAutoSelector()));
