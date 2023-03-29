@@ -12,4 +12,10 @@ public class MoveArmDelayTop extends SequentialCommandGroup {
             new MoveArmAngles(pt)
         );
     }
+    public MoveArmDelayTop (Translation2d pt, double delay, double weight) {
+        addCommands(
+            new MoveArmAngles(new Translation2d(((1-weight)*pt.getX()+weight*ArmSubsystem.getInstance().getTopRotation()), pt.getY())).withTimeout(delay),
+            new MoveArmAngles(pt)
+        );
+    }
 }

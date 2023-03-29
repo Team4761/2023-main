@@ -1,6 +1,10 @@
 package frc.robot.Auto.command;
 
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Auto.EncoderAuto.GoMetersBackwards;
+import frc.robot.Auto.EncoderAuto.GoMetersEncoder;
+import frc.robot.Auto.EncoderAuto.Balance;
 import frc.robot.field.Field;
 import frc.robot.main.Constants;
 
@@ -13,7 +17,11 @@ public class AutoCommandPos2 extends BaseAutoCommand {
 
         // from edge of charge station to center is around 104.7 cm accounting for angle
         addCommands(
-            new MoveToPointCommand(goalPosition)
+            //new MoveToPointCommand(goalPosition)
+            // 40 inches from edge to center of charge station + 60.69 from edge to charge - 16 inches half of robot
+            new GoMetersBackwards(5.1), // about 2.15 meters to get to charge station
+            new GoMetersEncoder(2.9-0.3)  // goes out of community first for mobility adjusted by .3 cause didn't balance
+            ,new Balance()
         );
     }
 }

@@ -26,7 +26,7 @@ public class MoveStraightMeasuredCommand extends CommandBase {
     public MoveStraightMeasuredCommand(double xSpeed, double meters) {
         goalSpeed = MathUtil.applyDeadband(xSpeed, RobotDriveBase.kDefaultDeadband);
         SmartDashboard.putNumber("GoalSpeed", goalSpeed);
-        this.meters = meters;
+        this.meters = Math.abs(meters);
         drivetrainGearRatio = SmartDashboard.getNumber("Drivetrain Gear Ratio", 7.3);
     }
 

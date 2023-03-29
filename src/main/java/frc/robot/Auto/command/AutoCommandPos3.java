@@ -16,7 +16,7 @@ public class AutoCommandPos3 extends BaseAutoCommand {
 
         addCommands(
             new MoveToPointCommand(item.getX() + PAST_ITEM, getStartPose().getY()),
-            new TurnDegreesGyro(-180)
+            new TurnDegreesGyro(180)
         );
         addAfterSideCommands();
     }

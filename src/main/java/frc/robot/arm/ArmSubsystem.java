@@ -12,8 +12,8 @@ import frc.robot.main.Constants;
 public class ArmSubsystem extends SubsystemBase {
     private final static ArmSubsystem INSTANCE = new ArmSubsystem();
 
-    AbsoluteEncoder bottomEncoder;
-    AbsoluteEncoder topEncoder;
+    public AbsoluteEncoder bottomEncoder;
+    public AbsoluteEncoder topEncoder;
     CANSparkMax bottom_left;
     CANSparkMax bottom_right;
     CANSparkMax top_motor_left;
@@ -38,8 +38,10 @@ public class ArmSubsystem extends SubsystemBase {
 
     private ArmSubsystem()
     {
-        bottomEncoder = new AbsoluteEncoder(Constants.ARM_ENCODER_BOTTOM_PORT);
-        topEncoder = new AbsoluteEncoder(Constants.ARM_ENCODER_TOP_PORT);
+        
+        //1.72, 0.35, upper, bottom
+        bottomEncoder = new AbsoluteEncoder(Constants.ARM_ENCODER_BOTTOM_PORT, -0.06/* .198*/); // resting at 0.1, flat 0.104 more
+        topEncoder = new AbsoluteEncoder(Constants.ARM_ENCODER_TOP_PORT, -1.79/*-2.48*/); // resting at 0.5, flat 0.21 more
         bottom_left = new CANSparkMax(Constants.ARM_MOTOR_BOTTOM_LEFT_PORT, CANSparkMaxLowLevel.MotorType.kBrushless);
         bottom_right = new CANSparkMax(Constants.ARM_MOTOR_BOTTOM_RIGHT_PORT, CANSparkMaxLowLevel.MotorType.kBrushless);
         top_motor_left = new CANSparkMax(Constants.ARM_MOTOR_TOP_LEFT_PORT, CANSparkMaxLowLevel.MotorType.kBrushless);
@@ -50,8 +52,8 @@ public class ArmSubsystem extends SubsystemBase {
         //top_motor_right.setInverted(true);
 
         // Do find '//REMOVABLE' and replace all with nothing to activate bottom control
-        bottom = new ArmPIDSubsystem(bottomEncoder, bottom_left, "bottom", Constants.ARM_P_BOTTOM, Constants.ARM_I_BOTTOM, Constants.ARM_D_BOTTOM, this);
-        top = new ArmPIDSubsystem(topEncoder, top_motor_left, "top", Constants.ARM_P_TOP, Constants.ARM_I_TOP, Constants.ARM_D_TOP, this);
+        bottom = new ArmPIDSubsystem(bottomEncoder, bottom_left, "bottom", Constants.ARM_P_BOTTOM, Constants.ARM_I_BOTTOM, Constants.ARM_D_BOTTOM, Constants.ARM_MAX_ROTATION_SPEED_BOTTOM, this);
+        top = new ArmPIDSubsystem(topEncoder, top_motor_left, "top", Constants.ARM_P_TOP, Constants.ARM_I_TOP, Constants.ARM_D_TOP, Constants.ARM_MAX_ROTATION_SPEED_TOP, this);
 
         inverseKinematics = new ArmMath();
         pos = inverseKinematics.getPoint(getBottomRotation(), getTopRotation());
@@ -75,8 +77,8 @@ public class ArmSubsystem extends SubsystemBase {
     /* Setters */
     // PID control
     public void movePID() {
-        if (getDesiredBottomRotation() - getDesiredTopRotation() < Math.PI*0.5 + 0.1)
-            top.setGoal(getDesiredTopRotation());
+        //if (getDesiredBottomRotation() - getDesiredTopRotation() < Math.PI*0.5 + 0.1)
+        top.setGoal(getDesiredTopRotation());
         bottom.setGoal(getDesiredBottomRotation());
     }
     // Updating positions
@@ -94,7 +96,7 @@ public class ArmSubsystem extends SubsystemBase {
     }
     //FEEDFORWARD IMPL //Needs to be based off 0,0 as straight extensions (intial arm math)
     public Vector<N2> calculateFeedforwards() {
-        double inputUpper = -getTopRotation() + Math.toRadians(Constants.FLAT_ARM_TOP_OFFSET); // Angle is the outside, not inside angle.... WHYYYYY
+        double inputUpper = getTopRotation() + Math.toRadians(Constants.FLAT_ARM_TOP_OFFSET); // Angle is the outside, not inside angle.... WHYYYYY
         double inputLower = -getBottomRotation() + Math.toRadians(Constants.FLAT_ARM_BOTTOM_OFFSET);
         Vector<N2> angles = VecBuilder.fill(inputLower, inputUpper);
 

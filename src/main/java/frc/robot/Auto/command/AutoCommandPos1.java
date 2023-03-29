@@ -9,11 +9,10 @@ public class AutoCommandPos1 extends BaseAutoCommand {
     public AutoCommandPos1(){
         super(Field.STARTING_POSE_1, 1);
         var item = Field.ItemInlineWithZone1;
-        var goalPosition = Field.ZONE_1.bottomShelfMid.getCenterRight();
 
         addCommands(
             new MoveToPointCommand(item.getX() + PAST_ITEM, getStartPose().getY()),
-            new TurnDegreesGyro(180)
+            new TurnDegreesGyro(-180)
         );
         addAfterSideCommands();
     }

@@ -12,19 +12,29 @@ import frc.robot.command.MoveStraightMeasuredCommand;
 import frc.robot.command.OutTakeCommand;
 import frc.robot.intake.IntakeSubsystem;
 import frc.robot.main.Constants;
+import frc.robot.main.Robot;
 
+// would be nice to reduce the amount of time this takes
 public class ScoreDirectlyInFront extends SequentialCommandGroup {
     public ScoreDirectlyInFront() {
-        addCommands(
-            new InTakeCommand(IntakeSubsystem.getInstance(), 1),
+    addCommands(                                                
+            new InTakeCommand(IntakeSubsystem.getInstance(), 0.25), // prev 0.3
             //new MoveStraightMeasuredCommand(-.5, Units.feetToMeters(2)),
             //new WaitCommand(1),
-            new MoveArmAngles(Constants.NEUTRAL_POSITION),
-            new MoveArmDelayBottom(Constants.TOP_RUNG_POSITION, 1.2),
-            new WaitCommand(0.5),
-            //new MoveStraightMeasuredCommand(.5, Units.feetToMeters(2.1)),
-            new OutTakeCommand(IntakeSubsystem.getInstance(), 0.8),
-            new MoveArmDelayTop(Constants.INBETWEEN_POSITION, 1.5),
+            //new MoveArmAngles(Constants.NEUTRAL_POSITION),
+            
+            // To top
+            Commands.runOnce(Robot.armControl::setTopSpeedHigh),
+            new MoveArmDelayBottom(Constants.AUTO_TOP_RUNG_POSITION, 0.6, 0.9), //good path but low
+            new MoveArmAngles(Constants.AUTO_TOP_RUNG_POSITION),
+            Commands.runOnce(Robot.armControl::setTopSpeedMid),
+
+            new OutTakeCommand(IntakeSubsystem.getInstance(), 0.4), // prev 0.5
+            
+            // Back to neutral
+            Commands.runOnce(Robot.armControl::setTopSpeedLow),
+            //new MoveArmDelayTop(Constants.INBETWEEN_POSITION, 1.5, 0.5).withTimeout(3),
+            //Commands.runOnce(Robot.armControl::setTopSpeedMid),
             new MoveArmAngles(Constants.NEUTRAL_POSITION)
         );
     }

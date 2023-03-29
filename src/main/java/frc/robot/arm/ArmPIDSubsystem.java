@@ -17,21 +17,22 @@ public class ArmPIDSubsystem extends ProfiledPIDSubsystem {
     String motorType;
     ArmSubsystem subsystem;
     public double ff = 0.0;
+
+    private boolean onlyFF = false;
     // <https://www.reca.lc/arm> has a very useful calculator!!!
 
     //was commneted
     //ArmFeedforward feedforward = new ArmFeedforward(0.01, 0.45, 1.95, 0.02);
 
 
-    public ArmPIDSubsystem(AbsoluteEncoder e, CANSparkMax m, String type, double p, double i, double d, ArmSubsystem armSubsystem) {
+    public ArmPIDSubsystem(AbsoluteEncoder e, CANSparkMax m, String type, double p, double i, double d, double maxSpeed, ArmSubsystem armSubsystem) {
         // Makes a new ProfiledPIDSubsystem with PID values of ARM_P, ARM_I, and ARM_D.
         // TrapezoidProfile makes it so that the motors know they can't go beyond ARM_MAX_ROTATION_SPEED and that they can accelerate up to ARM_MAX_ACCELERATION_SPEED
         // The last 0 defines a period of 0. This would only matter if we weren't using TimedRobot as our robot base.
         super(new ProfiledPIDController(p, i, d,
-            new TrapezoidProfile.Constraints( Constants.ARM_MAX_ROTATION_SPEED, Constants.ARM_MAX_ACCELERATION_SPEED)), 
+            new TrapezoidProfile.Constraints(maxSpeed, Constants.ARM_MAX_ACCELERATION_SPEED)), 
         0);
         
-
         encoder = e;
         motor = m;
         motorType = type;
@@ -54,18 +55,20 @@ public class ArmPIDSubsystem extends ProfiledPIDSubsystem {
         if(motorType.equalsIgnoreCase("top"))// && ArmSubsystem.getInstance().useFeedForward)
              ff = subsystem.calculateFeedforwards().get(1,0) / 12.0 / 3;
          if(motorType.equalsIgnoreCase("bottom"))// & ArmSubsystem.getInstance().useFeedForward)
-             ff = subsystem.calculateFeedforwards().get(0,0) / 12.0 / 3.9;
+             ff = subsystem.calculateFeedforwards().get(0,0) / 12.0 / 2.8;
     
         //System.out.println("CURRENT OUTPUT: " + output);
         //System.out.println("ERROR: " + (ArmSubsystem.getInstance().getDesiredTopRotation()-ArmSubsystem.getInstance().getTopRotation()));
 
+        if(onlyFF == true) output = 0;
+
         if (motorType.equalsIgnoreCase("top")) {
             SmartDashboard.putNumber("pid top", output);
-            ArmSubsystem.getInstance().setTop(-(output-ff));
+            ArmSubsystem.getInstance().setTop(-(output+ff));
         }
         if (motorType.equalsIgnoreCase("bottom")) {
             SmartDashboard.putNumber("pid bottom", output);
-            ArmSubsystem.getInstance().setBottom(-(output+ff));
+            ArmSubsystem.getInstance().setBottom(-(output-ff));
         }
         //System.out.println(motorType + " | " + getController().getP() + " , " + getController().getI() + " , " + getController().getD());
     }
@@ -85,6 +88,10 @@ public class ArmPIDSubsystem extends ProfiledPIDSubsystem {
 
     }
 
+    public void onlyFF(boolean onlyff) {
+        onlyFF = onlyff;
+    }
+
     public void updatePIDValues(double p, double i, double d) {
         if (motorType.equalsIgnoreCase("bottom")) {
             super.getController().setPID(p, i, d);
@@ -92,6 +99,11 @@ public class ArmPIDSubsystem extends ProfiledPIDSubsystem {
         if (motorType.equalsIgnoreCase("top"))
             super.getController().setPID(p, i, d);
         //System.out.println(motorType + " | " + getController().getP() + " , " + getController().getI() + " , " + getController().getD());
+    }
+
+    public void updateMaxSpeed(double speed) {
+        super.getController().setConstraints(new TrapezoidProfile.Constraints(speed, Constants.ARM_MAX_ACCELERATION_SPEED));
+        
     }
 
     @Override

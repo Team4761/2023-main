@@ -1,9 +1,11 @@
 package frc.robot.Auto.command;
 
-import frc.robot.Auto.EncoderAuto.TurnDegreesGyro;
-import frc.robot.field.Field;
 
-import static frc.robot.Auto.command.AutoCommandPos1.PAST_ITEM;
+import edu.wpi.first.math.util.Units;
+import frc.robot.Auto.EncoderAuto.TurnDegreesGyro;
+import frc.robot.command.MoveStraightMeasuredCommand;
+import frc.robot.field.Field;
+import frc.robot.main.Robot;
 
 /**
  * Auto starting from the starting position in front of AprilTag 6
@@ -14,8 +16,10 @@ public class AutoCommandPos6 extends BaseAutoCommand  {
         var startPose = getStartPose();
         var item = Field.ItemInlineWithZone6;
 
+        Robot.impl.setPose(startPose);
+
         addCommands(
-            new MoveToPointCommand(item.getX() - PAST_ITEM, startPose.getY()),
+            new MoveStraightMeasuredCommand(-.8, Units.inchesToMeters(item.getX() - startPose.getX()-8)),
             new TurnDegreesGyro(180)
         );
         addAfterSideCommands();

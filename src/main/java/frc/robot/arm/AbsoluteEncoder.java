@@ -1,6 +1,7 @@
 package frc.robot.arm;
 
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import frc.robot.main.Constants;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 // RADIANS
 
@@ -8,8 +9,11 @@ public class AbsoluteEncoder extends SubsystemBase {
     private DutyCycleEncoder m_dutyCycleEncoder;
     // CONNECT USING the white, red, and black cable.
     // The WHITE cable is the signal wire.
-
-    AbsoluteEncoder(int dioPORT) {
+    double offset;
+    
+    //1.72, 0.35, upper, bottom
+    AbsoluteEncoder(int dioPORT, double offset) {
+        this.offset = offset;
         try {
             m_dutyCycleEncoder = new DutyCycleEncoder(dioPORT);     // Connects to a DIO port
         } catch (Exception e) {
@@ -23,10 +27,10 @@ public class AbsoluteEncoder extends SubsystemBase {
     }
     // Returns radians
     public double getRotation() {
-        return m_dutyCycleEncoder.getAbsolutePosition() * 2*Math.PI;    // Math can only use POSITIVE rotations, negative rotations don't work.
+        return m_dutyCycleEncoder.getAbsolutePosition() * 2*Math.PI + offset;    // Math can only use POSITIVE rotations, negative rotations don't work.
     }
     public double getRotationDegrees() {
-        return (m_dutyCycleEncoder.get() * 360) % 360;
+        return (m_dutyCycleEncoder.get() * 360 + offset*180/Math.PI) % 360;
     }
     // 1 is a full revolution. 0 is nothing.
     public double getOutputRaw() {
@@ -38,7 +42,6 @@ public class AbsoluteEncoder extends SubsystemBase {
     public void reset() {
         m_dutyCycleEncoder.reset();
     }
-
 
     // DEBUGGING AND SPECIFIC INFO FOR NERDS //
     public String toString() {

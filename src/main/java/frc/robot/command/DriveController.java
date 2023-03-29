@@ -72,7 +72,7 @@ public class DriveController extends CommandBase {
         IntakeSubsystem.getInstance().setSpeed(0.6);
     }
     private void outTake() {
-        IntakeSubsystem.getInstance().setSpeed(-0.12);
+        IntakeSubsystem.getInstance().setSpeed(-0.1);
     }
     private void disableIntake() {
         IntakeSubsystem.getInstance().setSpeed(0.15);
@@ -121,6 +121,7 @@ public class DriveController extends CommandBase {
         }
     }
 
+    // 90 degree turns are conflicting with this
     private void arcadeDrive() {
         DifferentialDrive.WheelSpeeds wheelSpeeds = arcadeDriveIK((xbox.getLeftY()+Math.signum(xbox.getLeftY())*0.25)/1.25, -(xbox.getRightX())*Constants.DRIVETRAIN_ROTATION_SPEED);
         
@@ -151,8 +152,8 @@ public class DriveController extends CommandBase {
         }
 
         //          kV                                    kS
-        double vL = outputL*Constants.DRIVETRAIN_SPEED + Math.signum(outputL)*0.3 + 0.1 * (outputL-Paligator.getLeftVelocity()*Constants.distancePerEncoderTick);
-        double vR = outputR*Constants.DRIVETRAIN_SPEED + Math.signum(outputR)*0.15 + 0.1 * (outputR-Paligator.getRightVelocity()*Constants.distancePerEncoderTick);
+        double vL = outputL*Constants.DRIVETRAIN_SPEED*multiplier + Math.signum(outputL)*0.3 + 0.1 * (outputL-Paligator.getLeftVelocity()*Constants.distancePerEncoderTick);
+        double vR = outputR*Constants.DRIVETRAIN_SPEED*multiplier + Math.signum(outputR)*0.2 + 0.1 * (outputR-Paligator.getRightVelocity()*Constants.distancePerEncoderTick);
 
         // trying feed forward with numbers from sysid, need new sysid measurements                     
         // ks, kv, ka
@@ -161,7 +162,7 @@ public class DriveController extends CommandBase {
 
         lastTime = timer.get();
 
-        Paligator.setVoltages(vL*multiplier, vR*multiplier);
+        Paligator.setVoltages(vL, vR);
     }
 
     @Override

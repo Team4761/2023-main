@@ -4,12 +4,12 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.intake.IntakeSubsystem;
 
-public class OutTakeCommand extends CommandBase {
+public class PauseIntake extends CommandBase {
     private IntakeSubsystem m_intake;
     private Timer timer = new Timer();
     private double seconds;
 
-    public OutTakeCommand(IntakeSubsystem intake, double s) {
+    public PauseIntake(IntakeSubsystem intake, double s) {
         m_intake = intake;
         seconds = s;
         addRequirements(m_intake);
@@ -21,7 +21,7 @@ public class OutTakeCommand extends CommandBase {
     }
     @Override
     public void execute() {
-        m_intake.setSpeed(-0.1);
+        m_intake.setSpeed(0);
     }
     @Override
     public boolean isFinished() {

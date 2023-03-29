@@ -6,6 +6,8 @@
 package frc.robot.main;
 
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.CvSink;
+import edu.wpi.first.cscore.CvSource;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
@@ -72,6 +74,13 @@ public class Robot extends TimedRobot
   public double[][] path = {{3.0, 0.0}, {3.5, 1.0}};
   public PathoGen pathToFollow = new PathoGen(path);
   public PathFollower pathFollower = new PathFollower(pathToFollow.getPoints(), pathToFollow.getTargetVelocities());
+  
+  // camera
+  // Creates the CvSink and connects it to the UsbCamera
+  CvSink cvSink;
+  
+  // Creates the CvSource and MjpegServer [2] and connects them
+  CvSource outputStream;
 
   /**
    * This method is run when the robot is first started up and should be used for any
@@ -97,6 +106,11 @@ public class Robot extends TimedRobot
     pose = odometry.getPoseMeters();
 
     IntakeSubsystem.getInstance().setSpeed(0.15);
+    
+    CameraServer.startAutomaticCapture(0);
+    cvSink = CameraServer.getVideo();
+    outputStream = CameraServer.putVideo("Blur", 640, 480);
+    commandScheduler.schedule(new getPoseData());
   }
 
   /**
@@ -130,6 +144,7 @@ public class Robot extends TimedRobot
   public void autonomousInit()
   {
     IntakeSubsystem.getInstance().setSpeed(0.15);
+    // consider no neutral if auto too slow
     arms.setDesiredBottomRotation(Constants.NEUTRAL_POSITION.getY());
     arms.setDesiredTopRotation(Constants.NEUTRAL_POSITION.getX());
     commandScheduler.schedule(new MainAutoCommand());
@@ -149,15 +164,24 @@ public class Robot extends TimedRobot
   /** This method is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
+    // sets encoder positions to 0
+    // currently zeroed to folded, both parallel to ground
+    //arms.topEncoder.reset();
+    //arms.bottomEncoder.reset();
+
+    // for encoder zeroing
+    System.out.println("top, bottom: "+arms.getTopRotation()+", "+arms.getBottomRotation());
+    SmartDashboard.putNumber("top at init", arms.getTopRotation());
+    SmartDashboard.putNumber("bottom at init", arms.getBottomRotation());
+
     IntakeSubsystem.getInstance().setSpeed(0.15);
-    commandScheduler.schedule(new MoveArmAngles(Constants.NEUTRAL_POSITION));
+    commandScheduler.schedule(new MoveArmAngles(Constants.NEUTRAL_POSITION).withTimeout(3));
     arms.enablePID();
     leds.enableLEDs();
     armControl = new ArmControl(Constants.ARM_CONTROLLER_PORT);
     updateLED = new UpdateLED();
     driveController = new DriveController(Constants.DRIVE_CONTROLLER_PORT);
 
-    CameraServer.startAutomaticCapture(0);
  
     UpdateLED.setText("%(10,0,0)ROBOCKETS %(10,0,0)4761  ");
 
@@ -170,9 +194,11 @@ public class Robot extends TimedRobot
   int curPattern = 0;
   /** This method is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {
+  public void teleopPeriodic() {    
     commandScheduler.run();
 
+    SmartDashboard.putNumber("lowerArm", arms.getBottomRotation());
+    SmartDashboard.putNumber("upperArm", arms.getTopRotation());
 
     m_shuffleboard.updateArms();
     m_shuffleboard.updateDrive();

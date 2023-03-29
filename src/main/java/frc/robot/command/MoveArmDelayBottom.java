@@ -12,4 +12,12 @@ public class MoveArmDelayBottom extends SequentialCommandGroup {
             new MoveArmAngles(pt)
         );
     }
+    // 0-1 for weight, is percentage that the setpoint for delayed part gets during delay, 1 should not move one joint
+    // default weight is 0.75
+    public MoveArmDelayBottom (Translation2d pt, double delay, double weight) {
+        addCommands(
+            new MoveArmAngles(new Translation2d(pt.getX(), ((1-weight)*pt.getY()+weight*ArmSubsystem.getInstance().getBottomRotation()))).withTimeout(delay),
+            new MoveArmAngles(pt)
+        );
+    }
 }
