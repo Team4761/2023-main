@@ -40,7 +40,7 @@ public class BaseAutoCommand extends SequentialCommandGroup implements StartPose
             new MoveArmAngles(Constants.INTAKE_POSITION),
             new ParallelCommandGroup(
                 new InTakeCommand(IntakeSubsystem.getInstance(), 3),
-                new MoveStraightMeasuredCommand(0.4, 1)
+                new MoveStraightMeasuredCommand(0.4, .5)
             )
         );
     }

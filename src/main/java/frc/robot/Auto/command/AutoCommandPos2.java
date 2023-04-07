@@ -1,6 +1,7 @@
 package frc.robot.Auto.command;
 
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Auto.EncoderAuto.GoMetersBackwards;
 import frc.robot.Auto.EncoderAuto.GoMetersEncoder;
@@ -23,5 +24,15 @@ public class AutoCommandPos2 extends BaseAutoCommand {
             new GoMetersEncoder(2.9-0.3)  // goes out of community first for mobility adjusted by .3 cause didn't balance
             ,new Balance()
         );
+    }
+
+    public static void main(String[] args) {
+        var goalPosition = Field.CHARGING_STATION_OTHER_ON_TOP.getCenter().
+            plus(new Translation2d(Constants.ROBOT_LENGTH / 2, 0));
+        var startPose =         Field.STARTING_POSE_2;
+
+        double distanceX = Units.inchesToMeters(Math.abs(goalPosition.getX() - startPose.getX()));
+        System.out.println("DistanceX=" + distanceX);
+        System.out.println("Other=" + (5.1-(2.9)));
     }
 }
